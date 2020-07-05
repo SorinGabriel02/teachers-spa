@@ -1,9 +1,37 @@
 const express = require("express");
+const { body } = require("express-validator");
+const { signup, login } = require("../controllers/usersController");
+const passport = require("passport");
+const passportService = require("../services/passport");
 
 const router = express.Router();
 
-router.get("/", (req, res, next) => {
-  res.json({ message: "this works" });
+const requireAuth = passport.authenticate("jwt", { session: false });
+
+const requireLogin = passport.authenticate("local", { session: false });
+
+router.get("/dashboard", requireAuth, (req, res, next) => {
+  res.json({ message: "I can edit stuff here" });
 });
+
+router.post(
+  "/signup",
+  [
+    body("username").isLength({ min: 2, max: 100 }).trim().escape(),
+    body("email").isEmail().normalizeEmail(),
+    body("password").isLength({ min: 8, max: 250 }).escape(),
+  ],
+  signup
+);
+
+router.post(
+  "/login",
+  [
+    body("email").isEmail().normalizeEmail(),
+    body("password").isLength({ min: 8, max: 250 }).escape(),
+  ],
+  requireLogin,
+  login
+);
 
 module.exports = router;
