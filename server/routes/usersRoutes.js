@@ -6,13 +6,7 @@ const passportService = require("../services/passport");
 
 const router = express.Router();
 
-const requireAuth = passport.authenticate("jwt", { session: false });
-
 const requireLogin = passport.authenticate("local", { session: false });
-
-router.get("/dashboard", requireAuth, (req, res, next) => {
-  res.json({ message: "I can edit stuff here" });
-});
 
 router.post(
   "/signup",

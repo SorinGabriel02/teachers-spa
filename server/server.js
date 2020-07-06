@@ -3,7 +3,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 
-const userRouter = require("./routes/usersRoutes");
+const usersRouter = require("./routes/usersRoutes");
+const postsRouter = require("./routes/postsRoutes");
 
 const app = express();
 
@@ -12,7 +13,8 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 // routes
-app.use("/api/users", userRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/posts", postsRouter);
 
 const port = process.env.PORT || 8080;
 
