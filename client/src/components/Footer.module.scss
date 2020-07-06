@@ -1,0 +1,15 @@
+@import "../variables.scss";
+
+.mainFooter {
+  position: absolute;
+  bottom: 0;
+  height: 10vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: $headerBackground;
+  p {
+    width: 100%;
+    text-align: center;
+  }
+}

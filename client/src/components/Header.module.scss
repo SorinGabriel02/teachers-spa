@@ -1,0 +1,7 @@
+@import "../variables.scss";
+
+.mainHeader {
+  height: 10vh;
+  background-color: $headerBackground;
+  display: flex;
+}
