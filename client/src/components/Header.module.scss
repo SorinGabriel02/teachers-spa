@@ -10,10 +10,17 @@
   img {
     width: 9vh;
     margin: 0 2vmax;
-    animation-play-state: paused;
+    animation: imageHover 3s ease-in-out infinite alternate forwards paused;
   }
   img:hover {
-    animation: imageHover 2s ease-in-out infinite alternate forwards;
+    animation-play-state: running;
+  }
+  img:hover::after {
+    content: "Inapoi Acasa";
+    position: absolute;
+    top: 0;
+    width: 2vmax;
+    height: 2vmax;
   }
   @keyframes imageHover {
     from {

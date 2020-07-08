@@ -13,7 +13,7 @@ function Header() {
 
   return (
     <header className={mainHeader}>
-      <NavLink to="/" title="Pagina de pornire">
+      <NavLink to="/">
         <img src={logo} alt="logo" />
       </NavLink>
       <nav>
