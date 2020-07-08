@@ -1,15 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { mainHeader } from "./Header.module.scss";
+import { mainHeader, card } from "./Header.module.scss";
 
 function Header() {
   return (
     <header className={mainHeader}>
+      <p className={card} title="Inapoi la pagina de pornire.">
+        <Link to="/">Sprijin</Link>
+      </p>
       <nav>
-        <p>
-          <Link to="/">Sprijin</Link>
-        </p>
         <ul>
           <li>
             <Link to="/legislatie">Legislatie</Link>
@@ -24,7 +24,7 @@ function Header() {
             <Link to="/noutati">Noutati</Link>
           </li>
           <li>
-            <Link to="/login">Login</Link>
+            <Link to="/autentificare">Autentificare</Link>
           </li>
         </ul>
       </nav>

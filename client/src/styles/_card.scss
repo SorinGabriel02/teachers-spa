@@ -1,0 +1,19 @@
+@import "../variables.scss";
+
+.cardShared {
+  margin: 0 auto;
+  max-width: 90%;
+  border: 2px solid $headerBackground;
+  border-radius: 10px;
+  padding: 2vmax;
+  box-shadow: 0 0 5px $shadowColor;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.cardShared:hover {
+  box-shadow: 0 0 15px $shadowColor;
+}
+
+.cardShared:focus-within {
+  box-shadow: 0 0 15px $shadowColor;
+}

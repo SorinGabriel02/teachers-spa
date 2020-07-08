@@ -4,4 +4,30 @@
   height: 10vh;
   background-color: $headerBackground;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  nav {
+    width: 80%;
+  }
+  p {
+    border: 1px solid green;
+    padding: 3px;
+    margin: 3px;
+    border-radius: 5px;
+  }
+  a {
+    text-decoration: none;
+    color: black;
+  }
+  ul {
+    display: flex;
+    list-style: none;
+    justify-content: space-around;
+    border: 1px solid red;
+    padding: 1.1vmax;
+    li {
+      margin: 0 1vmax;
+      padding: 0.3vmax;
+    }
+  }
 }

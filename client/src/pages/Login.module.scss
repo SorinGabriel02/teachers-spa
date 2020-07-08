@@ -1,0 +1,13 @@
+@import "../variables.scss";
+@import "../styles/card";
+@import "../styles/label";
+
+.loginForm {
+  @extend .cardShared;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  label {
+    @extend .labelShared;
+  }
+}

@@ -5,7 +5,7 @@ import { mainFooter, content } from "./Footer.module.scss";
 function Footer() {
   return (
     <footer className={mainFooter}>
-      <p className={content}>&copy; ProfiDeSprijin 2020</p>
+      <p className={content}>&copy; Profesori de Sprijin 2020</p>
     </footer>
   );
 }

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Switch, Route } from "react-router-dom";
 
+import { AppContext } from "./context/appContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Welcome from "./pages/Welcome";
@@ -14,6 +15,8 @@ import NewPost from "./pages/NewPost";
 import { app } from "./App.module.scss";
 
 function App() {
+  const context = useContext(AppContext);
+  console.log(context);
   return (
     <div className={app}>
       <Header />
@@ -33,7 +36,7 @@ function App() {
         <Route path="/noutati">
           <Noutati />
         </Route>
-        <Route path="/login">
+        <Route path="/autentificare">
           <Login />
         </Route>
         <Route path="/new">
