@@ -1,30 +1,47 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 
-import { mainHeader, card } from "./Header.module.scss";
+import { mainHeader, activeLink } from "./Header.module.scss";
+import logo from "../assets/logo.png";
 
 function Header() {
+  const [isActive, setActive] = useState(false);
+
+  const handleSelect = (e) => {
+    e.target.style = { border: "1px solid red" };
+  };
+
   return (
     <header className={mainHeader}>
-      <p className={card} title="Inapoi la pagina de pornire.">
-        <Link to="/">Sprijin</Link>
-      </p>
+      <NavLink to="/" title="Pagina de pornire">
+        <img src={logo} alt="logo" />
+      </NavLink>
       <nav>
         <ul>
           <li>
-            <Link to="/legislatie">Legislatie</Link>
+            <NavLink activeClassName={activeLink} to="/legislatie">
+              Legislatie
+            </NavLink>
           </li>
           <li>
-            <Link to="/documente">Documente COSP</Link>
+            <NavLink activeClassName={activeLink} to="/documente">
+              Documente COSP
+            </NavLink>
           </li>
           <li>
-            <Link to="/materiale">Materiale Suport</Link>
+            <NavLink activeClassName={activeLink} to="/materiale">
+              Materiale Suport
+            </NavLink>
           </li>
           <li>
-            <Link to="/noutati">Noutati</Link>
+            <NavLink activeClassName={activeLink} to="/noutati">
+              Noutati
+            </NavLink>
           </li>
           <li>
-            <Link to="/autentificare">Autentificare</Link>
+            <NavLink activeClassName={activeLink} to="/autentificare">
+              Autentificare
+            </NavLink>
           </li>
         </ul>
       </nav>
