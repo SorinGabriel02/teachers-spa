@@ -1,5 +1,8 @@
+@import "../variables.scss";
+
 .labelShared {
+  font-weight: bold;
   font-size: 1.3rem;
   margin: 0.5vmax 0.2vmax;
-  text-shadow: 0 0 1px white;
+  text-shadow: 0 0 2px $shadowColor;
 }

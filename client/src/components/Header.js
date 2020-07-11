@@ -1,15 +1,10 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-
 import { mainHeader, activeLink } from "./Header.module.scss";
 import logo from "../assets/logo.png";
 
 function Header() {
   const [isActive, setActive] = useState(false);
-
-  const handleSelect = (e) => {
-    e.target.style = { border: "1px solid red" };
-  };
 
   return (
     <header className={mainHeader}>

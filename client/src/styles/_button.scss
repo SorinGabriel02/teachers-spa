@@ -1,0 +1,23 @@
+@import "../variables.scss";
+
+.sharedBtn {
+  width: fit-content;
+  font-size: 1.1rem;
+  text-shadow: 0 0 1px $shadowColor;
+  padding: 1vmax;
+  margin: 1vmax;
+  border: 1px solid $headerBackground;
+  border-radius: 1vmax;
+  box-shadow: $boxShadow;
+  &:hover {
+    box-shadow: $boxShadowFocus;
+  }
+  &:focus {
+    outline: none;
+    box-shadow: $boxShadowFocus;
+  }
+  &:active {
+    box-shadow: $boxShadow;
+    transform: scale(0.98);
+  }
+}

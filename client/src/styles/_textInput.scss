@@ -1,3 +1,15 @@
+@import "../variables.scss";
+
 .sharedTextInput {
+  font-size: 1.1rem;
   padding: 0.3vmax;
+  background-color: rgb(200, 200, 204);
+  border: none;
+  border-radius: 6px;
+  margin-bottom: 1vmax;
+  box-shadow: $boxShadow;
+  &:focus {
+    outline: none;
+    box-shadow: $boxShadowFocus;
+  }
 }

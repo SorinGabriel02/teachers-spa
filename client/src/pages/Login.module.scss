@@ -1,13 +1,32 @@
 @import "../variables.scss";
 @import "../styles/card";
 @import "../styles/label";
+@import "../styles/textInput";
+@import "../styles/button";
 
 .loginForm {
   @extend .cardShared;
   display: flex;
   flex-direction: column;
-  width: 60%;
+  width: 40%;
+  margin-top: 3vmax;
+  background-color: $headerBackground;
+  h2 {
+    text-align: center;
+    text-shadow: 0 0 2px $shadowColor;
+  }
   label {
     @extend .labelShared;
+  }
+  input {
+    @extend .sharedTextInput;
+  }
+  button {
+    @extend .sharedBtn;
+    background-color: $greenBtn;
+    align-self: center;
+  }
+  p {
+    text-align: center;
   }
 }

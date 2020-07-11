@@ -1,3 +1,10 @@
-$mainBackground: rgb(200, 200, 204);
+$mainBackground: rgba(200, 200, 204, 0.6);
 $headerBackground: rgb(173, 176, 201);
-$shadowColor: black;
+$greenBtn: rgba(206, 255, 174, 0.9);
+$shadowColor: rgba(0, 0, 0, 0.7);
+$boxShadow: -2px -2px 4px rgba(121, 134, 250, 0.5),
+  2px 2px 4px rgba(121, 134, 250, 0.5), 0 -2px 4px rgba(121, 134, 250, 0.5),
+  -2px 0 4px rgba(121, 134, 250, 0.5);
+$boxShadowFocus: -3px -3px 11px rgba(121, 134, 250, 0.7),
+  3px 3px 11px rgba(121, 134, 250, 0.7), 0 -3px 11px rgba(121, 134, 250, 0.7),
+  -3px 0 11px rgba(121, 134, 250, 0.7);
