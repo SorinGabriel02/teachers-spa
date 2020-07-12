@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 
 import { AppContext } from "./context/appContext";
 import Header from "./components/Header";
@@ -10,6 +10,7 @@ import Documente from "./pages/Documente";
 import Materiale from "./pages/Materiale";
 import Noutati from "./pages/Noutati";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import NewPost from "./pages/NewPost";
 
 import { app } from "./App.module.scss";
@@ -39,9 +40,13 @@ function App() {
         <Route path="/autentificare">
           <Login />
         </Route>
+        <Route path="/contNou">
+          <Signup />
+        </Route>
         <Route path="/new">
           <NewPost />
         </Route>
+        <Redirect to="/" />
       </Switch>
       <Footer />
     </div>

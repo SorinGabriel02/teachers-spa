@@ -4,14 +4,16 @@ import axios from "axios";
 
 import { loginForm } from "./Login.module.scss";
 
-function Login() {
+function Signup() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("/users/login", {
+      const response = await axios.post("/users/signup", {
+        name,
         email,
         password,
       });
@@ -23,6 +25,15 @@ function Login() {
   return (
     <form onSubmit={handleSubmit} className={loginForm}>
       <h2>Autentificare</h2>
+      <label htmlFor="nume">Nume</label>
+      <input
+        autoComplete="off"
+        type="text"
+        name="nume"
+        placeholder="Nume și prenume..."
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
       <label htmlFor="email">E-mail</label>
       <input
         autoComplete="off"
@@ -40,13 +51,12 @@ function Login() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button>Autentificare</button>
-
+      <button>Creează Cont</button>
       <p>
-        Nu ai cont? <NavLink to="/contNou">Creează cont</NavLink>
+        Ai deja cont? <NavLink to="/autentificare">Loghează-te</NavLink>
       </p>
     </form>
   );
 }
 
-export default Login;
+export default Signup;

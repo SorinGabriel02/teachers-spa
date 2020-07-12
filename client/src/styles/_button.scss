@@ -9,6 +9,7 @@
   border: 1px solid $headerBackground;
   border-radius: 1vmax;
   box-shadow: $boxShadow;
+  cursor: pointer;
   &:hover {
     box-shadow: $boxShadowFocus;
   }

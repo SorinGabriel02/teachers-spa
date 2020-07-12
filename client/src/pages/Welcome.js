@@ -5,8 +5,8 @@ import { landing } from "./Welcome.module.scss";
 function Welcome() {
   return (
     <main className={landing}>
-      <h1>Parteneri si Profesori de Educatie</h1>
-      <h2>Servicii de Sprijin Educational</h2>
+      <h1>Bine ai Venit la Parteneri în Educație</h1>
+      <h2>Informații Despre Serviciile de Sprijin Educațional</h2>
     </main>
   );
 }

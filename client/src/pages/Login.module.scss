@@ -3,13 +3,15 @@
 @import "../styles/label";
 @import "../styles/textInput";
 @import "../styles/button";
+@import "../styles/link";
 
 .loginForm {
   @extend .cardShared;
   display: flex;
   flex-direction: column;
-  width: 40%;
-  margin-top: 3vmax;
+  width: 35%;
+  margin-top: 2vmax;
+  margin-bottom: 2vmax;
   background-color: $headerBackground;
   h2 {
     text-align: center;
@@ -27,6 +29,9 @@
     align-self: center;
   }
   p {
+    margin: 1vmax;
     text-align: center;
+  }
+  a {
   }
 }

@@ -13,31 +13,21 @@ function Header() {
       </NavLink>
       <nav>
         <ul>
-          <li>
-            <NavLink activeClassName={activeLink} to="/legislatie">
-              Legislatie
-            </NavLink>
-          </li>
-          <li>
-            <NavLink activeClassName={activeLink} to="/documente">
-              Documente COSP
-            </NavLink>
-          </li>
-          <li>
-            <NavLink activeClassName={activeLink} to="/materiale">
-              Materiale Suport
-            </NavLink>
-          </li>
-          <li>
-            <NavLink activeClassName={activeLink} to="/noutati">
-              Noutati
-            </NavLink>
-          </li>
-          <li>
-            <NavLink activeClassName={activeLink} to="/autentificare">
-              Autentificare
-            </NavLink>
-          </li>
+          <NavLink activeClassName={activeLink} to="/legislatie">
+            <li>Legislatie</li>
+          </NavLink>
+          <NavLink activeClassName={activeLink} to="/documente">
+            <li>Documente COSP</li>
+          </NavLink>
+          <NavLink activeClassName={activeLink} to="/materiale">
+            <li>Materiale Suport</li>
+          </NavLink>
+          <NavLink activeClassName={activeLink} to="/noutati">
+            <li> Noutati</li>
+          </NavLink>
+          <NavLink activeClassName={activeLink} to="/autentificare">
+            <li> Autentificare</li>
+          </NavLink>
         </ul>
       </nav>
     </header>

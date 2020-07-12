@@ -1,0 +1,29 @@
+@import "../variables.scss";
+
+.linkShared {
+  position: relative;
+  width: fit-content;
+  text-decoration: none;
+  color: black;
+  padding: 0.4vmax 1vmax;
+  border-radius: 5px;
+  text-shadow: 0 0 2px $shadowColor;
+  box-shadow: $boxShadow;
+  transition: all 0.25s ease-in-out;
+}
+.linkShared::after {
+  display: block;
+  content: "";
+  border-bottom: solid 2px whitesmoke;
+  transform: scaleX(0);
+  transition: transform 0.5s ease-in-out;
+}
+.linkShared:hover {
+  box-shadow: 0 0 10px white;
+}
+.linkShared:focus {
+  color: rgb(30, 30, 172);
+}
+.linkShared:hover::after {
+  transform: scaleX(1);
+}

@@ -1,12 +1,20 @@
 @import "../variables.scss";
+@import "../styles/link";
+
+.activeLink {
+  border: 1px solid white;
+  box-shadow: 0 0 10px whitesmoke;
+}
 
 .mainHeader {
+  position: fixed;
+  top: 0;
+  width: 100%;
   height: 10vh;
   background-color: $headerBackground;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 0 5px black;
+  box-shadow: 0 0 3px $shadowColor;
   img {
     width: 9vh;
     margin: 0 2vmax;
@@ -14,13 +22,6 @@
   }
   img:hover {
     animation-play-state: running;
-  }
-  img:hover::after {
-    content: "Inapoi Acasa";
-    position: absolute;
-    top: 0;
-    width: 2vmax;
-    height: 2vmax;
   }
   @keyframes imageHover {
     from {
@@ -31,38 +32,19 @@
     }
   }
   nav {
-    width: 80%;
-    .activeLink {
-      border: 1px solid white;
-      box-shadow: 0 0 10px whitesmoke;
-    }
-    a {
-      text-decoration: none;
-      color: black;
-    }
+    width: 90%;
     ul {
+      height: 100%;
+      margin: 0 2vmax;
       display: flex;
       list-style: none;
-      justify-content: space-around;
-      padding: 1.1vmax;
-      li {
-        margin: 0 1vmax;
-        a {
-          outline: none;
-          border-radius: 5px;
-          font-size: 1.05rem;
-          padding: 0.5vmax 1vmax;
-          text-align: center;
-          box-shadow: 0 0 1px white;
-          transition: box-shadow 0.3s ease;
-        }
-        a:hover {
-          box-shadow: 0 0 10px white;
-        }
-        a:active {
-          border: 1px solid white;
-        }
-      }
+      justify-content: space-between;
+      align-items: center;
+    }
+    a {
+      @extend .linkShared;
+      margin: 0.2vh;
+      text-align: center;
     }
   }
 }
