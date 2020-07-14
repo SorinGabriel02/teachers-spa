@@ -16,8 +16,8 @@ import NewPost from "./pages/NewPost";
 import { app } from "./App.module.scss";
 
 function App() {
-  const context = useContext(AppContext);
-  console.log(context);
+  const { isAuthenticated } = useContext(AppContext);
+
   return (
     <div className={app}>
       <Header />
@@ -25,6 +25,11 @@ function App() {
         <Route exact path="/">
           <Welcome />
         </Route>
+        {!isAuthenticated && (
+          <Route path="/autentificare">
+            <Login />
+          </Route>
+        )}
         <Route path="/legislatie">
           <Legislatie />
         </Route>
@@ -37,13 +42,11 @@ function App() {
         <Route path="/noutati">
           <Noutati />
         </Route>
-        <Route path="/autentificare">
-          <Login />
-        </Route>
+
         <Route path="/contNou">
           <Signup />
         </Route>
-        <Route path="/new">
+        <Route path="/postNou">
           <NewPost />
         </Route>
         <Redirect to="/" />

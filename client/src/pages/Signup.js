@@ -17,7 +17,7 @@ function Signup() {
         email,
         password,
       });
-      console.log(response.data);
+      localStorage.setItem("token", response.data.token);
     } catch (error) {
       console.log(error);
     }

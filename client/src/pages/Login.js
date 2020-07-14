@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
+import { AppContext } from "../context/appContext";
 
 import { loginForm } from "./Login.module.scss";
 
 function Login() {
+  const { login } = useContext(AppContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,7 +17,9 @@ function Login() {
         email,
         password,
       });
-      console.log(response.data);
+      localStorage.setItem("token", response.data.token);
+      if (response.data.admin) localStorage.setItem("admin", true);
+      login();
     } catch (error) {
       console.log(error);
     }
