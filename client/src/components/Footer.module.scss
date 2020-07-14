@@ -1,11 +1,9 @@
 @import "../variables.scss";
 
 .mainFooter {
-  position: absolute;
+  margin-top: auto;
   background-color: orange;
-  overflow: hidden;
-  bottom: 0;
-  left: 0;
+
   height: $footerHeight;
   width: 100%;
   display: flex;

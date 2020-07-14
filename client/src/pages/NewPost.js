@@ -1,11 +1,9 @@
 import React from "react";
 
+import PostEditor from "../components/PostEditor";
+
 function NewPost() {
-  return (
-    <section>
-      <h2>Make a new post</h2>
-    </section>
-  );
+  return <PostEditor />;
 }
 
 export default NewPost;
