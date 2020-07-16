@@ -1,12 +1,13 @@
 import React, { useState, useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import axios from "axios";
 import { AppContext } from "../context/appContext";
 
 import { loginForm } from "./Login.module.scss";
 
 function Login() {
-  const { login } = useContext(AppContext);
+  const { login, error, handleError } = useContext(AppContext);
+  const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -17,13 +18,20 @@ function Login() {
         email,
         password,
       });
+
       localStorage.setItem("token", response.data.token);
       if (response.data.admin) localStorage.setItem("admin", true);
       login();
+      history.goBack();
     } catch (error) {
-      console.log(error);
+      if (error.response.status === 401)
+        console.log("Datele introduse nu sunt valide.");
+      if (error.response.status === 500)
+        console.log("Eroare de server. Te rugam să încerci din nou.");
     }
   };
+
+  //console.log(error);
   return (
     <form onSubmit={handleSubmit} className={loginForm}>
       <h2>Autentificare</h2>
@@ -45,7 +53,7 @@ function Login() {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button>Autentificare</button>
-
+      <div>{}</div>
       <p>
         Nu ai cont? <NavLink to="/contNou">Creează cont</NavLink>
       </p>

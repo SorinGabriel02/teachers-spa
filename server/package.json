@@ -24,7 +24,8 @@
     "mongoose": "^5.9.20",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "suneditor": "^2.31.2"
   },
   "devDependencies": {
     "morgan": "^1.10.0"

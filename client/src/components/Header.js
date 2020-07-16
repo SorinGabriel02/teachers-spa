@@ -8,7 +8,6 @@ import logo from "../assets/logo.png";
 function Header() {
   const { isAuthenticated, logout } = useContext(AppContext);
 
-  console.log(isAuthenticated);
   return (
     <header className={mainHeader}>
       <NavLink to="/">
@@ -17,7 +16,7 @@ function Header() {
       <nav>
         <ul>
           <NavLink activeClassName={activeLink} to="/legislatie">
-            <li>Legislatie</li>
+            <li>Legislație</li>
           </NavLink>
           <NavLink activeClassName={activeLink} to="/documente">
             <li>Documente COSP</li>
@@ -28,14 +27,13 @@ function Header() {
           <NavLink activeClassName={activeLink} to="/noutati">
             <li> Noutati</li>
           </NavLink>
-          {!isAuthenticated && (
+          {!isAuthenticated ? (
             <NavLink activeClassName={activeLink} to="/autentificare">
               <li> Autentificare</li>
             </NavLink>
-          )}
-          {isAuthenticated && (
+          ) : (
             <li>
-              <button onClick={logout}>Logout</button>
+              <button onClick={logout}>Delogare</button>
             </li>
           )}
         </ul>

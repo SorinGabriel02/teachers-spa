@@ -4,7 +4,6 @@ import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 
 import { editContainer } from "./PostEditor.module.scss";
-
 function PostEditor(props) {
   const setOptionsObj = {
     height: "auto",
@@ -52,7 +51,9 @@ function PostEditor(props) {
     imageUploadSizeLimit: 1500000,
   };
 
-  const handleChange = (content) => props.handleChange(content);
+  const handleChange = (content) => {
+    props.handleChange(content);
+  };
 
   return (
     <div className={editContainer}>

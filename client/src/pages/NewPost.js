@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 
+import { AppContext } from "../context/appContext";
 import PostEditor from "../components/PostEditor";
 
 function NewPost(props) {
+  const { isAuthenticated } = useContext(AppContext);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [editorState, setEditorState] = useState();
@@ -12,11 +14,15 @@ function NewPost(props) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("/posts/new", {
-        title,
-        author,
-        editorState,
-      });
+      const response = await axios.post(
+        "http://localhost:8080/api/posts/new",
+        {
+          title,
+          author,
+          content: editorState,
+        },
+        { headers: { Authorization: `Bearer ${isAuthenticated}` } }
+      );
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -25,6 +31,7 @@ function NewPost(props) {
 
   const btnDisable = !editorState || !title.length ? true : false;
 
+  console.log(isAuthenticated);
   return (
     <main>
       <form

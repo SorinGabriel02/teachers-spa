@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 
+import { AppContext } from "../context/appContext";
 import { newsBtn } from "./Noutati.module.scss";
 
-function Noutati() {
+function Noutati(props) {
+  const { isAdmin } = useContext(AppContext);
+
   return (
     <div>
       <h1>Noutati</h1>
-      <NavLink to="/postNou">
-        <button className={newsBtn}>Creează post</button>
-      </NavLink>
+      {isAdmin && (
+        <NavLink to="/postNou">
+          <button className={newsBtn}>Creează post</button>
+        </NavLink>
+      )}
     </div>
   );
 }

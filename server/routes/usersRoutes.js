@@ -6,7 +6,7 @@ const passportService = require("../services/passport");
 
 const router = express.Router();
 
-const requireLogin = passport.authenticate("local", { session: false });
+const requireAuth = passport.authenticate("local", { session: false });
 
 router.post(
   "/signup",
@@ -24,7 +24,7 @@ router.post(
     body("email").isEmail().normalizeEmail(),
     body("password").isLength({ min: 8, max: 250 }).escape(),
   ],
-  requireLogin,
+  requireAuth,
   login
 );
 

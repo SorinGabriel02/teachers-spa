@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const morgan = require("morgan");
+const fileUpload = require("express-fileupload");
 
 const usersRouter = require("./routes/usersRoutes");
 const postsRouter = require("./routes/postsRoutes");
@@ -11,7 +12,9 @@ const app = express();
 
 // middleware
 app.use(morgan("dev"));
+app.use(cors());
 app.use(express.json());
+app.use(fileUpload());
 
 // routes
 app.use("/api/users", usersRouter);

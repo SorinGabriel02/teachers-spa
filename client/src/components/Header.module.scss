@@ -1,5 +1,6 @@
 @import "../variables.scss";
 @import "../styles/link";
+@import "../styles/button";
 
 .activeLink {
   border: 1px solid white;
@@ -46,6 +47,12 @@
       @extend .linkShared;
       margin: 0.2vh;
       text-align: center;
+    }
+    button {
+      @extend .sharedBtn;
+      padding: 0.5vmax;
+      font-size: 1rem;
+      background-color: rgb(255, 107, 107);
     }
   }
 }

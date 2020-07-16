@@ -12,6 +12,9 @@ node_modules
 # production
 /build
 
+# images
+/server/upload/images
+
 # misc
 .env
 .DS_Store

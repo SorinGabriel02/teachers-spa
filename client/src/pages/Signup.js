@@ -1,10 +1,13 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { NavLink, useHistory } from "react-router-dom";
 import axios from "axios";
 
+import { AppContext } from "../context/appContext";
 import { loginForm } from "./Login.module.scss";
 
 function Signup() {
+  const { login } = useContext(AppContext);
+  const history = useHistory();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,18 +16,20 @@ function Signup() {
     event.preventDefault();
     try {
       const response = await axios.post("/users/signup", {
-        name,
+        username: name,
         email,
         password,
       });
       localStorage.setItem("token", response.data.token);
+      login();
+      history.goBack();
     } catch (error) {
       console.log(error);
     }
   };
   return (
     <form onSubmit={handleSubmit} className={loginForm}>
-      <h2>Autentificare</h2>
+      <h2>Creează cont</h2>
       <label htmlFor="nume">Nume</label>
       <input
         autoComplete="off"

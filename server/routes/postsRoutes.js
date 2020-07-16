@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const { body } = require("express-validator");
 const passport = require("passport");
 const passportService = require("../services/passport");
 const {
@@ -9,6 +8,7 @@ const {
   createPost,
   updatePost,
   deletePost,
+  uploadImage,
 } = require("../controllers/postsController");
 
 const router = express.Router();
@@ -23,6 +23,8 @@ const requireAdmin = (req, res, next) => {
 router.get("/", getPosts);
 
 router.get("/:postId", getPostById);
+
+router.post("/images/upload", uploadImage);
 
 router.post("/new", requireAuth, requireAdmin, createPost);
 
