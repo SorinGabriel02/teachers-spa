@@ -31,7 +31,6 @@ function NewPost(props) {
 
   const btnDisable = !editorState || !title.length ? true : false;
 
-  console.log(isAuthenticated);
   return (
     <main>
       <form

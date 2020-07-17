@@ -49,6 +49,7 @@ function PostEditor(props) {
       // "blockquote": range format, "pre": free format, "Other tags": replace format
     ],
     imageUploadSizeLimit: 1500000,
+    imageUploadUrl: "http://localhost:8080/api/media/images/new",
   };
 
   const handleChange = (content) => {

@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import { AppContextProvider } from "./context/appContext";
 import App from "./App";
@@ -8,9 +8,9 @@ import "./index.scss";
 
 ReactDOM.render(
   <AppContextProvider>
-    <BrowserRouter>
+    <Router>
       <App />
-    </BrowserRouter>
+    </Router>
   </AppContextProvider>,
   document.getElementById("root")
 );

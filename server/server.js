@@ -7,6 +7,7 @@ const fileUpload = require("express-fileupload");
 
 const usersRouter = require("./routes/usersRoutes");
 const postsRouter = require("./routes/postsRoutes");
+const mediaRouter = require("./routes/mediaRoutes");
 
 const app = express();
 
@@ -14,11 +15,16 @@ const app = express();
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
+// static directory that servers images to the rich text editor
+// when "/api/media/images" endpoint is requested
+// serve images from "/upload/images" directory
+app.use("/api/media/images/", express.static(`${__dirname}/upload/images/`));
 app.use(fileUpload());
 
 // routes
 app.use("/api/users", usersRouter);
 app.use("/api/posts", postsRouter);
+app.use("/api/media", mediaRouter);
 
 const port = process.env.PORT || 8080;
 
