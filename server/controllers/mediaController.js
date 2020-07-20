@@ -7,10 +7,11 @@ const uploadImage = (req, res, next) => {
   const mymeTypes = ["image/png", "image/jpeg", "image/jpg"];
   // img object sent from client
   let image = req.files["file-0"];
-  console.log(image);
 
   if (!mymeTypes.some((img) => img.mymetype === image.mymetype)) {
-    return res.status(422).json({ error: "Invalid type of image." });
+    return res
+      .status(422)
+      .json({ error: "Only .png, .jpeg or .jpg are allowed." });
   }
 
   image.mv(`${__dirname}/../upload/images/${image.name}`, (err) => {
@@ -27,10 +28,4 @@ const uploadImage = (req, res, next) => {
   });
 };
 
-// send back an image url
-const getImageUrl = (req, res, next) => {
-  const imageName = req.params;
-  res.send(`http://localhost:8080/upload/images/${imageName}`);
-};
-
-module.exports = { uploadImage, getImageUrl };
+module.exports = { uploadImage };

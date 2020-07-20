@@ -37,22 +37,19 @@ function App() {
         <Route path="/noutati">
           <Noutati />
         </Route>
-        {!isAuthenticated && (
-          <React.Fragment>
-            <Route path="/autentificare">
-              <Login />
-            </Route>
-            <Route path="/contNou">
-              <Signup />
-            </Route>
-          </React.Fragment>
-        )}
-        {isAuthenticated && isAdmin && (
-          <Route path="/postNou">
+        <Route path="/autentificare">
+          <Login />
+        </Route>
+        <Route path="/contNou">
+          <Signup />
+        </Route>
+        <Route path="/postNou">
+          {isAuthenticated && isAdmin ? (
             <NewPost />
-          </Route>
-        )}
-        <Redirect to="/" />
+          ) : (
+            <Redirect to="/autentificare" />
+          )}
+        </Route>
       </Switch>
       <Footer />
     </div>

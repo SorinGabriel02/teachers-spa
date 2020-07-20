@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { AppContext } from "../context/appContext";
 
 import { mainHeader, activeLink } from "./Header.module.scss";
@@ -7,6 +7,8 @@ import logo from "../assets/logo.png";
 
 function Header() {
   const { isAuthenticated, logout } = useContext(AppContext);
+
+  const { pathname } = useLocation();
 
   return (
     <header className={mainHeader}>
@@ -25,11 +27,16 @@ function Header() {
             <li>Materiale Suport</li>
           </NavLink>
           <NavLink activeClassName={activeLink} to="/noutati">
-            <li> Noutati</li>
+            <li>Noutati</li>
           </NavLink>
           {!isAuthenticated ? (
-            <NavLink activeClassName={activeLink} to="/autentificare">
-              <li> Autentificare</li>
+            <NavLink
+              /*keep the link active if path is /contNou */
+              className={pathname === "/contNou" ? activeLink : null}
+              activeClassName={activeLink}
+              to="/autentificare"
+            >
+              <li>Autentificare</li>
             </NavLink>
           ) : (
             <li>

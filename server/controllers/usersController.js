@@ -4,7 +4,12 @@ const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
 const tokenForUser = (user) =>
-  jwt.sign({ sub: user.id }, process.env.JWT_SECRET, { expiresIn: "24h" });
+  jwt.sign({ sub: user.id }, process.env.JWT_SECRET, { expiresIn: "1m" });
+
+const refreshToken = (user) =>
+  jwt.sign({ sub: user.id }, process.env.JWT_REFRESH_SECRET, {
+    expiresIn: "10m",
+  });
 
 const signup = async (req, res, next) => {
   const errors = validationResult(req);
@@ -23,8 +28,13 @@ const signup = async (req, res, next) => {
     // create and save the new user
     const newUser = new User({ username, email, password });
     const savedUser = await newUser.save();
-    // send back a token
-    res.status(201).json({ token: tokenForUser(savedUser) });
+    // send back a token and refresh token
+    res
+      .status(201)
+      .json({
+        token: tokenForUser(savedUser),
+        refreshToken: refreshToken(savedUser),
+      });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

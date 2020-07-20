@@ -6,7 +6,7 @@ import { AppContext } from "../context/appContext";
 import { loginForm } from "./Login.module.scss";
 
 function Login() {
-  const { login, error, handleError } = useContext(AppContext);
+  const { login, errorMessage, handleError } = useContext(AppContext);
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,9 +25,9 @@ function Login() {
       history.goBack();
     } catch (error) {
       if (error.response.status === 401)
-        console.log("Datele introduse nu sunt valide.");
+        handleError("Datele introduse sunt incorecte.");
       if (error.response.status === 500)
-        console.log("Eroare de server. Te rugam să încerci din nou.");
+        handleError("Eroare de server. Te rugam să încerci mai tarziu.");
     }
   };
 
@@ -52,8 +52,8 @@ function Login() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
+      {errorMessage && <p>{errorMessage}</p>}
       <button>Autentificare</button>
-      <div>{}</div>
       <p>
         Nu ai cont? <NavLink to="/contNou">Creează cont</NavLink>
       </p>
