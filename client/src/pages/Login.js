@@ -18,10 +18,9 @@ function Login() {
         email,
         password,
       });
+      // send data to appContext
+      login(response.data.token, !!response.data.admin);
 
-      localStorage.setItem("token", response.data.token);
-      if (response.data.admin) localStorage.setItem("admin", true);
-      login();
       history.goBack();
     } catch (error) {
       if (error.response.status === 401)

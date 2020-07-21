@@ -1,39 +1,39 @@
 import React, { useState, useEffect, createContext } from "react";
 import jwtDecode from "jwt-decode";
+import axios from "axios";
 
 const AppContext = createContext();
 
 function AppContextProvider({ children }) {
-  const [authEmail, setAuthEmail] = useState("");
-  const [authPass, setAuthPass] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    localStorage.getItem("token")
-  );
-  const [isAdmin, setIsAdmin] = useState(!!localStorage.getItem("admin"));
+  // const [timeoutId, setTimeoutId] = useState();
+  const [isAuthenticated, setIsAuthenticated] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const logout = () => {
     setIsAuthenticated("");
     setIsAdmin(false);
-    localStorage.removeItem("token");
-    localStorage.removeItem("admin");
   };
 
-  const login = () => {
-    setIsAuthenticated(localStorage.getItem("token"));
-    setIsAdmin(!!localStorage.getItem("admin"));
+  const login = (token, admin) => {
+    setIsAuthenticated(token);
+    setIsAdmin(admin);
   };
 
   const handleError = (errMessage) => setErrorMessage(errMessage);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const expires = jwtDecode(token).exp;
-      if (Date.now() >= expires * 1000) {
-        logout();
-      }
-    }
+    axios
+      .get("/users/refresh")
+      .then((response) => {
+        console.log(response.data.token);
+        setIsAuthenticated(response.data.token);
+        setIsAdmin(response.data.admin);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        if (err) logout();
+      });
   }, []);
 
   return (

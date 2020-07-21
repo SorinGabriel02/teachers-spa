@@ -20,8 +20,7 @@ function Signup() {
         email,
         password,
       });
-      localStorage.setItem("token", response.data.token);
-      login();
+      login(response.data.token, false);
       history.goBack();
     } catch (error) {
       console.log(error);
