@@ -5,6 +5,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const morgan = require("morgan");
 const fileUpload = require("express-fileupload");
+const cookieParser = require("cookie-parser");
 
 const usersRouter = require("./routes/usersRoutes");
 const postsRouter = require("./routes/postsRoutes");
@@ -16,7 +17,13 @@ const app = express();
 app.use(helmet());
 app.use(helmet.hidePoweredBy({ setTo: "PHP 7.4.0" }));
 app.use(morgan("dev"));
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 app.use(express.json());
 // static directory that servers images to the rich text editor
 // when "/api/media/images" endpoint is requested
