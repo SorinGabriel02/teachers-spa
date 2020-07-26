@@ -12,9 +12,11 @@ const jwtOptions = {
 };
 
 const jwtLogin = new JwtStrategy(jwtOptions, async (payload, done) => {
+  // here token signature should be valid
   try {
+    // check to see if the the user exists OR token is expired
     const match = await User.findById(payload.sub);
-    if (!match) return done(null, false);
+    if (!match || Date.now() >= payload.exp) return done(null, false);
     done(null, match);
   } catch (error) {
     done(error, false);

@@ -31,7 +31,7 @@ function Header() {
           </NavLink>
           {!isAuthenticated ? (
             <NavLink
-              /*keep the link active if path is /contNou */
+              /* also keep the link active if path is /contNou */
               className={pathname === "/contNou" ? activeLink : null}
               activeClassName={activeLink}
               to="/autentificare"

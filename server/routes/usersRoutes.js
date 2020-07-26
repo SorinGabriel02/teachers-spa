@@ -4,15 +4,21 @@ const {
   signup,
   login,
   refreshAccessToken,
+  logout,
 } = require("../controllers/usersController");
 const passport = require("passport");
 //const passportService = require("../services/passport");
 
 const router = express.Router();
 
-const requireAuth = passport.authenticate("local", { session: false });
+const requireLocalAuth = passport.authenticate("local", { session: false });
+const requireJwtAuth = passport.authenticate("jwt", { session: false });
 
+// refresh token route
 router.get("/refresh", refreshAccessToken);
+
+// an user is able to logout if he has a valid token
+router.get("/logout", requireJwtAuth, logout);
 
 router.post(
   "/signup",
@@ -30,7 +36,7 @@ router.post(
     body("email").isEmail().normalizeEmail(),
     body("password").isLength({ min: 8, max: 250 }).escape(),
   ],
-  requireAuth,
+  requireLocalAuth,
   login
 );
 

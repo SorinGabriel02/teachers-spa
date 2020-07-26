@@ -3,12 +3,12 @@ const User = require("../models/userModel");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
-const expiresTimestamp = Date.now() + 60 * 1000;
+const expiresAt = () => Date.now() + 60 * 1000;
 
 const tokenForUser = (userId) =>
-  jwt.sign({ sub: userId, exp: expiresTimestamp }, process.env.JWT_SECRET);
+  jwt.sign({ sub: userId, exp: expiresAt() }, process.env.JWT_SECRET);
 
-// send refresh token as httpOnly cookie
+// add refresh token as httpOnly cookie
 const refreshTokenAsCookie = (userId, res) => {
   // create token
   const token = jwt.sign({ sub: userId }, process.env.JWT_REFRESH_SECRET, {
@@ -21,32 +21,6 @@ const refreshTokenAsCookie = (userId, res) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production" ? true : false,
   });
-};
-
-const refreshAccessToken = async (req, res, next) => {
-  const refreshToken = req.cookies.refresh;
-  if (!refreshToken) {
-    return res.status(401).json({ errorMessage: "Autentificare necesară." });
-  }
-  try {
-    jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-    const decodedId = jwt.decode(refreshToken).sub;
-    // check if it's admin
-    if (decodedId === process.env.SORIN) {
-      res.json({
-        token: tokenForUser(decodedId),
-        admin: true,
-        expiresIn: expiresTimestamp,
-      });
-    } else {
-      res.json({ token: tokenForUser(decodedId), expiresIn: expiresTimestamp });
-    }
-  } catch (err) {
-    if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError") {
-      return res.status(401).json({ errorMessage: "Autentificare necesară" });
-    }
-    res.sendStatus(500);
-  }
 };
 
 const signup = async (req, res, next) => {
@@ -71,9 +45,7 @@ const signup = async (req, res, next) => {
     const savedUser = await newUser.save();
     // send back a token and a refresh token as cookie
     refreshTokenAsCookie(savedUser.id, res);
-    res
-      .status(201)
-      .json({ token: tokenForUser(savedUser.id), expiresIn: expiresTimestamp });
+    res.status(201).json({ token: tokenForUser(savedUser.id) });
   } catch (error) {
     res.status(500).json({
       errorMessage: "Eroare de server. Te rog să încerci din nou mai târziu.",
@@ -90,11 +62,67 @@ const login = async (req, res, next) => {
     return res.json({
       token: tokenForUser(userId),
       admin: true,
-      expiresIn: expiresTimestamp,
     });
   }
 
-  res.json({ token: tokenForUser(userId), expiresIn: expiresTimestamp });
+  res.json({ token: tokenForUser(userId) });
 };
 
-module.exports = { signup, login, refreshAccessToken };
+const refreshAccessToken = (req, res, next) => {
+  // send back both --> token and refreshToken
+  // keep the user in until refreshToken expires
+  const refreshToken = req.cookies.refresh;
+  if (!refreshToken) {
+    return res.json({ errorMessage: "Autentificare necesară." });
+  }
+  try {
+    jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    const decodedId = jwt.decode(refreshToken).sub;
+    // add new refreshToken as cookie
+    refreshTokenAsCookie(decodedId, res);
+    // check if it's admin
+    if (decodedId === process.env.SORIN) {
+      res.json({
+        token: tokenForUser(decodedId),
+        admin: true,
+      });
+    } else {
+      res.json({ token: tokenForUser(decodedId) });
+    }
+  } catch (err) {
+    if (err.name === "JsonWebTokenError") {
+      return res.status(401).json({ errorMessage: "Autentificare necesară" });
+    }
+    console.log(err);
+    res.sendStatus(500);
+  }
+};
+
+const logout = (req, res, next) => {
+  // access token is valid at this point
+  // if refresh token is valid, log the user out by emptying cookie
+  try {
+    refreshToken = req.cookies.refresh;
+    if (!refreshToken)
+      return res.status(401).json({ error: "Date incomplete." });
+    jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+    res.cookie("refresh", "", {
+      maxAge: 60 * 1000,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production" ? true : false,
+    });
+    res.json({ msg: "Delogare completă." });
+  } catch (error) {
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      return res.status(401).json({ error: "Date incorecte." });
+    }
+
+    res.sendStatus(500);
+  }
+};
+
+module.exports = { signup, login, refreshAccessToken, logout };
