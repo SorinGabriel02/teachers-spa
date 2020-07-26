@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
-const LocalStrategy = require("passport-local").Strategy;
+const LocalStrategy = require("passport-local");
 const User = require("../models/userModel");
 
 const jwtOptions = {
@@ -16,7 +16,8 @@ const jwtLogin = new JwtStrategy(jwtOptions, async (payload, done) => {
   try {
     // check to see if the the user exists OR token is expired
     const match = await User.findById(payload.sub);
-    if (!match || Date.now() >= payload.exp) return done(null, false);
+    if (!match || Math.floor(Date.now() / 1000) >= payload.exp)
+      return done(null, false);
     done(null, match);
   } catch (error) {
     done(error, false);

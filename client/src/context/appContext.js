@@ -41,7 +41,6 @@ function AppContextProvider({ children }) {
       try {
         const response = await axios.get("/users/refresh");
         if (response.data.token) {
-          console.log("initial call", response.data);
           login(response.data.token, response.data.admin);
           setRefreshInterval(true);
         }
@@ -54,20 +53,19 @@ function AppContextProvider({ children }) {
 
   // if user is logged in setup an interval
   // for the token to be refreshed just before it expires
-  // (15 minutes - 5 seconds = 14 minutes 55 seconds)
+  // (14 minutes 55 seconds, must correspond with the backend)
   useEffect(() => {
     if (refreshInterval) {
       const id = setInterval(async () => {
         try {
           const response = await axios.get("/users/refresh");
-          console.log("inside silent refresh call", response.data);
           if (response.data.token) {
             login(response.data.token, response.data.admin);
           }
         } catch (error) {
           console.log(error.response);
         }
-      }, 14 * 60 * 1000 + 55 * 1000); /* 14 minutes and 55 seconds */
+      }, 14 * 60 * 1000 + 55 * 1000); /* 14 minutes +  55 seconds */
       setIntervalId(id);
     }
   }, [login, refreshInterval]);
