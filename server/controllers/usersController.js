@@ -3,11 +3,9 @@ const User = require("../models/userModel");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
-// 15 minutes later
-const expiresAt = () => Date.now() + 15 * 60 * 1000;
-
+// expiry time in 15min token should be refreshed by a frontend call
 const tokenForUser = (userId) =>
-  jwt.sign({ sub: userId, exp: expiresAt() }, process.env.JWT_SECRET);
+  jwt.sign({ sub: userId }, process.env.JWT_SECRET, { expiresIn: "15m" });
 
 // add refresh token as httpOnly cookie
 const refreshTokenAsCookie = (userId, res) => {
