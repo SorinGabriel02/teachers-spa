@@ -3,7 +3,8 @@ const User = require("../models/userModel");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
-const expiresAt = () => Date.now() + 60 * 1000;
+// 15 minutes later
+const expiresAt = () => Date.now() + 15 * 60 * 1000;
 
 const tokenForUser = (userId) =>
   jwt.sign({ sub: userId, exp: expiresAt() }, process.env.JWT_SECRET);
@@ -12,10 +13,10 @@ const tokenForUser = (userId) =>
 const refreshTokenAsCookie = (userId, res) => {
   // create token
   const token = jwt.sign({ sub: userId }, process.env.JWT_REFRESH_SECRET, {
-    expiresIn: "4m",
+    expiresIn: "3d",
   });
-  // set cookie expiration === token expiresIn
-  const cookieExpiresIn = 4 * 60 * 1000;
+  // set cookie expiration === token expiresIn === 3 days
+  const cookieExpiresIn = 3 * 24 * 60 * 60 * 1000;
   return res.cookie("refresh", token, {
     maxAge: cookieExpiresIn,
     httpOnly: true,
@@ -103,6 +104,7 @@ const logout = (req, res, next) => {
   // if refresh token is valid, log the user out by emptying cookie
   try {
     refreshToken = req.cookies.refresh;
+    console.log(refreshToken);
     if (!refreshToken)
       return res.status(401).json({ error: "Date incomplete." });
     jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);

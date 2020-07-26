@@ -15,7 +15,7 @@ function NewPost(props) {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/posts/new",
+        "/posts/new",
         {
           title,
           author,
