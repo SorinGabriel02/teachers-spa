@@ -26,3 +26,26 @@ label,
 input {
   font-family: "Solway", serif;
 }
+
+.errorMessage {
+  color: rgb(252, 49, 49);
+  box-shadow: 0 0 3px white;
+  background-color: rgb(253, 212, 212);
+  width: 100%;
+  align-self: center;
+  padding: 3px;
+  border-radius: 5px;
+}
+
+.infoMessage {
+  font-size: "0.8rem";
+  font-style: italic;
+  font-size: 0.8rem;
+  opacity: 0;
+  max-height: 0%;
+  transition: all 1s ease;
+}
+.infoMessage-fade {
+  opacity: 1;
+  max-height: 100%;
+}

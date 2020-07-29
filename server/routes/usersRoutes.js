@@ -7,7 +7,6 @@ const {
   logout,
 } = require("../controllers/usersController");
 const passport = require("passport");
-//const passportService = require("../services/passport");
 
 const router = express.Router();
 

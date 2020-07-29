@@ -6,7 +6,6 @@ const AppContext = createContext();
 function AppContextProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const [refreshInterval, setRefreshInterval] = useState(false);
   const [intervalId, setIntervalId] = useState(0);
@@ -33,15 +32,14 @@ function AppContextProvider({ children }) {
     setRefreshInterval(true);
   }, []);
 
-  const handleError = (errMessage) => setErrorMessage(errMessage);
-
   // on first render, if possible, token is being refreshed
   useEffect(() => {
     const initialRefresh = async () => {
       try {
         const response = await axios.get("/users/refresh");
-        if (response.data.token) {
-          login(response.data.token, response.data.admin);
+        const token = response.data.token;
+        if (token) {
+          login(token, !!response.data.admin);
           setRefreshInterval(true);
         }
       } catch (error) {
@@ -77,8 +75,6 @@ function AppContextProvider({ children }) {
         isAdmin,
         login,
         logout,
-        errorMessage,
-        handleError,
       }}
     >
       {children}

@@ -1,7 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const passport = require("passport");
-const passportService = require("../services/passport");
 const {
   getPosts,
   getPostById,
