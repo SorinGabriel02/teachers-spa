@@ -25,7 +25,12 @@ const refreshTokenAsCookie = (userId, res) => {
 const signup = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty())
-    return res.status(422).json({ errorMessage: errors.array() });
+    return res
+      .status(422)
+      .json({
+        errorMessage:
+          "Datele introduse nu sunt valide. Te rog verifică și încearcă din nou.",
+      });
 
   try {
     const { username, email, password } = req.body;
@@ -33,7 +38,8 @@ const signup = async (req, res, next) => {
     const emailExists = await User.findOne({ email });
     if (emailExists)
       return res.status(409).json({
-        errorMessage: "Un cont cu acest email există deja.",
+        errorMessage:
+          "Un cont cu acest email există deja. Dacă ești deja înregistrat, loghează-te.",
       });
     // create and save the new user
     const newUser = new User({

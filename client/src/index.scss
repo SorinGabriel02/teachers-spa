@@ -31,21 +31,77 @@ input {
   color: rgb(252, 49, 49);
   box-shadow: 0 0 3px white;
   background-color: rgb(253, 212, 212);
+  opacity: 1;
   width: 100%;
   align-self: center;
   padding: 3px;
   border-radius: 5px;
 }
 
+.errorMessage-enter {
+  opacity: 0;
+}
+
+.errorMessage-enter-active {
+  opacity: 1;
+  transition: opacity 250ms;
+}
+
+.errorMessage-exit {
+  opacity: 1;
+}
+
+.errorMessage-exit-active {
+  opacity: 0;
+  transition: opacity 250ms;
+}
+
+.okMessage {
+  opacity: 1;
+  padding: 0 1vmax;
+  background-color: rgb(190, 243, 190);
+  border-radius: 4px;
+}
+
+.okMessage-enter {
+  opacity: 0;
+}
+
+.okMessage-enter-active {
+  opacity: 1;
+  transition: opacity 250ms;
+}
+
+.okMessage-exit {
+  opacity: 1;
+}
+
+.okMessage-exit-active {
+  opacity: 0;
+  transition: opacity 250ms;
+}
+
+.infoMessage-enter {
+  opacity: 0;
+}
+
 .infoMessage {
+  opacity: 1;
   font-size: "0.8rem";
   font-style: italic;
   font-size: 0.8rem;
-  opacity: 0;
-  max-height: 0%;
-  transition: all 1s ease;
 }
-.infoMessage-fade {
+
+.infoMessage-enter-active {
   opacity: 1;
-  max-height: 100%;
+  transition: opacity 250ms;
+}
+
+.infoMessage-exit {
+  opacity: 1;
+}
+
+.infoMessage-exit-active {
+  opacity: 0;
+  transition: opacity 250ms;
 }
