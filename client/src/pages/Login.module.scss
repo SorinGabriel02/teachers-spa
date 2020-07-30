@@ -5,9 +5,15 @@
 @import "../styles/button";
 @import "../styles/link";
 
+section {
+  width: 100%;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
 .loginForm {
   @extend .cardShared;
-
   display: flex;
   flex-direction: column;
   width: 35%;

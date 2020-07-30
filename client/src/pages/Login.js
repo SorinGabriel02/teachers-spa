@@ -5,6 +5,7 @@ import axios from "axios";
 
 import { AppContext } from "../context/appContext";
 import useValidation from "../hooks/useValidation";
+import Loading from "../components/Loading";
 import { loginForm } from "./Login.module.scss";
 
 const initialState = {
@@ -24,7 +25,7 @@ function reducer(state, action) {
     case "isLoading":
       return {
         ...state,
-        isLoading: action.payload,
+        isLoading: !state.isLoading,
       };
     case "name":
       return {
@@ -61,11 +62,11 @@ function reducer(state, action) {
   }
 }
 
-function Signup() {
+function Login() {
   const { login } = useContext(AppContext);
   const history = useHistory();
   // for canceling axios call if component dismounts
-  const cancelSource = useRef(null);
+  const cancelFetch = useRef(null);
   const [state, dispatch] = useReducer(reducer, initialState);
   const {
     isName,
@@ -93,7 +94,7 @@ function Signup() {
       );
     }
     try {
-      cancelSource.current = axios.CancelToken.source();
+      cancelFetch.current = axios.CancelToken.source();
       const reqRoute = state.isLogin ? "/users/login" : "/users/signup";
       const reqBody = state.isLogin
         ? { email: state.email, password: state.password }
@@ -102,11 +103,11 @@ function Signup() {
             email: state.email,
             password: state.password,
           };
-
+      dispatch({ type: "isLoading" });
       const response = await axios.post(reqRoute, reqBody, {
-        cancelToken: cancelSource.current.token,
+        cancelToken: cancelFetch.current.token,
       });
-      console.log(response.data);
+      dispatch({ type: "isLoading" });
       login(response.data.token, Boolean(response.data.admin));
       history.goBack();
     } catch (error) {
@@ -129,6 +130,7 @@ function Signup() {
         id = setInterval(() => clearError("res"), 4000);
         dispatch({ type: "intervalId", payload: id });
       }
+      dispatch({ type: "isLoading" });
     }
   };
 
@@ -141,8 +143,8 @@ function Signup() {
   // abort changing state if component is unmounted
   useEffect(() => {
     return () => {
-      cancelSource.current &&
-        cancelSource.current.cancel(
+      cancelFetch.current &&
+        cancelFetch.current.cancel(
           "component dismounts, api is being canceled"
         );
       state.intervalId.forEach((id) => clearInterval(id));
@@ -157,133 +159,136 @@ function Signup() {
   );
 
   return (
-    <form onSubmit={handleSubmit} className={loginForm}>
-      <h2>{state.isLogin ? "Autentificare" : "Creează cont"}</h2>
-      {!state.isLogin && (
-        <React.Fragment>
-          <label htmlFor="nume">Nume</label>
-          <CSSTransition
-            in={nameError}
-            unmountOnExit
-            timeout={250}
-            classNames="errorMessage"
-          >
-            <p className="errorMessage">{errorMessage.name}</p>
-          </CSSTransition>
-          <input
-            autoComplete="off"
-            type="text"
-            name="name"
-            placeholder="Nume și prenume..."
-            value={state.name}
-            onChange={handleChange}
-          />
-        </React.Fragment>
-      )}
-      <label htmlFor="email">E-mail</label>
-      <CSSTransition
-        in={emailError}
-        unmountOnExit
-        timeout={250}
-        classNames="errorMessage"
-      >
-        <p className="errorMessage">{errorMessage.email}</p>
-      </CSSTransition>
-      <input
-        autoComplete="off"
-        type="text"
-        name="email"
-        placeholder="Adresa de e-mail..."
-        value={state.email}
-        onChange={handleChange}
-      />
-      <label htmlFor="password">Parolă</label>
-      <CSSTransition
-        in={passwordError}
-        unmountOnExit
-        timeout={250}
-        classNames="errorMessage"
-      >
-        <p className="errorMessage">{errorMessage.password}</p>
-      </CSSTransition>
-      <input
-        type="password"
-        name="password"
-        placeholder="Parola..."
-        value={state.password}
-        onChange={handleChange}
-      />
-      {!state.isLogin && (
-        <React.Fragment>
-          <label htmlFor="passwordRepeat">
-            Repetă Parola
+    <section>
+      {state.isLoading && <Loading size={"5vmax"} />}
+      <form onSubmit={handleSubmit} className={loginForm}>
+        <h2>{state.isLogin ? "Autentificare" : "Creează cont"}</h2>
+        {!state.isLogin && (
+          <React.Fragment>
+            <label htmlFor="nume">Nume</label>
+            <CSSTransition
+              in={nameError}
+              unmountOnExit
+              timeout={250}
+              classNames="errorMessage"
+            >
+              <p className="errorMessage">{errorMessage.name}</p>
+            </CSSTransition>
+            <input
+              autoComplete="off"
+              type="text"
+              name="name"
+              placeholder="Nume și prenume..."
+              value={state.name}
+              onChange={handleChange}
+            />
+          </React.Fragment>
+        )}
+        <label htmlFor="email">E-mail</label>
+        <CSSTransition
+          in={emailError}
+          unmountOnExit
+          timeout={250}
+          classNames="errorMessage"
+        >
+          <p className="errorMessage">{errorMessage.email}</p>
+        </CSSTransition>
+        <input
+          autoComplete="off"
+          type="text"
+          name="email"
+          placeholder="Adresa de e-mail..."
+          value={state.email}
+          onChange={handleChange}
+        />
+        <label htmlFor="password">Parolă</label>
+        <CSSTransition
+          in={passwordError}
+          unmountOnExit
+          timeout={250}
+          classNames="errorMessage"
+        >
+          <p className="errorMessage">{errorMessage.password}</p>
+        </CSSTransition>
+        <input
+          type="password"
+          name="password"
+          placeholder="Parola..."
+          value={state.password}
+          onChange={handleChange}
+        />
+        {!state.isLogin && (
+          <React.Fragment>
+            <label htmlFor="passwordRepeat">
+              Repetă Parola
+              <CSSTransition
+                unmountOnExit
+                in={samePassword}
+                timeout={250}
+                classNames="okMessage"
+              >
+                <i
+                  style={{ marginLeft: "1vmax", borderRadius: "6px" }}
+                  className="okMessage"
+                >
+                  &#x2713;ok
+                </i>
+              </CSSTransition>
+            </label>
+            <input
+              style={samePassword ? { boxShadow: "0 0 10px green" } : null}
+              type="password"
+              name="passwordRepeat"
+              placeholder="Repetă parola"
+              value={state.passwordRepeat}
+              onChange={handleChange}
+            />
             <CSSTransition
               unmountOnExit
-              in={samePassword}
+              in={isPassword}
               timeout={250}
-              classNames="okMessage"
+              classNames="infoMessage"
             >
-              <i
-                style={{ marginLeft: "1vmax", borderRadius: "6px" }}
-                className="okMessage"
-              >
-                &#x2713;ok
-              </i>
+              <p className="infoMessage">
+                Parola trebuie să aibă cel puțin opt caractere și să conțină cel
+                puțin o literă mică, o majusculă, o cifră și un caracter special
+                @ $ ! % * ? &amp;
+              </p>
             </CSSTransition>
-          </label>
-          <input
-            style={samePassword ? { boxShadow: "0 0 10px green" } : null}
-            type="password"
-            name="passwordRepeat"
-            placeholder="Repetă parola"
-            value={state.passwordRepeat}
-            onChange={handleChange}
-          />
-          <CSSTransition
-            unmountOnExit
-            in={isPassword}
-            timeout={250}
-            classNames="infoMessage"
-          >
-            <p className="infoMessage">
-              Parola trebuie să aibă cel puțin opt caractere și să conțină cel
-              puțin o literă mică, o majusculă, o cifră și un caracter special @
-              $ ! % * ? &amp;
-            </p>
-          </CSSTransition>
-          <CSSTransition
-            unmountOnExit
-            in={Boolean(errorMessage.unequalPassword && !samePassword)}
-            timeout={250}
-            classNames="errorMessage"
-          >
-            <p className="errorMessage">{errorMessage.unequalPassword}</p>
-          </CSSTransition>
-        </React.Fragment>
-      )}
+            <CSSTransition
+              unmountOnExit
+              in={Boolean(errorMessage.unequalPassword && !samePassword)}
+              timeout={250}
+              classNames="errorMessage"
+            >
+              <p className="errorMessage">{errorMessage.unequalPassword}</p>
+            </CSSTransition>
+          </React.Fragment>
+        )}
 
-      {/* error sent back from the server */}
-      <CSSTransition
-        unmountOnExit
-        in={Boolean(errorMessage.res)}
-        timeout={250}
-        classNames="errorMessage"
-      >
-        <p className="errorMessage">{errorMessage.res}</p>
-      </CSSTransition>
-      <button>{state.isLogin ? "Logheză-te" : "Creează Cont"}</button>
-      <p>
-        {state.isLogin ? "Nu ai cont?" : "Ai deja cont?"}{" "}
-        <span
-          onClick={() => {
-            dispatch({ type: "isLogin" });
-          }}
+        {/* error sent back from the server */}
+        <CSSTransition
+          unmountOnExit
+          in={Boolean(errorMessage.res)}
+          timeout={250}
+          classNames="errorMessage"
         >
-          {state.isLogin ? "Creează Cont" : "Loghează-te"}
-        </span>
-      </p>
-    </form>
+          <p className="errorMessage">{errorMessage.res}</p>
+        </CSSTransition>
+        <button>{state.isLogin ? "Logheză-te" : "Creează Cont"}</button>
+        <p>
+          {state.isLogin ? "Nu ai cont?" : "Ai deja cont?"}{" "}
+          <span
+            onClick={() => {
+              dispatch({ type: "isLogin" });
+            }}
+          >
+            {state.isLogin ? "Creează Cont" : "Loghează-te"}
+          </span>
+        </p>
+      </form>
+    </section>
   );
 }
 
-export default Signup;
+export default Login;
