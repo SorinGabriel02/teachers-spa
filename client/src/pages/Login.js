@@ -1,5 +1,6 @@
-import React, { useReducer, useEffect, useRef, useContext } from "react";
-import { NavLink, useHistory } from "react-router-dom";
+import React, { useReducer, useContext, useEffect, useRef } from "react";
+import { useHistory } from "react-router-dom";
+import { CSSTransition } from "react-transition-group";
 import axios from "axios";
 
 import { AppContext } from "../context/appContext";
@@ -10,8 +11,11 @@ const initialState = {
   // intervalId is an array in case there's more than 1 active interval;
   intervalId: [],
   isLoading: false,
+  isLogin: true,
+  name: "",
   email: "",
   password: "",
+  passwordRepeat: "",
   errorMessage: {},
 };
 
@@ -21,6 +25,11 @@ function reducer(state, action) {
       return {
         ...state,
         isLoading: action.payload,
+      };
+    case "name":
+      return {
+        ...state,
+        name: action.payload,
       };
     case "email":
       return {
@@ -32,25 +41,37 @@ function reducer(state, action) {
         ...state,
         password: action.payload,
       };
+    case "passwordRepeat":
+      return {
+        ...state,
+        passwordRepeat: action.payload,
+      };
     case "intervalId":
       return {
         ...state,
         intervalId: [...state.intervalId, action.payload],
+      };
+    case "isLogin":
+      return {
+        ...state,
+        isLogin: !state.isLogin,
       };
     default:
       return state;
   }
 }
 
-function Login() {
+function Signup() {
   const { login } = useContext(AppContext);
   const history = useHistory();
   // for canceling axios call if component dismounts
   const cancelSource = useRef(null);
   const [state, dispatch] = useReducer(reducer, initialState);
   const {
+    isName,
     isEmail,
     isPassword,
+    validateName,
     validateEmail,
     validatePassword,
     errorMessage,
@@ -60,41 +81,52 @@ function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    let id = 0;
+    // pre-fetch validation
+    if (!state.isLogin && !validateName(state.name)) return;
     if (!validateEmail(state.email) || !validatePassword(state.password))
       return;
-    try {
-      // create a ref in case request needs to be canceled
-      cancelSource.current = axios.CancelToken.source();
-      const response = await axios.post(
-        "/users/login",
-        {
-          email: state.email,
-          password: state.password,
-        },
-        { cancelToken: cancelSource.current.token }
+    if (!state.isLogin && !samePassword) {
+      return displayErrorMessage(
+        "unequalPassword",
+        "Cele două valori ale parolei nu sunt identice."
       );
-      // send data to appContext
-      login(response.data.token, !!response.data.admin);
+    }
+    try {
+      cancelSource.current = axios.CancelToken.source();
+      const reqRoute = state.isLogin ? "/users/login" : "/users/signup";
+      const reqBody = state.isLogin
+        ? { email: state.email, password: state.password }
+        : {
+            username: state.name,
+            email: state.email,
+            password: state.password,
+          };
+
+      const response = await axios.post(reqRoute, reqBody, {
+        cancelToken: cancelSource.current.token,
+      });
+      console.log(response.data);
+      login(response.data.token, Boolean(response.data.admin));
       history.goBack();
     } catch (error) {
-      let id = 0;
-      if (
-        (error.response && error.response.status === 401) ||
-        error.response.status === 400
-      ) {
-        displayErrorMessage("res", "Datele introduse sunt incorecte.");
-        id = setInterval(() => {
-          clearError("res");
-        }, 4000);
-        dispatch({ type: "intervalId", payload: id });
-      } else if (error.response && error.response.status === 500) {
+      console.log(error.response);
+      if (error.response && error.response.status >= 500) {
         displayErrorMessage(
           "res",
           "Eroare de server. Te rugam să încerci mai tarziu."
         );
-        id = setInterval(() => {
-          clearError("res");
-        }, 4000);
+        id = setInterval(() => clearError("res"), 4000);
+        dispatch({ type: "intervalId", payload: id });
+      }
+      if (error.response && error.response.status === 409) {
+        displayErrorMessage("res", error.response.data.errorMessage);
+        id = setInterval(() => clearError("res"), 4000);
+        dispatch({ type: "intervalId", payload: id });
+      }
+      if (error.response && error.response.status === 422) {
+        displayErrorMessage("res", error.response.data.errorMessage);
+        id = setInterval(() => clearError("res"), 4000);
         dispatch({ type: "intervalId", payload: id });
       }
     }
@@ -117,25 +149,63 @@ function Login() {
     };
   }, [state.intervalId]);
 
+  const passwordError = Boolean(!isPassword && errorMessage.password);
+  const emailError = Boolean(!isEmail && errorMessage.email);
+  const nameError = Boolean(!isName && errorMessage.name);
+  const samePassword = Boolean(
+    state.password && state.password === state.passwordRepeat
+  );
+
   return (
     <form onSubmit={handleSubmit} className={loginForm}>
-      <h2>Autentificare</h2>
-      <label htmlFor="email">E-mail</label>
-      {!isEmail && errorMessage.email && (
-        <p className="errorMessage">{errorMessage.email}</p>
+      <h2>{state.isLogin ? "Autentificare" : "Creează cont"}</h2>
+      {!state.isLogin && (
+        <React.Fragment>
+          <label htmlFor="nume">Nume</label>
+          <CSSTransition
+            in={nameError}
+            unmountOnExit
+            timeout={250}
+            classNames="errorMessage"
+          >
+            <p className="errorMessage">{errorMessage.name}</p>
+          </CSSTransition>
+          <input
+            autoComplete="off"
+            type="text"
+            name="name"
+            placeholder="Nume și prenume..."
+            value={state.name}
+            onChange={handleChange}
+          />
+        </React.Fragment>
       )}
+      <label htmlFor="email">E-mail</label>
+      <CSSTransition
+        in={emailError}
+        unmountOnExit
+        timeout={250}
+        classNames="errorMessage"
+      >
+        <p className="errorMessage">{errorMessage.email}</p>
+      </CSSTransition>
       <input
         autoComplete="off"
         type="text"
         name="email"
-        placeholder="Adresa de email..."
+        placeholder="Adresa de e-mail..."
         value={state.email}
         onChange={handleChange}
       />
       <label htmlFor="password">Parolă</label>
-      {!isPassword && errorMessage.password && (
+      <CSSTransition
+        in={passwordError}
+        unmountOnExit
+        timeout={250}
+        classNames="errorMessage"
+      >
         <p className="errorMessage">{errorMessage.password}</p>
-      )}
+      </CSSTransition>
       <input
         type="password"
         name="password"
@@ -143,13 +213,77 @@ function Login() {
         value={state.password}
         onChange={handleChange}
       />
-      {errorMessage.res && <p className="errorMessage">{errorMessage.res}</p>}
-      <button>Autentificare</button>
+      {!state.isLogin && (
+        <React.Fragment>
+          <label htmlFor="passwordRepeat">
+            Repetă Parola
+            <CSSTransition
+              unmountOnExit
+              in={samePassword}
+              timeout={250}
+              classNames="okMessage"
+            >
+              <i
+                style={{ marginLeft: "1vmax", borderRadius: "6px" }}
+                className="okMessage"
+              >
+                &#x2713;ok
+              </i>
+            </CSSTransition>
+          </label>
+          <input
+            style={samePassword ? { boxShadow: "0 0 10px green" } : null}
+            type="password"
+            name="passwordRepeat"
+            placeholder="Repetă parola"
+            value={state.passwordRepeat}
+            onChange={handleChange}
+          />
+          <CSSTransition
+            unmountOnExit
+            in={isPassword}
+            timeout={250}
+            classNames="infoMessage"
+          >
+            <p className="infoMessage">
+              Parola trebuie să aibă cel puțin opt caractere și să conțină cel
+              puțin o literă mică, o majusculă, o cifră și un caracter special @
+              $ ! % * ? &amp;
+            </p>
+          </CSSTransition>
+          <CSSTransition
+            unmountOnExit
+            in={Boolean(errorMessage.unequalPassword && !samePassword)}
+            timeout={250}
+            classNames="errorMessage"
+          >
+            <p className="errorMessage">{errorMessage.unequalPassword}</p>
+          </CSSTransition>
+        </React.Fragment>
+      )}
+
+      {/* error sent back from the server */}
+      <CSSTransition
+        unmountOnExit
+        in={Boolean(errorMessage.res)}
+        timeout={250}
+        classNames="errorMessage"
+      >
+        <p className="errorMessage">{errorMessage.res}</p>
+      </CSSTransition>
+      <button>{state.isLogin ? "Logheză-te" : "Creează Cont"}</button>
       <p>
-        Nu ai cont? <NavLink to="/contNou">Creează cont</NavLink>
+        {state.isLogin ? "Nu ai cont?" : "Ai deja cont?"}{" "}
+        <span
+          onClick={() => {
+            dispatch({ type: "isLogin" });
+          }}
+        >
+          {state.isLogin ? "Creează Cont" : "Loghează-te"}
+        </span>
       </p>
     </form>
   );
 }
 
-export default Login;
+export default Signup;

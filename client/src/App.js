@@ -10,7 +10,6 @@ import Documente from "./pages/Documente";
 import Materiale from "./pages/Materiale";
 import Noutati from "./pages/Noutati";
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
 import NewPost from "./pages/NewPost";
 
 import { app } from "./App.module.scss";
@@ -39,9 +38,6 @@ function App() {
         </Route>
         <Route path="/autentificare">
           {!isAuthenticated ? <Login /> : <Redirect to="/" />}
-        </Route>
-        <Route path="/contNou">
-          {!isAuthenticated ? <Signup /> : <Redirect to="/" />}
         </Route>
         <Route path="/postNou">
           {isAuthenticated && isAdmin ? <NewPost /> : <Redirect to="/" />}
