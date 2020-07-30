@@ -9,3 +9,22 @@
     color: black;
   }
 }
+main {
+  display: flex;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.editContainer {
+  width: 45%;
+  height: 70vh;
+  margin: 1vmax auto;
+  padding: 1vmax;
+  box-shadow: $boxShadow;
+  background-color: whitesmoke;
+  cursor: pointer;
+}
+
+.editContainer::-webkit-scrollbar {
+  display: none;
+}

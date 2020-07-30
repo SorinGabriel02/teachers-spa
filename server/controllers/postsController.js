@@ -1,7 +1,12 @@
 const Post = require("../models/postModel");
 
-const getPosts = (req, res, next) => {
-  res.json({ message: "get a list of posts..." });
+const getPosts = async (req, res, next) => {
+  try {
+    const posts = await Post.find({});
+    res.json([...posts]);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const getPostById = (req, res, next) => {
