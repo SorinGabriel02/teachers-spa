@@ -25,12 +25,10 @@ const refreshTokenAsCookie = (userId, res) => {
 const signup = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty())
-    return res
-      .status(422)
-      .json({
-        errorMessage:
-          "Datele introduse nu sunt valide. Te rog verifică și încearcă din nou.",
-      });
+    return res.status(422).json({
+      errorMessage:
+        "Datele introduse nu sunt valide. Te rog verifică și încearcă din nou.",
+    });
 
   try {
     const { username, email, password } = req.body;
@@ -108,7 +106,6 @@ const logout = (req, res, next) => {
   // if refresh token is valid, log the user out by emptying cookie
   try {
     refreshToken = req.cookies.refresh;
-    console.log(refreshToken);
     if (!refreshToken)
       return res.status(401).json({ error: "Date incomplete." });
     jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);

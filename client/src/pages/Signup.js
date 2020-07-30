@@ -217,7 +217,6 @@ function Signup() {
           </i>
         </CSSTransition>
       </label>
-
       <input
         style={samePassword ? { boxShadow: "0 0 10px green" } : null}
         type="password"
@@ -238,6 +237,7 @@ function Signup() {
           &amp;
         </p>
       </CSSTransition>
+      {/* error passwords don't match */}
       <CSSTransition
         unmountOnExit
         in={Boolean(errorMessage.unequalPassword && !samePassword)}
@@ -246,6 +246,7 @@ function Signup() {
       >
         <p className="errorMessage">{errorMessage.unequalPassword}</p>
       </CSSTransition>
+      {/* error sent back from the server */}
       <CSSTransition
         unmountOnExit
         in={Boolean(errorMessage.res)}
@@ -254,7 +255,6 @@ function Signup() {
       >
         <p className="errorMessage">{errorMessage.res}</p>
       </CSSTransition>
-
       <button>Creează Cont</button>
       <p>
         Ai deja cont? <NavLink to="/autentificare">Loghează-te</NavLink>
