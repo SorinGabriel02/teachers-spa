@@ -23,8 +23,7 @@ main {
   box-shadow: $boxShadow;
   background-color: whitesmoke;
   cursor: pointer;
-}
-
-.editContainer::-webkit-scrollbar {
-  display: none;
+  iframe {
+    pointer-events: none;
+  }
 }

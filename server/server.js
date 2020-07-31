@@ -9,6 +9,7 @@ const cookieParser = require("cookie-parser");
 
 const usersRouter = require("./routes/usersRoutes");
 const postsRouter = require("./routes/postsRoutes");
+const commentsRouter = require("./routes/commentsRoutes");
 const mediaRouter = require("./routes/mediaRoutes");
 
 const app = express();
@@ -34,6 +35,7 @@ app.use(fileUpload());
 // routes
 app.use("/api/users", usersRouter);
 app.use("/api/posts", postsRouter);
+app.use("/api/comments", commentsRouter);
 app.use("/api/media", mediaRouter);
 
 const port = process.env.PORT || 8080;

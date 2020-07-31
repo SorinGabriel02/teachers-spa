@@ -11,6 +11,7 @@ import Materiale from "./pages/Materiale";
 import Noutati from "./pages/Noutati";
 import Login from "./pages/Login";
 import NewPost from "./pages/NewPost";
+import SelectedPost from "./pages/SelectedPost";
 
 import { app } from "./App.module.scss";
 
@@ -33,8 +34,11 @@ function App() {
         <Route path="/materiale">
           <Materiale />
         </Route>
-        <Route path="/noutati">
+        <Route exact path="/noutati">
           <Noutati />
+        </Route>
+        <Route path="/noutati/:postId">
+          <SelectedPost />
         </Route>
         <Route path="/autentificare">
           {!isAuthenticated ? <Login /> : <Redirect to="/" />}

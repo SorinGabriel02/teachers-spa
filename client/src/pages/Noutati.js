@@ -19,8 +19,28 @@ function Noutati(props) {
     height: "65.5vh",
     mode: "balloon",
     resizingBar: false,
-    defaultStyle: { border: "3px solid red" },
   };
+
+  const postsList = posts
+    .sort((a, b) => {
+      // sort the posts by creation date last to first
+      const aCreatedAt = Date.parse(a.createdAt);
+      const bCreatedAt = Date.parse(b.createdAt);
+      return bCreatedAt - aCreatedAt;
+    })
+    .map((post) => (
+      <section key={post._id} className={editContainer}>
+        <NavLink style={{ textDecoration: "none" }} to={`/noutati/${post._id}`}>
+          <SunEditor
+            showToolbar={false}
+            enableToolbar={false}
+            setContents={post.content}
+            disable={true}
+            setOptions={setOptionsObj}
+          />
+        </NavLink>
+      </section>
+    ));
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -42,18 +62,6 @@ function Noutati(props) {
         );
     };
   }, []);
-
-  const postsList = posts.map((post) => (
-    <section key={post._id} className={editContainer}>
-      <SunEditor
-        showToolbar={false}
-        enableToolbar={false}
-        setContents={post.content}
-        disable={true}
-        setOptions={setOptionsObj}
-      />
-    </section>
-  ));
 
   return (
     <div>
