@@ -8,11 +8,15 @@ const tokenForUser = (userId) =>
   jwt.sign({ sub: userId }, process.env.JWT_SECRET, { expiresIn: "15m" });
 
 // add refresh token as httpOnly cookie
-const refreshTokenAsCookie = (userId, res) => {
+const refreshTokenAsCookie = (userId, admin, res) => {
   // create token
-  const token = jwt.sign({ sub: userId }, process.env.JWT_REFRESH_SECRET, {
-    expiresIn: "3d",
-  });
+  const token = jwt.sign(
+    { sub: userId, adm: admin },
+    process.env.JWT_REFRESH_SECRET,
+    {
+      expiresIn: "3d",
+    }
+  );
   // set cookie expiration === token expiresIn === 3 days
   const cookieExpiresIn = 3 * 24 * 60 * 60 * 1000;
   return res.cookie("refresh", token, {
@@ -47,7 +51,7 @@ const signup = async (req, res, next) => {
     });
     const savedUser = await newUser.save();
     // send back a token and a refresh token as cookie
-    refreshTokenAsCookie(savedUser.id, res);
+    refreshTokenAsCookie(savedUser.id, savedUser.admin, res);
     res.status(201).json({ token: tokenForUser(savedUser.id) });
   } catch (error) {
     res.status(500).json({
@@ -57,18 +61,18 @@ const signup = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
-  const userId = req.user.id;
+  const { id, admin } = req.user;
   // send back refresh token as cookie
-  refreshTokenAsCookie(userId, res);
+  refreshTokenAsCookie(id, admin, res);
   // and token
-  if (userId === process.env.SORIN) {
+  if (admin) {
     return res.json({
-      token: tokenForUser(userId),
+      token: tokenForUser(id),
       admin: true,
     });
   }
 
-  res.json({ token: tokenForUser(userId) });
+  res.json({ token: tokenForUser(id) });
 };
 
 const refreshAccessToken = (req, res, next) => {
@@ -76,15 +80,16 @@ const refreshAccessToken = (req, res, next) => {
   // keep the user in until refreshToken expires
   const refreshToken = req.cookies.refresh;
   if (!refreshToken) {
-    return res.json({ errorMessage: "Autentificare necesară." });
+    return res.status(401).json({ errorMessage: "Autentificare necesară." });
   }
   try {
     jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
     const decodedId = jwt.decode(refreshToken).sub;
+    const isAdmin = jwt.decode(refreshToken).adm;
     // add new refreshToken as cookie
-    refreshTokenAsCookie(decodedId, res);
+    refreshTokenAsCookie(decodedId, isAdmin, res);
     // check if it's admin
-    if (decodedId === process.env.SORIN) {
+    if (isAdmin) {
       res.json({
         token: tokenForUser(decodedId),
         admin: true,

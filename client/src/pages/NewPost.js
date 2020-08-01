@@ -25,6 +25,7 @@ function NewPost(props) {
         { headers: { Authorization: `Bearer ${isAuthenticated}` } }
       );
       console.log(response.data);
+      history.go("/noutati");
     } catch (error) {
       console.log(error.response.status);
     }
@@ -32,7 +33,7 @@ function NewPost(props) {
   };
 
   const btnDisable = !editorState ? true : false;
-  console.log(history);
+
   return (
     <main>
       {isLoading && <Loading />}

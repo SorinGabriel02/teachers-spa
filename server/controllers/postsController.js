@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+const User = require("../models/userModel");
 const Post = require("../models/postModel");
 
 const getPosts = async (req, res, next) => {
@@ -23,8 +25,24 @@ const getPostById = async (req, res, next) => {
 const createPost = async (req, res, next) => {
   try {
     const { content } = req.body;
-    const newPost = new Post({ content, author: req.user._id, comments: [] });
-    await newPost.save();
+    const { id } = req.user;
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res
+        .status(401)
+        .json({ errorMessage: "Datele utilizatorului nu sunt valide." });
+    }
+
+    const newPost = new Post({ content, author: user.id, comments: [] });
+    // save post and add it's id the user that created it
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    await newPost.save({ session });
+    user.posts.push(newPost);
+    await user.save({ session });
+    session.commitTransaction();
+
     res.status(201).json({ message: "Successfully created." });
   } catch (error) {
     res.status(500).json({ error: error.message });

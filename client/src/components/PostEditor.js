@@ -16,7 +16,6 @@ function PostEditor(props) {
         "textStyle",
         "font",
         "fontColor",
-        "fontSize",
         "hiliteColor",
         "align",
       ],
@@ -26,7 +25,6 @@ function PostEditor(props) {
       ["image", "link", "video"],
       ["fullScreen", "preview", "print", "codeView"],
     ],
-    value: props.editorContent || null,
     minHeight: "53vh",
     font: [
       "Roboto",
@@ -41,8 +39,7 @@ function PostEditor(props) {
     ],
     formats: [
       "p",
-      "blockquote",
-      "pre",
+      "h1",
       "h2",
       "h3",
       "h4",
@@ -60,10 +57,18 @@ function PostEditor(props) {
 
   return (
     <div className={editContainer}>
-      <SunEditor setOptions={setOptionsObj} onChange={handleChange} />
+      <SunEditor
+        setContents={props.editorContent}
+        setOptions={setOptionsObj}
+        onChange={handleChange}
+      />
     </div>
   );
 }
+
+PostEditor.defaultProps = {
+  editorContent: "<p>Spor la treabă!</p>",
+};
 
 PostEditor.propTypes = {
   handleChange: PropTypes.func.isRequired,

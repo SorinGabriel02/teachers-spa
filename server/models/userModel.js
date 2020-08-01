@@ -19,6 +19,11 @@ const userSchema = new Schema(
       minlength: 8,
       maxlength: 100,
     },
+    admin: { type: Boolean, required: true, default: false },
+    posts: [{ type: mongoose.Types.ObjectId, required: true, ref: "Post" }],
+    comments: [
+      { type: mongoose.Types.ObjectId, required: true, ref: "Comment" },
+    ],
   },
   { timestamps: true }
 );

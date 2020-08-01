@@ -14,7 +14,7 @@ const router = express.Router();
 const requireAuth = passport.authenticate("jwt", { session: false });
 
 const requireAdmin = (req, res, next) => {
-  if (req.user.id === process.env.SORIN) return next();
+  if (req.user.admin) return next();
   res.status(403).json({
     errorMessage: "Această acțiune nu este permisă. Te rog autentifică-te.",
   });
