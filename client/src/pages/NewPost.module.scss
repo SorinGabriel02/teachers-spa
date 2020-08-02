@@ -1,0 +1,8 @@
+@import "../variables.scss";
+@import "../styles/button";
+
+.publish {
+  @extend .sharedBtn;
+  background-color: $greenBtn;
+  margin: 1vmax auto;
+}

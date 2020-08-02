@@ -18,12 +18,25 @@ main {
 .editContainer {
   width: 45%;
   height: 70vh;
-  margin: 1vmax auto;
+  margin: 2vmax auto;
   padding: 1vmax;
   box-shadow: $boxShadow;
   background-color: whitesmoke;
+  transition: all 0.2s ease;
   cursor: pointer;
   iframe {
     pointer-events: none;
   }
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: $boxShadowFocus;
+  }
+}
+
+.notFound {
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

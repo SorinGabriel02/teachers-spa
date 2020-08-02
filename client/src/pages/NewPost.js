@@ -6,6 +6,8 @@ import { AppContext } from "../context/appContext";
 import PostEditor from "../components/PostEditor";
 import Loading from "../components/Loading";
 
+import { publish } from "./NewPost.module.scss";
+
 function NewPost(props) {
   const history = useHistory();
   const { isAuthenticated } = useContext(AppContext);
@@ -25,11 +27,11 @@ function NewPost(props) {
         { headers: { Authorization: `Bearer ${isAuthenticated}` } }
       );
       console.log(response.data);
-      history.go("/noutati");
+      history.push("/noutati");
     } catch (error) {
       console.log(error.response.status);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const btnDisable = !editorState ? true : false;
@@ -42,7 +44,9 @@ function NewPost(props) {
         style={{ display: "flex", flexDirection: "column" }}
       >
         <PostEditor handleChange={handleChange} />
-        <button disabled={btnDisable}>Creează</button>
+        <button className={publish} disabled={btnDisable}>
+          Publică Articolul
+        </button>
       </form>
     </main>
   );

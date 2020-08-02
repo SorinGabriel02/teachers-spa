@@ -11,13 +11,13 @@ const userSchema = new Schema(
       required: true,
       unique: true,
       minlength: 5,
-      maxlength: 250,
+      maxlength: 100,
     },
     password: {
       type: String,
       required: true,
       minlength: 8,
-      maxlength: 100,
+      maxlength: 200,
     },
     admin: { type: Boolean, required: true, default: false },
     posts: [{ type: mongoose.Types.ObjectId, required: true, ref: "Post" }],
@@ -31,6 +31,7 @@ const userSchema = new Schema(
 // password hash
 userSchema.pre("save", async function (next) {
   const user = this;
+  if (!user.isModified("password")) return next();
   try {
     const hash = await bcrypt.hash(user.password, 11);
     user.password = hash;

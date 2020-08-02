@@ -6,7 +6,7 @@ import axios from "axios";
 import { AppContext } from "../context/appContext";
 import Loading from "../components/Loading";
 
-import { newsBtn, editContainer } from "./Noutati.module.scss";
+import { newsBtn, editContainer, notFound } from "./Noutati.module.scss";
 import "suneditor/dist/css/suneditor.min.css";
 
 function Noutati(props) {
@@ -29,13 +29,16 @@ function Noutati(props) {
       return bCreatedAt - aCreatedAt;
     })
     .map((post) => (
-      <section key={post._id} className={editContainer}>
+      <section key={post.id} className={editContainer}>
         <NavLink style={{ textDecoration: "none" }} to={`/noutati/${post._id}`}>
           <SunEditor
             showToolbar={false}
             enableToolbar={false}
             setContents={post.content}
             disable={true}
+            setDefaultStyle={
+              "background-color: rgb(240, 240, 230); overflow-x: hidden; overflow-y: hidden;"
+            }
             setOptions={setOptionsObj}
           />
         </NavLink>
@@ -68,10 +71,14 @@ function Noutati(props) {
       {isLoading && <Loading />}
       {isAdmin && (
         <NavLink to="/postNou">
-          <button className={newsBtn}>Creează post</button>
+          <button className={newsBtn}>Publică articol</button>
         </NavLink>
       )}
-
+      {!isLoading && !postsList.length && (
+        <h1 className={notFound}>
+          Eroare 404 <br /> Momentan nu a fost găsit nici un articol.
+        </h1>
+      )}
       <main>{postsList}</main>
     </div>
   );
