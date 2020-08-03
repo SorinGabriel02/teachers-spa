@@ -1,0 +1,39 @@
+@import "../variables.scss";
+$transitionTime: 200ms;
+
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: fit-content;
+  max-height: fit-content;
+  transform: translate(-50%, -50%);
+  z-index: 13;
+  background-color: whitesmoke;
+  border: 1px solid $headerBackground;
+  border-radius: 8px;
+  padding: 1.5vmax;
+  box-shadow: 0 0 4px white;
+}
+
+.containerEnter {
+  opacity: 0;
+  transform: scale(0.7) translate(-100%, -100%);
+}
+
+.containerEnterActive {
+  opacity: 1;
+  transform: scale(1) translate(-50%, -50%);
+  transition: all $transitionTime;
+}
+
+.containerExit {
+  opacity: 1;
+  transform: scale(1) translate(-50%, -50%);
+}
+
+.containerExitActive {
+  opacity: 0;
+  transform: scale(0.7) translate(-50%, -50%);
+  transition: all $transitionTime;
+}

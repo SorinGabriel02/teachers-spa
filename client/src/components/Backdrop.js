@@ -1,29 +1,33 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
+import { CSSTransition } from "react-transition-group";
+import PropTypes from "prop-types";
 
-function Backdrop() {
-  const [hide, setHide] = useState(false);
-  const styles = {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100vh",
-    background: "rgba(128, 128, 128, 0.6)",
-    zIndex: 9,
-  };
+import styles from "./Backdrop.module.scss";
 
-  const handleClick = () => {
-    setHide(true);
-  };
-
+function Backdrop(props) {
   return ReactDOM.createPortal(
-    <div
-      style={hide ? { display: "none" } : styles}
-      onClick={handleClick}
-    ></div>,
+    <CSSTransition
+      mountOnEnter
+      unmountOnExit
+      in={props.show}
+      timeout={150}
+      classNames={{
+        enter: styles.backdropEnter,
+        enterActive: styles.backdropEnterActive,
+        exit: styles.backdropExit,
+        exitActive: styles.backdropExitActive,
+      }}
+    >
+      <div onClick={props.onClick} className={styles.backdrop}></div>
+    </CSSTransition>,
     document.getElementById("backdrop")
   );
 }
+
+Backdrop.propTypes = {
+  show: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
 
 export default Backdrop;
