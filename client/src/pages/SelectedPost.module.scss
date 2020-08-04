@@ -31,12 +31,18 @@
   }
 }
 
-.writeComment {
-  @extend .cardShared;
-  margin: 2vmax auto;
-  textarea {
-    width: 100%;
-    height: 30vh;
-    resize: vertical;
+.deleteModal {
+  top: 30vh;
+  h3 {
+    padding: 3%;
+    color: rgb(255, 172, 172);
+    text-align: center;
+    text-shadow: 1px 1px $shadowColor, -1px -1px $shadowColor,
+      -1px 1px $shadowColor, 1px -1px $shadowColor;
+    letter-spacing: 0.1rem;
+  }
+  main {
+    display: flex;
+    justify-content: space-around;
   }
 }

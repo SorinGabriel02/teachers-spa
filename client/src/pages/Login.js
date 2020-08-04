@@ -20,7 +20,7 @@ const initialState = {
   errorMessage: {},
 };
 
-function reducer(state, action) {
+function loginReducer(state, action) {
   switch (action.type) {
     case "isLoading":
       return {
@@ -67,7 +67,7 @@ function Login() {
   const history = useHistory();
   // for canceling axios call if component dismounts
   const cancelFetch = useRef(null);
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(loginReducer, initialState);
   const {
     isName,
     isEmail,
