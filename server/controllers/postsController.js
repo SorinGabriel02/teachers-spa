@@ -72,6 +72,8 @@ const deletePost = async (req, res, next) => {
         },
       });
 
+    console.log(toDelete);
+
     if (!toDelete) {
       return res
         .status(404)
@@ -84,15 +86,17 @@ const deletePost = async (req, res, next) => {
     toDelete.author.posts.pull({ _id: toDelete._id });
     // check to see if the author has comments
     toDelete.author.save({ session });
-    console.log(toDelete.comments);
 
     // delete each comment reference from their respective user/author
     for (let comment of toDelete.comments) {
       // forEach comment delete it's reference from the respective user
-      await comment.author.comments.pull({ _id: comment._id });
-      // save the comments modified user document
-      console.log(toDelete.author._id, comment.author._id);
-      await comment.author.save({ session });
+      await User.findByIdAndUpdate(
+        comment.author._id,
+        {
+          comments: comment.author.comments.pull({ _id: comment._id }),
+        },
+        { session }
+      );
 
       // delete the related comment document from database
       await Comment.findByIdAndDelete(comment._id, { session });
