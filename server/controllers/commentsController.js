@@ -4,17 +4,11 @@ const Post = require("../models/postModel");
 const Comment = require("../models/commentModel");
 
 const newComment = async (req, res, next) => {
+  // user is authenticated
+  const user = req.user;
   try {
-    const author = req.user.id;
     const { content, postId } = req.body;
     const post = await Post.findById(postId);
-    const user = await User.findById(author, "-password");
-
-    if (!user) {
-      return res.status(404).json({
-        errorMessage: "Utilizatorul curent nu a fost găsit. Relogare necesară.",
-      });
-    }
 
     if (!post) {
       return res.status(404).json({
@@ -25,8 +19,8 @@ const newComment = async (req, res, next) => {
 
     const newComment = new Comment({
       content,
-      author,
-      post: postId,
+      author: user.id,
+      post: post.id,
     });
     // start a session where a comment is saved and it's reference
     // added to that particular post's comments array
@@ -43,7 +37,7 @@ const newComment = async (req, res, next) => {
 
     await session.commitTransaction();
 
-    res.json({ comment: newComment });
+    res.json({ comment: newComment.toObject({ getters: true }) });
   } catch (error) {
     console.log(error);
     res.sendStatus(500);

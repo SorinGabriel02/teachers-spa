@@ -26,8 +26,8 @@ router.get("/:postId", getPostById);
 
 router.post("/new", requireAuth, requireAdmin, createPost);
 
-router.patch("/update", requireAuth, requireAdmin, updatePost);
+router.patch("/update/:postId", requireAuth, requireAdmin, updatePost);
 
-router.delete("/delete", requireAuth, requireAdmin, deletePost);
+router.delete("/delete/:postId", requireAuth, requireAdmin, deletePost);
 
 module.exports = router;
