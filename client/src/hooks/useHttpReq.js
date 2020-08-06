@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
 import axios from "axios";
 
 function useHttpReq() {
@@ -6,17 +6,18 @@ function useHttpReq() {
   const [data, setData] = useState(null);
   const [err, setErr] = useState(null);
 
-  async function makeReq(reqMethod, url, reqBody, reqOptions) {
-    try {
-      cancelFetch.current = axios.CancelToken.source();
-      const response = await axios[reqMethod](url, reqBody, reqOptions);
-      console.log(response.data);
-      return setData(response.data);
-    } catch (error) {
-      console.log(error.response);
-      return setErr(error.response);
-    }
-  }
+  const makeReq = useCallback(
+    async (reqMethod, url, reqOptions = null, reqBody = null) => {
+      try {
+        cancelFetch.current = axios.CancelToken.source();
+        const response = await axios[reqMethod](url, reqOptions, reqBody);
+        setData(response.data);
+      } catch (error) {
+        setErr(error.response);
+      }
+    },
+    []
+  );
 
   return [data, err, makeReq, cancelFetch.current];
 }

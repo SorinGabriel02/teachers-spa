@@ -1,19 +1,35 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useReducer, useEffect, useContext, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import SunEditor from "suneditor-react";
-import axios from "axios";
 
 import { AppContext } from "../context/appContext";
+import useHttpReq from "../hooks/useHttpReq";
 import Loading from "../components/Loading";
+import Backdrop from "../components/Backdrop";
+import Modal from "../components/Modal";
 
 import { newsBtn, editContainer, notFound } from "./Noutati.module.scss";
 import "suneditor/dist/css/suneditor.min.css";
 
+const initialState = { isLoading: true };
+
+function postsReducer(state, action) {
+  switch (action.type) {
+    case "fetch":
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
+    default:
+      return state;
+  }
+}
+
 function Noutati(props) {
-  const cancelFetch = useRef(null);
+  const ref = useRef(null);
   const { isAdmin } = useContext(AppContext);
-  const [isLoading, setIsLoading] = useState(false);
-  const [posts, setPosts] = useState([]);
+  const [state, dispatch] = useReducer(postsReducer, initialState);
+  const [posts, err, makeReq, cancelReq] = useHttpReq();
 
   const setOptionsObj = {
     height: "65.5vh",
@@ -21,63 +37,75 @@ function Noutati(props) {
     resizingBar: false,
   };
 
-  const postsList = posts
-    .sort((a, b) => {
-      // sort the posts by creation date last to first
-      const aCreatedAt = Date.parse(a.createdAt);
-      const bCreatedAt = Date.parse(b.createdAt);
-      return bCreatedAt - aCreatedAt;
-    })
-    .map((post) => (
-      <section key={post.id} className={editContainer}>
-        <NavLink style={{ textDecoration: "none" }} to={`/noutati/${post._id}`}>
-          <SunEditor
-            showToolbar={false}
-            enableToolbar={false}
-            setContents={post.content}
-            disable={true}
-            setDefaultStyle={
-              "background-color: rgb(240, 240, 230); overflow-x: hidden; overflow-y: hidden;"
-            }
-            setOptions={setOptionsObj}
-          />
-        </NavLink>
-      </section>
-    ));
+  const postsList =
+    posts &&
+    posts
+      .sort((a, b) => {
+        // sort the posts by creation date last to first
+        const aCreatedAt = Date.parse(a.createdAt);
+        const bCreatedAt = Date.parse(b.createdAt);
+        return bCreatedAt - aCreatedAt;
+      })
+      .map((post) => (
+        <section key={post.id} className={editContainer}>
+          <NavLink
+            style={{ textDecoration: "none" }}
+            to={`/noutati/${post._id}`}
+          >
+            <SunEditor
+              ref={ref}
+              showToolbar={false}
+              enableToolbar={false}
+              setContents={post.content}
+              disable={true}
+              setDefaultStyle={
+                "background-color: rgb(240, 240, 230); overflow-x: hidden; overflow-y: hidden;"
+              }
+              setOptions={setOptionsObj}
+            />
+          </NavLink>
+        </section>
+      ));
 
+  const handleClick = () => {};
+
+  // get post on page load
   useEffect(() => {
-    const fetchPosts = async () => {
-      setIsLoading(true);
-      try {
-        cancelFetch.current = axios.CancelToken.source();
-        const response = await axios.get("/posts");
-        setPosts([...response.data]);
-      } catch (error) {
-        console.log(error.response);
-      }
-      setIsLoading(false);
-    };
-    fetchPosts();
+    dispatch({ type: "fetch", payload: true });
+    makeReq("get", "/posts");
+  }, [makeReq]);
+
+  // when a response arrives isLoading = false
+  useEffect(() => {
+    if (posts || err) dispatch({ type: "fetch", payload: false });
+  }, [posts, err]);
+
+  // cancel request if one is active on component dismount
+  useEffect(() => {
     return () => {
-      cancelFetch.current &&
-        cancelFetch.current.cancel(
-          "component dismounts, api is being canceled"
-        );
+      cancelReq &&
+        cancelReq.cancel("component dismounts, api is being canceled");
     };
-  }, []);
+  }, [cancelReq]);
 
   return (
     <div>
-      {isLoading && <Loading />}
-      {isAdmin && (
+      <Backdrop show={state.isLoading} />
+      {state.isLoading && <Loading />}
+      <Backdrop
+        onClick={handleClick}
+        show={!!err || (postsList && !postsList.length)}
+      />
+      <Modal show={(postsList && !postsList.length) || !!err}>
+        <button onClick={handleClick} className={newsBtn}>
+          x
+        </button>
+        <h1>Momentan nu a fost găsit nici un articol.</h1>
+      </Modal>
+      {isAdmin && posts && (
         <NavLink to="/postNou">
           <button className={newsBtn}>Publică articol</button>
         </NavLink>
-      )}
-      {!isLoading && !postsList.length && (
-        <h1 className={notFound}>
-          Eroare 404 <br /> Momentan nu a fost găsit nici un articol.
-        </h1>
       )}
       <main>{postsList}</main>
     </div>

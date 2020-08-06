@@ -1,9 +1,8 @@
-import React, { useReducer, useEffect, useContext, useRef } from "react";
-import { useParams } from "react-router-dom";
+import React, { useReducer, useEffect, useContext } from "react";
+import { useParams, useHistory } from "react-router-dom";
 import SunEditor from "suneditor-react";
-import axios from "axios";
-
 import { AppContext } from "../context/appContext";
+import useHttpReq from "../hooks/useHttpReq";
 import Loading from "../components/Loading";
 import Comment from "../components/Comment";
 import Backdrop from "../components/Backdrop";
@@ -19,7 +18,7 @@ import {
 } from "./SelectedPost.module.scss";
 
 const initialState = {
-  isLoading: false,
+  isLoading: true,
   deleteModal: false,
   postData: "",
   commentsData: [],
@@ -45,6 +44,7 @@ function postReducer(state, action) {
     case "deletePost":
       return {
         ...state,
+        isLoading: true,
       };
     default:
       return state;
@@ -53,9 +53,10 @@ function postReducer(state, action) {
 
 function SelectedPost() {
   const { postId } = useParams();
-  const cancelFetch = useRef(null);
-  const { isAdmin } = useContext(AppContext);
+  const history = useHistory();
+  const { isAuthenticated, isAdmin } = useContext(AppContext);
   const [state, dispatch] = useReducer(postReducer, initialState);
+  const [data, err, makeReq, cancelReq] = useHttpReq();
 
   const postEditorOptions = {
     minHeight: "70vh",
@@ -76,40 +77,47 @@ function SelectedPost() {
     dispatch({ type: "deleteModal", payload: true });
   const hideDeleteModal = () =>
     dispatch({ type: "deleteModal", payload: false });
-  const deleteArticle = () => {
-    console.log("Deleting article...");
+  const deleteArticle = async () => {
     hideDeleteModal();
+    dispatch({ type: "deletePost" });
+    await makeReq("delete", `/posts/delete/${postId}`, {
+      headers: { Authorization: `Bearer ${isAuthenticated}` },
+    });
+    history.push("/noutati");
   };
-
+  // get post data when component mounts
   useEffect(() => {
     dispatch({ type: "getData" });
-    const fetchPost = async () => {
-      try {
-        cancelFetch.current = axios.CancelToken.source();
-        const response = await axios.get(`/posts/${postId}`);
+    makeReq("get", `/posts/${postId}`);
+  }, [makeReq, postId]);
 
-        dispatch({
-          type: "dataRetrieved",
-          payload: {
-            post: response.data.post.content,
-            comments: [...response.data.post.comments],
-          },
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchPost();
+  useEffect(() => {
+    if (data) {
+      dispatch({
+        type: "dataRetrieved",
+        payload: {
+          post: data.post.content,
+          comments: [...data.post.comments],
+        },
+      });
+    }
+  }, [data]);
 
+  // cancel request if active on componentWillUnmount
+  useEffect(() => {
     return () => {
-      cancelFetch.current &&
-        cancelFetch.current.cancel(
-          "component dismounts, api is being canceled"
-        );
+      cancelReq &&
+        cancelReq.cancel("component dismounts, api call is being canceled");
     };
-  }, [postId]);
+  }, [cancelReq]);
 
-  if (state.isLoading) return <Loading />;
+  if (state.isLoading)
+    return (
+      <React.Fragment>
+        <Backdrop show={state.isLoading} onClick={hideDeleteModal} />
+        <Loading />
+      </React.Fragment>
+    );
 
   return (
     <main>

@@ -49,9 +49,6 @@ const updatePost = (req, res, next) => {
 };
 
 const deletePost = async (req, res, next) => {
-  // at this point user is authenticated and admin
-  const user = req.user;
-  // console.log(req.user);
   const { postId } = req.params;
 
   try {
