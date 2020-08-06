@@ -25,9 +25,13 @@ function Backdrop(props) {
   );
 }
 
+Backdrop.defaultProps = {
+  show: true,
+};
+
 Backdrop.propTypes = {
-  show: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
+  show: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default Backdrop;

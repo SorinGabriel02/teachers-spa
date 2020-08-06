@@ -87,7 +87,7 @@ function SelectedPost() {
       try {
         cancelFetch.current = axios.CancelToken.source();
         const response = await axios.get(`/posts/${postId}`);
-        console.log(response.data);
+
         dispatch({
           type: "dataRetrieved",
           payload: {

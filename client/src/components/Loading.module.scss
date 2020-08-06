@@ -18,8 +18,8 @@
   box-shadow: 2px 2px 10px red, -2px 2px 10px green, 2px -2px 10px blue,
     -2px -2px 10px black;
   transform: translate(-50%, -50%);
-  animation: rotateSpinner 1.5s ease-in-out infinite;
-  z-index: 20;
+  animation: rotateSpinner 1.5s linear infinite;
+  z-index: 200;
 }
 
 @keyframes rotateSpinner {
