@@ -18,6 +18,7 @@ const initialState = {
   password: "",
   passwordRepeat: "",
   errorMessage: {},
+  goBackTo: "",
 };
 
 function loginReducer(state, action) {
@@ -26,6 +27,11 @@ function loginReducer(state, action) {
       return {
         ...state,
         isLoading: !state.isLoading,
+      };
+    case "goBackTo":
+      return {
+        ...state,
+        goBackTo: action.payload,
       };
     case "name":
       return {
@@ -93,6 +99,7 @@ function Login() {
         "Cele două valori ale parolei nu sunt identice."
       );
     }
+
     try {
       cancelFetch.current = axios.CancelToken.source();
       const reqRoute = state.isLogin ? "/users/login" : "/users/signup";
@@ -104,12 +111,20 @@ function Login() {
             password: state.password,
           };
       dispatch({ type: "isLoading" });
+
       const response = await axios.post(reqRoute, reqBody, {
         cancelToken: cancelFetch.current.token,
       });
       dispatch({ type: "isLoading" });
+
       login(response.data.token, Boolean(response.data.admin));
-      history.goBack();
+      if (state.goBackTo && state.goBackTo.backToComment) {
+        return history.push(`/noutati/${state.goBackTo.backToComment}`, {
+          focusOnComment: true,
+        });
+      } else {
+        history.goBack();
+      }
     } catch (error) {
       console.log(error.response);
       if (error.response && error.response.status >= 500) {
@@ -140,8 +155,15 @@ function Login() {
     clearError(name);
   };
 
-  // abort changing state if component is unmounted
   useEffect(() => {
+    // save the state from history for a targeted push after login
+    if (history.location.state) {
+      dispatch({ type: "goBackTo", payload: history.location.state });
+    }
+  }, [history.location.state]);
+
+  useEffect(() => {
+    // stop changing state if component is unmounted
     return () => {
       cancelFetch.current &&
         cancelFetch.current.cancel(

@@ -13,13 +13,24 @@
 .singleComment {
   display: flex;
   justify-content: space-between;
+  min-height: 10vmax;
+  margin: 0 0 2vmax 0;
 }
 .commentButtons {
+  display: flex;
+  flex-direction: column;
   border-left: 1px solid grey;
+  opacity: 0.8;
+  transition: opacity 0.2s ease-in;
+  padding-left: 1vmax;
+  &:hover {
+    opacity: 1;
+  }
 }
 
 li .editBtn,
 .deleteBtn {
+  margin: 0.3vmax;
   font-size: 0.7rem;
   padding: 0.2rem;
 }

@@ -25,6 +25,7 @@ const initialState = {
   postData: "",
   commentsData: [],
   commentInput: "",
+  resetInput: false,
 };
 
 function postReducer(state, action) {
@@ -42,8 +43,8 @@ function postReducer(state, action) {
       return {
         ...state,
         isLoading: false,
-        commentInput: "",
         commentsData: [...state.commentsData, action.payload],
+        commentInput: "",
       };
     case "deleteModal":
       return {
@@ -68,6 +69,7 @@ function postReducer(state, action) {
 function SelectedPost() {
   const { postId } = useParams();
   const history = useHistory();
+
   const ref = useRef();
   const { isAuthenticated, isAdmin } = useContext(AppContext);
   const [state, dispatch] = useReducer(postReducer, initialState);
@@ -105,7 +107,11 @@ function SelectedPost() {
 
   const postComment = () => {
     if (!isAuthenticated) {
-      return history.push("/autentificare");
+      // adding a piece of state, login component will know
+      // the user wants to post a comment and bring him back
+      return history.push("/autentificare", {
+        backToComment: postId,
+      });
     }
     if (isAuthenticated && !state.commentInput) return ref.current.focus();
 
@@ -137,11 +143,13 @@ function SelectedPost() {
           comments: [...data.post.comments],
         },
       });
+      if (history.location.state && history.location.state.focusOnComment)
+        ref.current.focus();
     }
     if (data && data.comment) {
       dispatch({ type: "newComment", payload: data.comment });
     }
-  }, [data]);
+  }, [data, history.location.state]);
 
   // cancel request if active on componentWillUnmount
   useEffect(() => {
@@ -151,7 +159,6 @@ function SelectedPost() {
     };
   }, [cancelReq]);
 
-  console.log(state.commentInput);
   return (
     <main>
       {state.isLoading && !state.postData && (
@@ -210,6 +217,7 @@ function SelectedPost() {
           {isAuthenticated ? "Adaugă Comentariu" : "Logează-te pentru a posta"}
         </button>
         <Comment
+          value={state.commentInput}
           inputRef={ref}
           isLoading={Boolean(state.isLoading && state.postData)}
           onChange={handleComment}
