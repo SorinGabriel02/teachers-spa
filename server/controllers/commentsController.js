@@ -6,8 +6,9 @@ const Comment = require("../models/commentModel");
 const newComment = async (req, res, next) => {
   // user is authenticated
   const user = req.user;
+  const { postId } = req.params;
   try {
-    const { content, postId } = req.body;
+    const { content } = req.body;
     const post = await Post.findById(postId);
 
     if (!post) {
@@ -37,7 +38,7 @@ const newComment = async (req, res, next) => {
 
     await session.commitTransaction();
 
-    res.json({ comment: newComment.toObject({ getters: true }) });
+    res.status(201).json({ comment: newComment.toObject({ getters: true }) });
   } catch (error) {
     console.log(error);
     res.sendStatus(500);

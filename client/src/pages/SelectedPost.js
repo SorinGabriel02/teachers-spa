@@ -1,8 +1,9 @@
-import React, { useReducer, useEffect, useContext } from "react";
+import React, { useReducer, useEffect, useContext, useRef } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import SunEditor from "suneditor-react";
 import { AppContext } from "../context/appContext";
 import useHttpReq from "../hooks/useHttpReq";
+import PostedComment from "../components/PostedComment";
 import Loading from "../components/Loading";
 import Comment from "../components/Comment";
 import Backdrop from "../components/Backdrop";
@@ -11,6 +12,7 @@ import Modal from "../components/Modal";
 import "suneditor/dist/css/suneditor.min.css";
 import {
   btnSection,
+  sendCommentBtn,
   editBtn,
   deleteBtn,
   commentsSection,
@@ -22,12 +24,12 @@ const initialState = {
   deleteModal: false,
   postData: "",
   commentsData: [],
-  comment: "",
+  commentInput: "",
 };
 
 function postReducer(state, action) {
   switch (action.type) {
-    case "getData":
+    case "apiCall":
       return { ...state, isLoading: true };
     case "dataRetrieved":
       return {
@@ -35,6 +37,13 @@ function postReducer(state, action) {
         isLoading: false,
         postData: action.payload.post,
         commentsData: action.payload.comments,
+      };
+    case "newComment":
+      return {
+        ...state,
+        isLoading: false,
+        commentInput: "",
+        commentsData: [...state.commentsData, action.payload],
       };
     case "deleteModal":
       return {
@@ -46,6 +55,11 @@ function postReducer(state, action) {
         ...state,
         isLoading: true,
       };
+    case "commentInput":
+      return {
+        ...state,
+        commentInput: action.payload,
+      };
     default:
       return state;
   }
@@ -54,6 +68,7 @@ function postReducer(state, action) {
 function SelectedPost() {
   const { postId } = useParams();
   const history = useHistory();
+  const ref = useRef();
   const { isAuthenticated, isAdmin } = useContext(AppContext);
   const [state, dispatch] = useReducer(postReducer, initialState);
   const [data, err, makeReq, cancelReq] = useHttpReq();
@@ -65,13 +80,15 @@ function SelectedPost() {
     resizingBar: false,
   };
 
-  const handleComment = (content) => {};
-
-  const comments =
+  const updateComments =
     state.commentsData &&
-    state.commentsData.map((comment) => {
-      return <li key={comment.id}>{comment.content}</li>;
-    });
+    state.commentsData.length &&
+    state.commentsData.map((comment) => (
+      <PostedComment key={comment.id} comment={comment} />
+    ));
+
+  const handleComment = (value) =>
+    dispatch({ type: "commentInput", payload: value });
 
   const showDeleteModal = () =>
     dispatch({ type: "deleteModal", payload: true });
@@ -85,14 +102,34 @@ function SelectedPost() {
     });
     history.push("/noutati");
   };
+
+  const postComment = () => {
+    if (!isAuthenticated) {
+      return history.push("/autentificare");
+    }
+    if (isAuthenticated && !state.commentInput) return ref.current.focus();
+
+    dispatch({ type: "apiCall" });
+    makeReq(
+      "post",
+      `/comments/${postId}/new`,
+      { content: state.commentInput },
+      {
+        headers: {
+          Authorization: `Bearer ${isAuthenticated}`,
+        },
+      }
+    );
+  };
+
   // get post data when component mounts
   useEffect(() => {
-    dispatch({ type: "getData" });
+    dispatch({ type: "apiCall" });
     makeReq("get", `/posts/${postId}`);
   }, [makeReq, postId]);
 
   useEffect(() => {
-    if (data) {
+    if (data && data.post) {
       dispatch({
         type: "dataRetrieved",
         payload: {
@@ -100,6 +137,9 @@ function SelectedPost() {
           comments: [...data.post.comments],
         },
       });
+    }
+    if (data && data.comment) {
+      dispatch({ type: "newComment", payload: data.comment });
     }
   }, [data]);
 
@@ -111,17 +151,17 @@ function SelectedPost() {
     };
   }, [cancelReq]);
 
-  if (state.isLoading)
-    return (
-      <React.Fragment>
-        <Backdrop show={state.isLoading} onClick={hideDeleteModal} />
-        <Loading />
-      </React.Fragment>
-    );
-
+  console.log(state.commentInput);
   return (
     <main>
-      <Backdrop show={state.deleteModal} onClick={hideDeleteModal} />
+      {state.isLoading && !state.postData && (
+        <Loading styles={{ top: "45vh" }} />
+      )}
+
+      <Backdrop
+        show={state.deleteModal || (state.isLoading && !state.postData)}
+        onClick={hideDeleteModal}
+      />
       <Modal show={state.deleteModal} className={deleteModal}>
         <header>
           <h3>Te rog confirmă ștergerea permanentă a articolului</h3>
@@ -162,10 +202,19 @@ function SelectedPost() {
             Pentru moment nu sunt comentarii.
           </p>
         ) : (
-          <ul>{comments}</ul>
+          <ul>{updateComments}</ul>
         )}
       </section>
-      <Comment />
+      <section>
+        <button className={sendCommentBtn} onClick={postComment}>
+          {isAuthenticated ? "Adaugă Comentariu" : "Logează-te pentru a posta"}
+        </button>
+        <Comment
+          inputRef={ref}
+          isLoading={Boolean(state.isLoading && state.postData)}
+          onChange={handleComment}
+        />
+      </section>
     </main>
   );
 }

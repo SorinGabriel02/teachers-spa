@@ -12,6 +12,7 @@
   @extend .sharedBtn;
   background-color: $greenBtn;
 }
+
 .deleteBtn {
   @extend .sharedBtn;
   background-color: $redBtn;
@@ -29,6 +30,10 @@
       @extend .cardShared;
     }
   }
+}
+
+.sendCommentBtn {
+  @extend .sharedBtn;
 }
 
 .deleteModal {

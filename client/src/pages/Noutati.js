@@ -1,5 +1,5 @@
 import React, { useReducer, useEffect, useContext, useRef } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import SunEditor from "suneditor-react";
 
 import { AppContext } from "../context/appContext";
@@ -8,7 +8,7 @@ import Loading from "../components/Loading";
 import Backdrop from "../components/Backdrop";
 import Modal from "../components/Modal";
 
-import { newsBtn, editContainer, notFound } from "./Noutati.module.scss";
+import { newsBtn, editContainer } from "./Noutati.module.scss";
 import "suneditor/dist/css/suneditor.min.css";
 
 const initialState = { isLoading: true };
@@ -27,6 +27,7 @@ function postsReducer(state, action) {
 
 function Noutati(props) {
   const ref = useRef(null);
+  const history = useHistory();
   const { isAdmin } = useContext(AppContext);
   const [state, dispatch] = useReducer(postsReducer, initialState);
   const [posts, err, makeReq, cancelReq] = useHttpReq();
@@ -67,7 +68,7 @@ function Noutati(props) {
         </section>
       ));
 
-  const handleClick = () => {};
+  const handleClick = () => history.push("/");
 
   // get post on page load
   useEffect(() => {
@@ -98,9 +99,12 @@ function Noutati(props) {
       />
       <Modal show={(postsList && !postsList.length) || !!err}>
         <button onClick={handleClick} className={newsBtn}>
-          x
+          &#10006;
         </button>
-        <h1>Momentan nu a fost găsit nici un articol.</h1>
+        <h1>
+          Momentan nu a fost găsit nici un articol. Te rog să încerci mai
+          târziu.
+        </h1>
       </Modal>
       {isAdmin && posts && (
         <NavLink to="/postNou">

@@ -1,0 +1,25 @@
+@import "../variables.scss";
+@import "../styles/button";
+
+.editBtn {
+  @extend .sharedBtn;
+  background-color: $greenBtn;
+}
+
+.deleteBtn {
+  @extend .sharedBtn;
+  background-color: $redBtn;
+}
+.singleComment {
+  display: flex;
+  justify-content: space-between;
+}
+.commentButtons {
+  border-left: 1px solid grey;
+}
+
+li .editBtn,
+.deleteBtn {
+  font-size: 0.7rem;
+  padding: 0.2rem;
+}

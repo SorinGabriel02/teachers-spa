@@ -8,6 +8,6 @@ const router = express.Router();
 
 const withAuth = passport.authenticate("jwt", { session: false });
 
-router.post("/new", withAuth, newComment);
+router.post("/:postId/new", withAuth, newComment);
 
 module.exports = router;
