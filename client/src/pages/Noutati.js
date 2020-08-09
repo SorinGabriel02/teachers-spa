@@ -7,8 +7,9 @@ import useHttpReq from "../hooks/useHttpReq";
 import Loading from "../components/Loading";
 import Backdrop from "../components/Backdrop";
 import Modal from "../components/Modal";
+import XBtn from "../components/XBtn";
 
-import { newsBtn, editContainer } from "./Noutati.module.scss";
+import { publishBtn, newsBtn, editContainer } from "./Noutati.module.scss";
 import "suneditor/dist/css/suneditor.min.css";
 
 const initialState = { isLoading: true };
@@ -98,9 +99,7 @@ function Noutati(props) {
         show={!!err || (postsList && !postsList.length)}
       />
       <Modal show={(postsList && !postsList.length) || !!err}>
-        <button onClick={handleClick} className={newsBtn}>
-          &#10006;
-        </button>
+        <XBtn onClick={handleClick} />
         <h1>
           Momentan nu a fost găsit nici un articol. Te rog să încerci mai
           târziu.
@@ -108,7 +107,7 @@ function Noutati(props) {
       </Modal>
       {isAdmin && posts && (
         <NavLink to="/postNou">
-          <button className={newsBtn}>Publică articol</button>
+          <button className={publishBtn}>Publică articol</button>
         </NavLink>
       )}
       <main>{postsList}</main>

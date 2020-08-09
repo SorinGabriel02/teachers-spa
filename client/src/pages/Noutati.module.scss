@@ -1,19 +1,9 @@
 @import "../variables.scss";
 @import "../styles/button";
 
-.newsBtn {
-  padding: 0.3rem 0.5rem;
-  border: 1px solid $headerBackground;
+.publishBtn {
+  @extend .sharedBtn;
   background-color: $greenBtn;
-  border-radius: 50%;
-  outline: whitesmoke;
-  margin: 1vmax;
-  &:hover {
-    box-shadow: $boxShadow;
-  }
-  &:active {
-    box-shadow: none;
-  }
 }
 
 main {

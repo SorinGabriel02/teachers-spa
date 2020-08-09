@@ -28,6 +28,10 @@
     margin: 0;
     li {
       @extend .cardShared;
+      margin-bottom: 2vmax;
+      &:hover {
+        box-shadow: $boxShadow;
+      }
     }
   }
 }

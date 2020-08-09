@@ -1,0 +1,16 @@
+@import "../variables.scss";
+
+.newsBtn {
+  padding: 0.3rem 0.5rem;
+  border: 2px solid $headerBackground;
+  background-color: $greenBtn;
+  border-radius: 50%;
+  outline: whitesmoke;
+  margin: 1vmax;
+  &:hover {
+    box-shadow: $boxShadow;
+  }
+  &:active {
+    box-shadow: none;
+  }
+}

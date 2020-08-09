@@ -1,13 +1,15 @@
 import React, { useReducer, useEffect, useContext, useRef } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import SunEditor from "suneditor-react";
+
 import { AppContext } from "../context/appContext";
 import useHttpReq from "../hooks/useHttpReq";
+import PostEditor from "../components/PostEditor";
 import PostedComment from "../components/PostedComment";
 import Loading from "../components/Loading";
 import Comment from "../components/Comment";
 import Backdrop from "../components/Backdrop";
 import Modal from "../components/Modal";
+import XBtn from "../components/XBtn";
 
 import "suneditor/dist/css/suneditor.min.css";
 import {
@@ -26,6 +28,7 @@ const initialState = {
   commentsData: [],
   commentInput: "",
   resetInput: false,
+  editPost: false,
 };
 
 function postReducer(state, action) {
@@ -61,6 +64,16 @@ function postReducer(state, action) {
         ...state,
         commentInput: action.payload,
       };
+    case "editPost":
+      return {
+        ...state,
+        editPost: !state.editPost,
+      };
+    case "postChange":
+      return {
+        ...state,
+        postData: action.payload,
+      };
     default:
       return state;
   }
@@ -74,13 +87,6 @@ function SelectedPost() {
   const { isAuthenticated, isAdmin } = useContext(AppContext);
   const [state, dispatch] = useReducer(postReducer, initialState);
   const [data, err, makeReq, cancelReq] = useHttpReq();
-
-  const postEditorOptions = {
-    minHeight: "70vh",
-    height: "auto",
-    mode: "balloon",
-    resizingBar: false,
-  };
 
   const updateComments =
     state.commentsData &&
@@ -128,6 +134,18 @@ function SelectedPost() {
     );
   };
 
+  const handlePostEdit = () => {
+    dispatch({ type: "editPost" });
+  };
+
+  const handlePostChange = (content) => {
+    dispatch({ type: "postChange", payload: content });
+  };
+
+  const handleXBtn = () => {
+    console.log("x pushed");
+  };
+
   // get post data when component mounts
   useEffect(() => {
     dispatch({ type: "apiCall" });
@@ -158,15 +176,23 @@ function SelectedPost() {
         cancelReq.cancel("component dismounts, api call is being canceled");
     };
   }, [cancelReq]);
-
+  console.log(err);
   return (
     <main>
-      {state.isLoading && !state.postData && (
+      {!Boolean(err && err.status) && state.isLoading && !state.postData && (
         <Loading styles={{ top: "45vh" }} />
       )}
+      <Modal show={Boolean(err && err.status)}>
+        <XBtn onClick={handleXBtn} />
+        {err && err.data}
+      </Modal>
 
       <Backdrop
-        show={state.deleteModal || (state.isLoading && !state.postData)}
+        show={
+          Boolean(err && err.status) ||
+          state.deleteModal ||
+          (state.isLoading && !state.postData)
+        }
         onClick={hideDeleteModal}
       />
       <Modal show={state.deleteModal} className={deleteModal}>
@@ -186,20 +212,19 @@ function SelectedPost() {
 
       {isAdmin && (
         <section className={btnSection}>
-          <button className={editBtn}>Editează Articolul</button>
+          <button className={editBtn} onClick={handlePostEdit}>
+            {!state.editPost ? "Editează Articolul" : "Salvează articolul"}
+          </button>
           <button className={deleteBtn} onClick={showDeleteModal}>
             Șterge Articolul
           </button>
         </section>
       )}
       <section>
-        <SunEditor
-          showToolbar={false}
-          enableToolbar={false}
-          setContents={state.postData}
-          disable={true}
-          setOptions={postEditorOptions}
-          setDefaultStyle={"background-color: rgb(228, 228, 230); padding: 2%;"}
+        <PostEditor
+          handleChange={handlePostChange}
+          editorContent={state.postData}
+          disable={!state.editPost}
         />
       </section>
       <section className={commentsSection}>

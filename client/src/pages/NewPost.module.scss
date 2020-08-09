@@ -5,6 +5,9 @@
   @extend .sharedBtn;
   background-color: $greenBtn;
   margin: 1vmax auto;
+  &:disabled {
+    cursor: not-allowed;
+  }
 }
 
 .modalClose {

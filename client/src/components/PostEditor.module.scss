@@ -2,9 +2,13 @@
 
 .editContainer {
   min-width: 90%;
-  min-height: 70vh;
+  min-height: fit-content;
+  height: fit-content;
   margin: 1vmax auto;
   padding: 1vmax;
   box-shadow: $boxShadow;
   background-color: whitesmoke;
+  .postToolbarContainer {
+    z-index: 100;
+  }
 }
