@@ -14,8 +14,8 @@ const withAuth = passport.authenticate("jwt", { session: false });
 
 router.post("/:postId/new", withAuth, newComment);
 
-router.patch("/:postId/:commentId", withAuth, updateComment);
+router.patch("/:commentId", withAuth, updateComment);
 
-router.delete("/:postId/:commentId", withAuth, deleteComment);
+router.delete("/:commentId", withAuth, deleteComment);
 
 module.exports = router;

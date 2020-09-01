@@ -12,6 +12,9 @@ import {
   commentButtons,
   editBtn,
   deleteBtn,
+  editModal,
+  modalButtons,
+  modalDeleteBtn,
 } from "./PostedComment.module.scss";
 
 function PostedComment({ comment, editComment, deleteComment }) {
@@ -34,8 +37,13 @@ function PostedComment({ comment, editComment, deleteComment }) {
   };
 
   const confirmedDelete = () => {
-    deleteComment(comment.id);
     setShow(false);
+    deleteComment(comment.id);
+  };
+
+  const confirmedEdit = () => {
+    setShow(false);
+    editComment(comment.id, edited);
   };
 
   const hideModal = () => setShow(false);
@@ -66,17 +74,30 @@ function PostedComment({ comment, editComment, deleteComment }) {
         <Backdrop show={show} onClick={() => setShow(false)} />
         <Modal show={show} className="editCommentContainer">
           {editMode ? (
-            <React.Fragment>
+            <div className={editModal}>
               <Comment value={edited} onChange={handleChange} />
-              <button onClick={() => editComment(comment.id)}>Salvează</button>
-              <button onClick={hideModal}>Anulează</button>
-            </React.Fragment>
+              <div className={modalButtons}>
+                <button className={editBtn} onClick={confirmedEdit}>
+                  Salvează
+                </button>
+                <button className={editBtn} onClick={hideModal}>
+                  Anulează
+                </button>
+              </div>
+            </div>
           ) : (
-            <React.Fragment>
-              <p>Te rog confirmă ștergerea definitivă a comentariului.</p>
-              <button onClick={confirmedDelete}>Șterge</button>
-              <button onClick={hideModal}>Anulează</button>
-            </React.Fragment>
+            <div className={editModal}>
+              <h3>Te rog confirmă ștergerea definitivă a comentariului.</h3>
+              <hr />
+              <div className={modalButtons}>
+                <button className={modalDeleteBtn} onClick={confirmedDelete}>
+                  Șterge
+                </button>
+                <button className={editBtn} onClick={hideModal}>
+                  Anulează
+                </button>
+              </div>
+            </div>
           )}
         </Modal>
       </div>

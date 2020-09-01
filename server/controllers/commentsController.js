@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Post = require("../models/postModel");
 const Comment = require("../models/commentModel");
-const { post } = require("../routes/commentsRoutes");
 
 const newComment = async (req, res, next) => {
   // user is authenticated
@@ -46,29 +45,46 @@ const newComment = async (req, res, next) => {
   }
 };
 
-const updateComment = (req, res) => {
-  // update if user is admin OR user is comment author
-  const { postId, commentId } = req.params;
+const updateComment = async (req, res) => {
+  // update if user user is comment author
+  const { commentId } = req.params;
   const { content } = req.body;
-  console.log(req.user, postId, commentId, content);
-  res.json({ message: "updating comment" });
+  try {
+    const commentToUpdate = await Comment.findById(commentId);
+    if (!commentToUpdate) {
+      return res.status(404).json({
+        errorMessage: "404 Comentariul nu a putut fi găsit. Editare nereușită.",
+      });
+    }
+    if (commentToUpdate.author.toString() !== req.user._id.toString()) {
+      return res
+        .status(401)
+        .json({ errorMessage: "Datele de autentificare sunt incorecte." });
+    }
+    commentToUpdate.content = content;
+    const updatedComment = await commentToUpdate.save();
+    res.json({ updatedComment: updatedComment.toObject({ getters: true }) });
+  } catch (error) {
+    res.status(500).json({
+      errorMessage: "Eroare de server. Te rog să încerci mai târziu.",
+    });
+  }
 };
 
 const deleteComment = async (req, res) => {
   // delete if user is admin OR user is comment author
-  const { postId, commentId } = req.params;
+  const { commentId } = req.params;
   try {
-    const post = await Post.findById(postId);
-    const comment = await Comment.findById(commentId).populate("author");
-    // error back if post or comment can't be found
-    if (!post || !comment) {
+    const comment = await Comment.findById(commentId).populate("author post");
+    // error back if comment can't be found
+    if (!comment) {
       return res.status(404).json({
         errorMessage: "404 A intervenit o eroare. Te rog încearcă mai târziu.",
       });
     }
     // error back if the request did not come from comment author or admin
     if (
-      req.user._id.toString() !== comment.author._id.toString() ||
+      req.user._id.toString() !== comment.author._id.toString() &&
       !req.user.admin
     ) {
       return res
@@ -82,13 +98,13 @@ const deleteComment = async (req, res) => {
     comment.author.comments.pull(commentId);
     await comment.author.save({ session });
     // - remove comment reference from "post"
-    post.comments.pull(commentId);
-    await post.save({ session });
+    comment.post.comments.pull(commentId);
+    await comment.post.save({ session });
     // - delete comment
     await Comment.findByIdAndDelete(commentId, { session });
     await session.commitTransaction();
 
-    res.json({ message: "Success" });
+    res.json({ message: "Comentariul a fost șters." });
   } catch (error) {
     res.status(500).json({
       errorMessage: "Eroare de server. Comentariul nu a putut fi șters.",

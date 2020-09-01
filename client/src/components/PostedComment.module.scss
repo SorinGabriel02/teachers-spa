@@ -28,6 +28,24 @@
   }
 }
 
+.editModal {
+  display: flex;
+  flex-direction: column;
+  h3 {
+    text-align: center;
+  }
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: space-around;
+}
+
+.modalDeleteBtn {
+  @extend .sharedBtn;
+  background-color: $redBtn;
+}
+
 li .editBtn,
 .deleteBtn {
   margin: 0.3vmax;

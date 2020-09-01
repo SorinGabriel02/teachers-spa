@@ -75,12 +75,29 @@ function postReducer(state, action) {
         ...state,
         postData: action.payload,
       };
+    case "editedComment": {
+      console.log(action.payload);
+      const updatedComments =
+        action.payload &&
+        state.commentsData.map((comm) => {
+          if (comm.id === action.payload.id) {
+            comm.content = action.payload.content;
+          }
+          return comm;
+        });
+      return {
+        ...state,
+        isLoading: false,
+        commentsData: updatedComments,
+      };
+    }
     case "deleteComment": {
       const filteredComments = state.commentsData.filter(
         (comm) => comm.id !== action.payload
       );
       return {
         ...state,
+        isLoading: false,
         commentsData: filteredComments,
       };
     }
@@ -141,25 +158,42 @@ function SelectedPost() {
     );
   };
 
-  const editComment = useCallback((commentId) => {}, []);
+  const editComment = useCallback(
+    async (commentId, edited) => {
+      dispatch({ type: "apiCall" });
+      await makeReq(
+        "patch",
+        `/comments/${commentId}`,
+        { content: edited },
+        {
+          headers: {
+            Authorization: `Bearer ${isAuthenticated}`,
+          },
+        }
+      );
+    },
+    [isAuthenticated, makeReq]
+  );
 
   const deleteComment = useCallback(
     async (commentId) => {
-      await makeReq("delete", `/comments/${postId}/${commentId}`, {
+      dispatch({ type: "apiCall" });
+      await makeReq("delete", `/comments/${commentId}`, {
         headers: {
           Authorization: `Bearer ${isAuthenticated}`,
         },
       });
-      if (data && data.message) {
+      if (!err) {
         dispatch({ type: "deleteComment", payload: commentId });
       }
     },
-    [isAuthenticated, makeReq, postId, data]
+    [isAuthenticated, makeReq, err]
   );
 
   const handlePostEdit = () => {
     dispatch({ type: "editPostMode" });
     if (state.editPostMode) {
+      dispatch({ type: "apiRequest" });
       makeReq(
         "patch",
         `/posts/update/${postId}`,
@@ -213,6 +247,9 @@ function SelectedPost() {
     if (data && data.comment) {
       dispatch({ type: "newComment", payload: data.comment });
     }
+    if (data && data.updatedComment) {
+      dispatch({ type: "editedComment", payload: data.updatedComment });
+    }
   }, [data, err, history.location]);
 
   // cancel request if active on componentWillUnmount
@@ -235,7 +272,6 @@ function SelectedPost() {
           ? err.data.errorMessage
           : "A intervenit o eroare. Te rog să încerci mai târziu."}
       </Modal>
-
       <Backdrop
         show={
           Boolean(err && err.status) ||
@@ -260,7 +296,6 @@ function SelectedPost() {
           </button>
         </main>
       </Modal>
-
       {isAdmin && (
         <section className={btnSection}>
           <button className={editBtn} onClick={handlePostEdit}>
