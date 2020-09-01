@@ -1,4 +1,10 @@
-import React, { useReducer, useEffect, useContext, useRef } from "react";
+import React, {
+  useReducer,
+  useEffect,
+  useContext,
+  useRef,
+  useCallback,
+} from "react";
 import { useParams, useHistory } from "react-router-dom";
 
 import { AppContext } from "../context/appContext";
@@ -28,7 +34,7 @@ const initialState = {
   commentsData: [],
   commentInput: "",
   resetInput: false,
-  editPost: false,
+  editPostMode: false,
 };
 
 function postReducer(state, action) {
@@ -54,26 +60,30 @@ function postReducer(state, action) {
         ...state,
         deleteModal: action.payload,
       };
-    case "deletePost":
-      return {
-        ...state,
-        isLoading: true,
-      };
     case "commentInput":
       return {
         ...state,
         commentInput: action.payload,
       };
-    case "editPost":
+    case "editPostMode":
       return {
         ...state,
-        editPost: !state.editPost,
+        editPostMode: !state.editPostMode,
       };
     case "postChange":
       return {
         ...state,
         postData: action.payload,
       };
+    case "deleteComment": {
+      const filteredComments = state.commentsData.filter(
+        (comm) => comm.id !== action.payload
+      );
+      return {
+        ...state,
+        commentsData: filteredComments,
+      };
+    }
     default:
       return state;
   }
@@ -88,23 +98,20 @@ function SelectedPost() {
   const [state, dispatch] = useReducer(postReducer, initialState);
   const [data, err, makeReq, cancelReq] = useHttpReq();
 
-  const updateComments =
-    state.commentsData &&
-    state.commentsData.length &&
-    state.commentsData.map((comment) => (
-      <PostedComment key={comment.id} comment={comment} />
-    ));
-
   const handleComment = (value) =>
     dispatch({ type: "commentInput", payload: value });
 
-  const showDeleteModal = () =>
-    dispatch({ type: "deleteModal", payload: true });
-  const hideDeleteModal = () =>
-    dispatch({ type: "deleteModal", payload: false });
+  const showDeleteModal = useCallback(
+    () => dispatch({ type: "deleteModal", payload: true }),
+    []
+  );
+  const hideDeleteModal = useCallback(
+    () => dispatch({ type: "deleteModal", payload: false }),
+    []
+  );
   const deleteArticle = async () => {
     hideDeleteModal();
-    dispatch({ type: "deletePost" });
+    dispatch({ type: "apiCall" });
     await makeReq("delete", `/posts/delete/${postId}`, {
       headers: { Authorization: `Bearer ${isAuthenticated}` },
     });
@@ -134,8 +141,32 @@ function SelectedPost() {
     );
   };
 
+  const editComment = useCallback((commentId) => {}, []);
+
+  const deleteComment = useCallback(
+    async (commentId) => {
+      await makeReq("delete", `/comments/${postId}/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${isAuthenticated}`,
+        },
+      });
+      if (data && data.message) {
+        dispatch({ type: "deleteComment", payload: commentId });
+      }
+    },
+    [isAuthenticated, makeReq, postId, data]
+  );
+
   const handlePostEdit = () => {
-    dispatch({ type: "editPost" });
+    dispatch({ type: "editPostMode" });
+    if (state.editPostMode) {
+      makeReq(
+        "patch",
+        `/posts/update/${postId}`,
+        { content: state.postData },
+        { headers: { Authorization: `Bearer ${isAuthenticated}` } }
+      );
+    }
   };
 
   const handlePostChange = (content) => {
@@ -143,8 +174,23 @@ function SelectedPost() {
   };
 
   const handleXBtn = () => {
-    console.log("x pushed");
+    history.push("/noutati");
   };
+
+  const updateComments = useCallback(() => {
+    return (
+      state.commentsData &&
+      state.commentsData.length &&
+      state.commentsData.map((comment) => (
+        <PostedComment
+          key={comment.id}
+          comment={comment}
+          editComment={editComment}
+          deleteComment={deleteComment}
+        />
+      ))
+    );
+  }, [deleteComment, editComment, state.commentsData]);
 
   // get post data when component mounts
   useEffect(() => {
@@ -167,7 +213,7 @@ function SelectedPost() {
     if (data && data.comment) {
       dispatch({ type: "newComment", payload: data.comment });
     }
-  }, [data, history.location.state]);
+  }, [data, err, history.location]);
 
   // cancel request if active on componentWillUnmount
   useEffect(() => {
@@ -176,7 +222,7 @@ function SelectedPost() {
         cancelReq.cancel("component dismounts, api call is being canceled");
     };
   }, [cancelReq]);
-  console.log(err);
+
   return (
     <main>
       {!Boolean(err && err.status) && state.isLoading && !state.postData && (
@@ -184,20 +230,25 @@ function SelectedPost() {
       )}
       <Modal show={Boolean(err && err.status)}>
         <XBtn onClick={handleXBtn} />
-        {err && err.data}
+        <hr />
+        {err && err.data.errorMessage
+          ? err.data.errorMessage
+          : "A intervenit o eroare. Te rog să încerci mai târziu."}
       </Modal>
 
       <Backdrop
         show={
           Boolean(err && err.status) ||
+          state.editCommentMode ||
           state.deleteModal ||
           (state.isLoading && !state.postData)
         }
         onClick={hideDeleteModal}
       />
+      {/* Modal to confirm post delete */}
       <Modal show={state.deleteModal} className={deleteModal}>
         <header>
-          <h3>Te rog confirmă ștergerea permanentă a articolului</h3>
+          <h3>Te rog confirmă ștergerea permanentă a articolului.</h3>
         </header>
         <hr />
         <main>
@@ -213,7 +264,7 @@ function SelectedPost() {
       {isAdmin && (
         <section className={btnSection}>
           <button className={editBtn} onClick={handlePostEdit}>
-            {!state.editPost ? "Editează Articolul" : "Salvează articolul"}
+            {!state.editPostMode ? "Editează Articolul" : "Salvează articolul"}
           </button>
           <button className={deleteBtn} onClick={showDeleteModal}>
             Șterge Articolul
@@ -224,7 +275,7 @@ function SelectedPost() {
         <PostEditor
           handleChange={handlePostChange}
           editorContent={state.postData}
-          disable={!state.editPost}
+          disable={!state.editPostMode}
         />
       </section>
       <section className={commentsSection}>
@@ -234,7 +285,7 @@ function SelectedPost() {
             Pentru moment nu sunt comentarii.
           </p>
         ) : (
-          <ul>{updateComments}</ul>
+          <ul>{updateComments()}</ul>
         )}
       </section>
       <section>

@@ -8,7 +8,9 @@ const getPosts = async (req, res, next) => {
     const posts = await Post.find({});
     res.json([...posts.map((post) => post.toObject({ getters: true }))]);
   } catch (error) {
-    res.sendStatus(500);
+    res.status(500).json({
+      errorMessage: "A intervenit o eroare. Te rog să încerci mai târziu.",
+    });
   }
 };
 
@@ -18,8 +20,9 @@ const getPostById = async (req, res, next) => {
     const post = await Post.findById(postId).populate("comments");
     res.json({ post: post.toObject({ getters: true }) });
   } catch (error) {
-    console.log(error);
-    res.sendStatus(500);
+    res.status(500).json({
+      errorMessage: "A intervenit o eroare. Te rog să încerci mai târziu.",
+    });
   }
 };
 
@@ -39,13 +42,24 @@ const createPost = async (req, res, next) => {
     session.commitTransaction();
     res.status(201).json({ message: "Successfully created." });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      errorMessage: "A intervenit o eroare. Te rog să încerci mai târziu.",
+    });
   }
 };
 
-const updatePost = (req, res, next) => {
-  res.json({ message: "updating post..." });
+const updatePost = async (req, res, next) => {
+  try {
+    const { postId } = req.params;
+    const { content } = req.body;
+    await Post.findOneAndUpdate({ _id: postId }, { content });
+    res.json({ message: "Post successfully updated." });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      errorMessage: "A intervenit o eroare. Te rog să încerci mai târziu.",
+    });
+  }
 };
 
 const deletePost = async (req, res, next) => {
@@ -68,8 +82,6 @@ const deletePost = async (req, res, next) => {
           select: "_id comments",
         },
       });
-
-    console.log(toDelete);
 
     if (!toDelete) {
       return res
@@ -106,8 +118,9 @@ const deletePost = async (req, res, next) => {
 
     res.sendStatus(204);
   } catch (error) {
-    console.log(error);
-    res.sendStatus(500);
+    res.status(500).json({
+      errorMessage: "A intervenit o eroare. Te rog să încerci mai târziu.",
+    });
   }
 };
 

@@ -9,7 +9,7 @@ import Backdrop from "../components/Backdrop";
 import Modal from "../components/Modal";
 import XBtn from "../components/XBtn";
 
-import { publishBtn, newsBtn, editContainer } from "./Noutati.module.scss";
+import { publishBtn, editContainer } from "./Noutati.module.scss";
 import "suneditor/dist/css/suneditor.min.css";
 
 const initialState = { isLoading: true };
