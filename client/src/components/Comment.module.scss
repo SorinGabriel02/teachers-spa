@@ -4,6 +4,11 @@
   @extend .cardShared;
   width: 100%;
   margin: 1.5vmax auto;
+  box-shadow: 0 0 1px;
+  &:hover {
+    box-shadow: 0 0 2px;
+  }
+
   textarea {
     width: 100%;
     height: 30vh;

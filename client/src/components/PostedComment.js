@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import jwtDecode from "jwt-decode";
 import PropTypes from "prop-types";
 
@@ -15,10 +15,14 @@ import {
   editModal,
   modalButtons,
   modalDeleteBtn,
+  userInfo,
 } from "./PostedComment.module.scss";
+import avatar from "../assets/defaultAvatar.png";
 
 function PostedComment({ comment, editComment, deleteComment }) {
   const { isAuthenticated, isAdmin } = useContext(AppContext);
+  const contentRef = useRef(null);
+  const commentRef = useRef(null);
   const [show, setShow] = useState(false);
   const [edited, setEdited] = useState(comment.content);
   const [editMode, setEditMode] = useState(false);
@@ -46,17 +50,42 @@ function PostedComment({ comment, editComment, deleteComment }) {
     editComment(comment.id, edited);
   };
 
-  const hideModal = () => setShow(false);
+  const hideModal = () => {
+    setShow(false);
+    setEditMode(false);
+  };
 
   const displayEditBtn =
-    isAuthenticated && jwtDecode(isAuthenticated).sub === comment.author;
+    isAuthenticated && jwtDecode(isAuthenticated).sub === comment.author.id;
   const displayDeleteBtn =
     isAuthenticated &&
-    (jwtDecode(isAuthenticated).sub === comment.author || isAdmin);
+    (jwtDecode(isAuthenticated).sub === comment.author.id || isAdmin);
   const noBtnShowing = !displayEditBtn && !displayDeleteBtn;
+
+  // add line breaks
+  useEffect(() => {
+    contentRef.current.innerHTML =
+      contentRef.current &&
+      comment.content.replace(/(?:\r\n|\r|\n)/g, "<br />");
+  }, [comment.content]);
+
+  // focus on textarea and move cursor at the end of text
+  useEffect(() => {
+    if (editMode && commentRef.current) {
+      commentRef.current.focus();
+      commentRef.current.setSelectionRange(-1, -1);
+    }
+  }, [editMode]);
+
   return (
     <li className={singleComment}>
-      <article>{comment.content}</article>
+      <article>
+        <p className={userInfo}>
+          <img src={avatar} alt="avatar icon" />
+          {comment.author.username}
+        </p>
+        <p ref={contentRef}></p>
+      </article>
       <div
         style={noBtnShowing ? { border: "none" } : null}
         className={commentButtons}
@@ -75,7 +104,11 @@ function PostedComment({ comment, editComment, deleteComment }) {
         <Modal show={show} className="editCommentContainer">
           {editMode ? (
             <div className={editModal}>
-              <Comment value={edited} onChange={handleChange} />
+              <Comment
+                inputRef={commentRef}
+                value={edited}
+                onChange={handleChange}
+              />
               <div className={modalButtons}>
                 <button className={editBtn} onClick={confirmedEdit}>
                   Salvează

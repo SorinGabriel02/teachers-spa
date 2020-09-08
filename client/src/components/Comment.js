@@ -12,11 +12,6 @@ function Comment(props) {
   return (
     <div className={writeComment}>
       {props.isLoading && <Loading />}
-      <div>
-        <button>
-          <b>B</b>
-        </button>
-      </div>
       <textarea
         maxLength="300"
         ref={props.inputRef}

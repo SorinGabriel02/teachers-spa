@@ -15,6 +15,7 @@
   justify-content: space-between;
   min-height: 10vmax;
   margin: 0 0 2vmax 0;
+  background-color: whitesmoke;
 }
 .commentButtons {
   display: flex;
@@ -31,6 +32,7 @@
 .editModal {
   display: flex;
   flex-direction: column;
+  min-width: 60vw;
   h3 {
     text-align: center;
   }
@@ -51,4 +53,25 @@ li .editBtn,
   margin: 0.3vmax;
   font-size: 0.7rem;
   padding: 0.2rem;
+}
+
+.userInfo {
+  display: flex;
+  width: fit-content;
+  border-bottom: 1px solid rgba(81, 69, 255, 0.3);
+  padding: 0.2rem 0.5rem;
+  margin-bottom: 0.6vmax;
+  background-color: $mainBackground;
+  border-radius: 8px;
+  img {
+    margin-right: 0.4vmax;
+    width: 25px;
+    border-radius: 50%;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .editModal {
+    min-width: 90vw;
+  }
 }

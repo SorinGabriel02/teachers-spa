@@ -16,6 +16,7 @@ html {
 body {
   background-color: $mainBackground;
   font-family: "Roboto", sans-serif;
+  width: 100%;
 }
 
 h1,
@@ -111,6 +112,6 @@ input {
 }
 
 // edit comment modal class
-.editCommentContainer {
-  min-width: 98%;
-}
+// .editCommentContainer {
+//   min-width: 98%;
+// }

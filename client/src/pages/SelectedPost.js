@@ -6,6 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { useParams, useHistory } from "react-router-dom";
+import DOMPurify from "dompurify";
 
 import { AppContext } from "../context/appContext";
 import useHttpReq from "../hooks/useHttpReq";
@@ -149,7 +150,7 @@ function SelectedPost() {
     makeReq(
       "post",
       `/comments/${postId}/new`,
-      { content: state.commentInput },
+      { content: DOMPurify.sanitize(state.commentInput) },
       {
         headers: {
           Authorization: `Bearer ${isAuthenticated}`,
@@ -164,7 +165,7 @@ function SelectedPost() {
       await makeReq(
         "patch",
         `/comments/${commentId}`,
-        { content: edited },
+        { content: DOMPurify.sanitize(edited) },
         {
           headers: {
             Authorization: `Bearer ${isAuthenticated}`,
@@ -259,6 +260,8 @@ function SelectedPost() {
         cancelReq.cancel("component dismounts, api call is being canceled");
     };
   }, [cancelReq]);
+
+  console.log(data);
 
   return (
     <main>

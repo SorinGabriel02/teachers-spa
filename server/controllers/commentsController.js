@@ -1,8 +1,16 @@
 const mongoose = require("mongoose");
 const Post = require("../models/postModel");
 const Comment = require("../models/commentModel");
+const { validationResult } = require("express-validator");
 
 const newComment = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty())
+    return res.status(422).json({
+      errorMessage:
+        "Datele introduse nu sunt valide. Te rog verifică și încearcă din nou.",
+    });
+
   // user is authenticated
   const user = req.user;
   const { postId } = req.params;
@@ -28,7 +36,9 @@ const newComment = async (req, res, next) => {
     const session = await mongoose.startSession();
     session.startTransaction();
 
-    await newComment.save({ session });
+    await (await newComment.save({ session }))
+      .populate("author", "username")
+      .execPopulate();
     // this push() belongs to mongoose, not standard JS push()
     post.comments.push(newComment);
     await post.save({ session });
@@ -46,25 +56,36 @@ const newComment = async (req, res, next) => {
 };
 
 const updateComment = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty())
+    return res.status(422).json({
+      errorMessage:
+        "Datele introduse nu sunt valide. Te rog verifică și încearcă din nou.",
+    });
   // update if user user is comment author
   const { commentId } = req.params;
   const { content } = req.body;
   try {
-    const commentToUpdate = await Comment.findById(commentId);
+    const commentToUpdate = await Comment.findById(commentId).populate(
+      "author",
+      "username"
+    );
     if (!commentToUpdate) {
       return res.status(404).json({
         errorMessage: "404 Comentariul nu a putut fi găsit. Editare nereușită.",
       });
     }
-    if (commentToUpdate.author.toString() !== req.user._id.toString()) {
+    if (commentToUpdate.author._id.toString() !== req.user._id.toString()) {
       return res
         .status(401)
         .json({ errorMessage: "Datele de autentificare sunt incorecte." });
     }
     commentToUpdate.content = content;
-    const updatedComment = await commentToUpdate.save();
-    res.json({ updatedComment: updatedComment.toObject({ getters: true }) });
+    await commentToUpdate.save();
+
+    res.json({ updatedComment: commentToUpdate.toObject({ getters: true }) });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       errorMessage: "Eroare de server. Te rog să încerci mai târziu.",
     });

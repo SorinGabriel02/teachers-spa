@@ -17,7 +17,13 @@ const getPosts = async (req, res, next) => {
 const getPostById = async (req, res, next) => {
   const { postId } = req.params;
   try {
-    const post = await Post.findById(postId).populate("comments");
+    const post = await Post.findById(postId).populate({
+      path: "comments",
+      populate: {
+        path: "author",
+        select: { _id: 1, username: 1 },
+      },
+    });
     res.json({ post: post.toObject({ getters: true }) });
   } catch (error) {
     res.status(500).json({
