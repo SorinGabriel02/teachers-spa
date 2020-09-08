@@ -52,7 +52,7 @@ function Noutati(props) {
         <section key={post.id} className={editContainer}>
           <NavLink
             style={{ textDecoration: "none" }}
-            to={`/noutati/${post._id}`}
+            to={`/noutati/${post.id}`}
           >
             <SunEditor
               ref={ref}

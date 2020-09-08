@@ -6,7 +6,13 @@ const Comment = require("../models/commentModel");
 const getPosts = async (req, res, next) => {
   try {
     const posts = await Post.find({});
-    res.json([...posts.map((post) => post.toObject({ getters: true }))]);
+    const mappedPosts = posts.map((post) => ({
+      id: post._id,
+      content: post.content,
+      createdAt: post.createdAt,
+      author: post.author,
+    }));
+    res.json([...mappedPosts]);
   } catch (error) {
     res.status(500).json({
       errorMessage: "A intervenit o eroare. Te rog să încerci mai târziu.",

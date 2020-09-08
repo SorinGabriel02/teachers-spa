@@ -82,7 +82,6 @@ const updateComment = async (req, res) => {
     }
     commentToUpdate.content = content;
     await commentToUpdate.save();
-
     res.json({ updatedComment: commentToUpdate.toObject({ getters: true }) });
   } catch (error) {
     console.log(error);
