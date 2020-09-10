@@ -25,7 +25,7 @@ function Header() {
             <li>Materiale Suport</li>
           </NavLink>
           <NavLink activeClassName={activeLink} to="/noutati">
-            <li>Noutati</li>
+            <li>Noutăți</li>
           </NavLink>
           {!isAuthenticated ? (
             <NavLink activeClassName={activeLink} to="/autentificare">

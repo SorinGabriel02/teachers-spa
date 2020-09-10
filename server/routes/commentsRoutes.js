@@ -15,14 +15,14 @@ const withAuth = passport.authenticate("jwt", { session: false });
 
 router.post(
   "/:postId/new",
-  [body("content").notEmpty().trim()],
+  [body("content").isString().notEmpty().escape()],
   withAuth,
   newComment
 );
 
 router.patch(
   "/:commentId",
-  [body("content").notEmpty().trim()],
+  [body("content").isString().notEmpty().escape()],
   withAuth,
   updateComment
 );

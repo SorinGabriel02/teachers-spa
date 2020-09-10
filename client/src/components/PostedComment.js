@@ -62,11 +62,19 @@ function PostedComment({ comment, editComment, deleteComment }) {
     (jwtDecode(isAuthenticated).sub === comment.author.id || isAdmin);
   const noBtnShowing = !displayEditBtn && !displayDeleteBtn;
 
-  // add line breaks
+  // add line breaks maximum 15 lines
   useEffect(() => {
-    contentRef.current.innerHTML =
-      contentRef.current &&
-      comment.content.replace(/(?:\r\n|\r|\n)/g, "<br />");
+    // contentRef.current.innerHTML =
+    //   contentRef.current &&
+    //   comment.content.replace(/(?:\r\n|\r|\n)/g, "<br />");
+    if (contentRef.current) {
+      let iterator = 14;
+      const stringBreaks = comment.content.replace(
+        /(?:\r\n|\r|\n)/g,
+        (s) => (iterator && iterator-- && "<br />") || " "
+      );
+      contentRef.current.innerHTML = stringBreaks;
+    }
   }, [comment.content]);
 
   // focus on textarea and move cursor at the end of text

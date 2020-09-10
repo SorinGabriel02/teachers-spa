@@ -1,29 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 
-import Backdrop from "../components/Backdrop";
-import Modal from "../components/Modal";
-
-import styles from "./Documente.module.scss";
+import { documente } from "./Documente.module.scss";
 
 function Documente() {
-  const [show, setShow] = useState(false);
-
-  const handleClick = () => setShow(false);
-
   return (
-    <div style={{ position: "relative" }}>
-      <Modal show={show} className={styles.modal}>
-        <Backdrop show={show} onClick={handleClick} />
-        <h1>Modalul online</h1>
-        <button onClick={() => setShow(false)}>Make me disappear</button>
-      </Modal>
-      <h1 style={{ position: "absolute", top: "40%", left: "40%" }}>
-        Documente COSP
-      </h1>
-      <button style={{ minWidth: "5vmax" }} onClick={() => setShow(true)}>
-        Show Modal
-      </button>
-    </div>
+    <main className={documente}>
+      <h1>Certificatul de Orientare Școlară și Profesională &#40;COSP&#41;</h1>
+      <section>
+        <h2>Documente necesare pentru obținerea COSP ordinul 1985/2016</h2>
+        <p>Coming soon...</p>
+      </section>
+      <section>
+        <h2>Acte necesare stabilirii dosarului de sprijin financiar</h2>
+        <p>Coming soon...</p>
+      </section>
+    </main>
   );
 }
 

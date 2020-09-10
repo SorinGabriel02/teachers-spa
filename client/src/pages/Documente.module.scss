@@ -1,3 +1,13 @@
-.modal {
-  border-radius: 10px;
+.documente {
+  display: flex;
+  flex-direction: column;
+  width: 94%;
+  align-self: center;
+  h1 {
+    text-align: center;
+    margin: 1vmax;
+  }
+  section {
+    margin: 1vmax;
+  }
 }

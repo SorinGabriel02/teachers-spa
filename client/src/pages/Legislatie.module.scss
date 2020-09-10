@@ -1,0 +1,23 @@
+.legislation {
+  display: flex;
+  flex-direction: column;
+  h1 {
+    text-align: center;
+    margin: 1vmax;
+  }
+  section {
+    width: 95%;
+    align-self: center;
+    padding: 1vmax;
+    border-bottom: 1px solid;
+    margin-bottom: 1vmax;
+  }
+  h2 {
+    margin: 1vmax;
+    text-indent: 10%;
+    font-weight: normal;
+  }
+  p {
+    margin: 0 1vmax;
+  }
+}

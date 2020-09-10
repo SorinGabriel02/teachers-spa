@@ -1,6 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const passport = require("passport");
+const { body } = require("express-validator");
+
 const {
   getPosts,
   getPostById,
@@ -24,9 +26,21 @@ router.get("/", getPosts);
 
 router.get("/:postId", getPostById);
 
-router.post("/new", requireAuth, requireAdmin, createPost);
+router.post(
+  "/new",
+  [body("content").isString().notEmpty()],
+  requireAuth,
+  requireAdmin,
+  createPost
+);
 
-router.patch("/update/:postId", requireAuth, requireAdmin, updatePost);
+router.patch(
+  "/update/:postId",
+  [body("content").isString().notEmpty()],
+  requireAuth,
+  requireAdmin,
+  updatePost
+);
 
 router.delete("/delete/:postId", requireAuth, requireAdmin, deletePost);
 

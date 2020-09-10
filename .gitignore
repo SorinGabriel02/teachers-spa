@@ -15,6 +15,10 @@ node_modules
 # images
 /server/upload/images
 
+#pdfs
+/assets
+/client/src/assets
+
 # misc
 .env
 .DS_Store
