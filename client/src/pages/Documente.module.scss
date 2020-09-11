@@ -1,7 +1,7 @@
 .documente {
   display: flex;
   flex-direction: column;
-  width: 94%;
+  width: 96%;
   align-self: center;
   h1 {
     text-align: center;
@@ -9,5 +9,55 @@
   }
   section {
     margin: 1vmax;
+  }
+  h3 {
+    margin: 1vmax 0;
+  }
+}
+
+.requestContainer {
+  ul {
+    list-style-type: circle;
+    margin: 0 2vw;
+  }
+  li {
+    margin-bottom: 0.1rem;
+  }
+  p {
+    font-size: 1.1rem;
+  }
+}
+
+.cerereFig {
+  width: 37vw;
+  height: fit-content;
+  text-decoration: none;
+  color: black;
+  float: right;
+  padding-left: 2vw;
+  img {
+    width: 100%;
+  }
+  img:hover {
+    box-shadow: 0 0 3px;
+  }
+  p {
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .requestContainer {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .cerereFig {
+    float: none;
+    width: 98%;
+    margin: 0;
+    padding: 0;
+    p {
+      padding-top: 1vmax;
+    }
   }
 }
