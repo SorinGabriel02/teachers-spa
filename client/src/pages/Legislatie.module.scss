@@ -1,23 +1,51 @@
+@import "../variables.scss";
+
 .legislation {
   display: flex;
   flex-direction: column;
   h1 {
     text-align: center;
-    margin: 1vmax;
+    text-shadow: 0 0 2px rgba(121, 134, 250, 0.8);
+    margin: 2vmax;
   }
   section {
     width: 95%;
     align-self: center;
     padding: 1vmax;
-    border-bottom: 1px solid;
-    margin-bottom: 1vmax;
+    margin: 2vh 0;
+    box-shadow: $boxShadow;
   }
   h2 {
     margin: 1vmax;
-    text-indent: 10%;
+    text-indent: 7%;
     font-weight: normal;
   }
   p {
     margin: 0 1vmax;
+    font-size: 1.1rem;
+  }
+  a {
+    position: relative;
+    text-decoration: none;
+    padding: 0.1rem;
+    width: fit-content;
+    font-size: 1.1rem;
+    color: rgb(29, 29, 255);
+  }
+  a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    border-bottom: 2px solid rgb(110, 132, 255);
+    transform: scaleX(0);
+    transition: all 0.15s ease;
+  }
+  a:hover::after {
+    transform: scaleX(1);
+  }
+  a:visited {
+    color: rgb(55, 85, 255);
   }
 }

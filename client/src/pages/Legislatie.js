@@ -6,11 +6,56 @@ import ordin5573 from "../assets/ordin_5573_2011.pdf";
 import ordin762 from "../assets/ordin_762_2007.pdf";
 import ordin5574 from "../assets/ordin_5574_2011.pdf";
 import ghid from "../assets/ghid_invatamant_special.pdf";
+import ordonanta141 from "../assets/ordonanta_141_2020.pdf";
+import metodologie from "../assets/metodologie_cadru.pdf";
 
 function Legislatie() {
   return (
     <main className={legislation}>
       <h1>Legislație Aferentă</h1>
+      <section>
+        <h2>
+          ORDIN nr. 5.545 din 10 septembrie 2020 pentru aprobarea
+          Metodologiei-cadru privind desfășurarea activităților didactice prin
+          intermediul tehnologiei și al internetului, precum și pentru
+          prelucrarea datelor cu caracter personal "Prezenta metodologie-cadru
+          reglementează modalitatea de desfășurare a activităților didactice
+          prin intermediul tehnologiei și al internetului, precum și prelucrarea
+          datelor cu caracter personal ale participanților la acest tip de
+          activități."
+        </h2>
+        <p>
+          Vizitează{" "}
+          <a
+            href="http://legislatie.just.ro/Public/DetaliiDocumentAfis/229929?fbclid=IwAR2zPBs_c7CvGJ9cOZZyFX_zLIPNZf6ZTrsaigSFD0DSnKXwzdG7qzv7tgM"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            legislatie.just.ro
+          </a>{" "}
+          pentru detalii
+        </p>
+      </section>
+      <section>
+        <h2>
+          Metodologie - Cadru privind desfășurarea activităţilor didactice prin
+          intermediul tehnologiei şi al internetului, precum și pentru
+          prelucrarea datelor cu caracter personal
+        </h2>
+        <a href={metodologie} download>
+          Downloadează în format PDF
+        </a>
+      </section>
+      <section>
+        <h2>
+          Ordonanța de urgență nr. 141/2020 privind instituirea unor măsuri
+          pentru buna funcționare a sistemului de ı̂nvățământ și pentru
+          modificarea și completarea Legii educației naționale nr. 1/2011
+        </h2>
+        <a href={ordonanta141} download>
+          Downloadează în format PDF
+        </a>
+      </section>
       <section>
         <h2>
           Metodologia privind evaluarea, asistența psihoeducațională, orientarea

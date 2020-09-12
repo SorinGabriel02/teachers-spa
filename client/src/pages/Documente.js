@@ -15,7 +15,12 @@ function Documente() {
         <h2>Documente necesare pentru obținerea COSP ordinul 1985/2016</h2>
         <h3>Acte necesare pentru dosar</h3>
         <div className={requestContainer}>
-          <a href={cerereTip} target="_blank" className={cerereFig}>
+          <a
+            href={cerereTip}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cerereFig}
+          >
             <p>Exemplu Cerere</p>
             <img
               src={cerereTip}
