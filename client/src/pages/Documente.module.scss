@@ -1,30 +1,55 @@
+@import "../variables.scss";
+@import "../styles/basicLink";
+
 .documente {
   display: flex;
   flex-direction: column;
+  margin: 1vmax 0;
   width: 96%;
   align-self: center;
-  h1 {
+  h1,
+  h2,
+  h3 {
+    text-shadow: 0 0 1px rgb(80, 80, 255);
     text-align: center;
+  }
+  h1 {
     margin: 1vmax;
   }
   section {
-    margin: 1vmax;
+    padding: 1vmax;
+    margin-bottom: 2vmax;
+    border-radius: 5px;
+    box-shadow: $sectionBoxShadow;
+  }
+  h2 {
+    margin-bottom: 1vmax;
   }
   h3 {
     margin: 1vmax 0;
   }
+  ul {
+    list-style: circle;
+    margin: 2vw 2vw 2vw 4vw;
+  }
+  li {
+    padding: 0.2rem;
+  }
+  img {
+    box-shadow: 0 0 1px;
+  }
+  img:hover {
+    box-shadow: 0 0 3px;
+  }
+  p {
+    text-indent: 2%;
+    font-size: 1.1rem;
+  }
 }
 
 .requestContainer {
-  ul {
-    list-style-type: circle;
-    margin: 0 2vw;
-  }
   li {
     margin-bottom: 0.1rem;
-  }
-  p {
-    font-size: 1.1rem;
   }
 }
 
@@ -38,11 +63,26 @@
   img {
     width: 100%;
   }
-  img:hover {
-    box-shadow: 0 0 3px;
-  }
   p {
     text-align: center;
+  }
+}
+
+.exemplare {
+  ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  a {
+    @extend .basicLink;
+  }
+}
+
+.acteStabilire {
+  a {
+    @extend .basicLink;
   }
 }
 

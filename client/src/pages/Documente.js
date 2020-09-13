@@ -4,8 +4,18 @@ import {
   documente,
   cerereFig,
   requestContainer,
+  exemplare,
+  acteStabilire,
 } from "./Documente.module.scss";
 import cerereTip from "../assets/cerereTip.jpg";
+import cerereEval from "../assets/cerere_evaluare.pdf";
+import fisaMedicala from "../assets/fisa_medicala_sintetica.pdf";
+import fisaPsihologica from "../assets/fisa_psihologica.pdf";
+import fisaPsihopedagogica from "../assets/fisa_psihopedagogica.pdf";
+import cerereDirector from "../assets/cerere_director.pdf";
+import cerereTip1 from "../assets/cerere_tip_1.pdf";
+import cerereTip2a from "../assets/cerere_tip_2a.pdf";
+import cerereTip2b from "../assets/cerere_tip_2b.pdf";
 
 function Documente() {
   return (
@@ -21,7 +31,7 @@ function Documente() {
             rel="noopener noreferrer"
             className={cerereFig}
           >
-            <p>Exemplu Cerere</p>
+            <p>Cerere Evaluare</p>
             <img
               src={cerereTip}
               alt="cerere tip pentru evaluarea copiilor cu dizabilități"
@@ -117,10 +127,141 @@ function Documente() {
             </li>
           </ul>
         </div>
+        <h3>Downloadează exemplare în format PDF</h3>
+        <div className={exemplare}>
+          <p>
+            Adresa din antetul exemplarelor diferă de la un județ la altul.
+            Aceste exemple conțin adresa din județul Iași.
+          </p>
+          <ul>
+            <li>
+              <a href={cerereEval} download>
+                Cerere pentru Evaluare
+              </a>
+            </li>
+            <li>
+              <a href={fisaMedicala} download>
+                Fișa Medicală Sintetică
+              </a>
+            </li>
+            <li>
+              <a href={fisaPsihologica} download>
+                Fișa de Evaluare Psihologică
+              </a>
+            </li>
+            <li>
+              <a href={fisaPsihopedagogica} download>
+                Fișa de Evaluare Psihopedagogică
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section className={acteStabilire}>
+        <h2>Acte necesare stabilirii dosarului de sprijin financiar</h2>
+        <p>
+          Eleviii incluși în cadrul unui program de sprijin educațional al unei
+          instituții incluzive pot beneficia de un sprijin financiar
+          corespondent cu frecvența acestora la ore, conform legislației:
+        </p>
+        <ul>
+          <li>
+            <p>
+              Drepturi/Beneficii de asistență socială pentru copiii cu CES
+              prevăzute de Legea nr. 1/2011, cu modificările și completările
+              ulterioare, Euro 200, Burse sociale, “Cornul şi laptele”, Legea
+              272/2004
+            </p>
+          </li>
+          <li>
+            <p>
+              Legea 6/2012- pentru modificarea și completarea OUG 96/2002
+              privind acordarea de produse lactate și de panificație pentru
+              elevii claselor I-VIII
+            </p>
+          </li>
+          <li>
+            <p>HG 904/2014, art. 129, Anexa 1</p>
+          </li>
+          <li>
+            <p>
+              HG 391/2016- drepturi aferente copiilor/elevilor/tinerilor cu
+              cerințe educaționale speciale integrați în învățământul de masă
+            </p>
+          </li>
+        </ul>
+        <p>
+          După obținerea certificatului de orientare școlară și profesională,
+          părinții pot întocmi un dosar la secretariatul școlii în intervale
+          anterior comunicate, dosar ce va conține următoarele documente:
+        </p>
+        <ul>
+          <li>
+            <p>
+              Cerere tip adresată directorului instituției.{" "}
+              <a href={cerereDirector} download>
+                Downloadează în format PDF &#40;județul Iași&#41;
+              </a>
+            </p>
+          </li>
+          <li>
+            <p>Cerere tip</p>
+            <ul style={{ listStyle: "initial" }}>
+              <li>
+                <p>
+                  1{" "}
+                  <a href={cerereTip1} download>
+                    Downloadează în format PDF
+                  </a>
+                </p>
+              </li>
+              <li>
+                <p>
+                  2a{"  "}
+                  <a href={cerereTip2a} download>
+                    Downloadează în format PDF
+                  </a>
+                </p>
+              </li>
+              <li>
+                <p>
+                  2b{"  "}
+                  <a href={cerereTip2b} download>
+                    Downloadează în format PDF
+                  </a>
+                </p>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <p>Copie după buletinele părinților/tutorelui legal </p>
+          </li>
+          <li>
+            <p>
+              Copie certificat de naștere copil si copie dupa buletinul
+              elevului/ei &#40;daca este cazul&#41;
+            </p>
+          </li>
+          <li>
+            <p>
+              Copie după certificatul de orientare școlară și profesională
+              &#40;cosp&#41;
+            </p>
+          </li>
+          <li>
+            <p>
+              Copie certificat de încadrare în grad de handicap &#40;daca este
+              cazul&#41;{" "}
+            </p>
+          </li>
+          <li>
+            <p>Copie extras cont</p>
+          </li>
+        </ul>
       </section>
       <section>
-        <h2>Acte necesare stabilirii dosarului de sprijin financiar</h2>
-        <p>Coming soon...</p>
+        <h2>Înștiințări gererale</h2>
+        <p>soon...</p>
       </section>
     </main>
   );

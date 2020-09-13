@@ -18,7 +18,7 @@ function Legislatie() {
           ORDIN nr. 5.545 din 10 septembrie 2020 pentru aprobarea
           Metodologiei-cadru privind desfășurarea activităților didactice prin
           intermediul tehnologiei și al internetului, precum și pentru
-          prelucrarea datelor cu caracter personal "Prezenta metodologie-cadru
+          prelucrarea datelor cu caracter personal. "Prezenta metodologie-cadru
           reglementează modalitatea de desfășurare a activităților didactice
           prin intermediul tehnologiei și al internetului, precum și prelucrarea
           datelor cu caracter personal ale participanților la acest tip de

@@ -1,9 +1,12 @@
 $footerHeight: 10vh;
-$mainBackground: rgb(240, 240, 240);
+$mainBackground: rgb(226, 226, 236);
 $headerBackground: rgb(173, 176, 201);
 $greenBtn: rgba(206, 255, 174, 0.9);
 $redBtn: rgb(250, 158, 158);
 $shadowColor: rgba(0, 0, 0, 0.7);
+$sectionBackground: rgb(235, 235, 235);
+$sectionBoxShadow: 2px 2px 5px white, 2px -2px 5px white, -2px 2px 5px white,
+  -2px -2px 5px white;
 $boxShadow: -2px -2px 4px rgba(121, 134, 250, 0.5),
   2px 2px 4px rgba(121, 134, 250, 0.5), 0 -2px 4px rgba(121, 134, 250, 0.5),
   -2px 0 4px rgba(121, 134, 250, 0.5);
