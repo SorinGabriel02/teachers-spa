@@ -9,10 +9,10 @@ import Backdrop from "../components/Backdrop";
 import Modal from "../components/Modal";
 import XBtn from "../components/XBtn";
 
-import { publishBtn, editContainer } from "./Noutati.module.scss";
+import { publishBtn, editContainer, noNews } from "./Noutati.module.scss";
 import "suneditor/dist/css/suneditor.min.css";
 
-const initialState = { isLoading: true, showModal: false };
+const initialState = { isLoading: true, noPosts: false };
 
 function postsReducer(state, action) {
   switch (action.type) {
@@ -21,10 +21,10 @@ function postsReducer(state, action) {
         ...state,
         isLoading: action.payload,
       };
-    case "showModal":
+    case "noPosts":
       return {
         ...state,
-        showModal: action.payload,
+        noPosts: action.payload,
       };
     default:
       return state;
@@ -36,7 +36,7 @@ function Noutati() {
   const history = useHistory();
   const { isAdmin } = useContext(AppContext);
   const [state, dispatch] = useReducer(postsReducer, initialState);
-  const [posts, err, makeReq, cancelReq, clearErr] = useHttpReq();
+  const [posts, err, makeReq, cancelReq] = useHttpReq();
 
   const setOptionsObj = {
     height: "65.5vh",
@@ -74,13 +74,7 @@ function Noutati() {
         </section>
       ));
 
-  const handleClick = () => {
-    if (!isAdmin) {
-      history.push("/");
-    } else {
-      clearErr();
-    }
-  };
+  const handleClick = () => history.push("/");
 
   // get post on page load
   useEffect(() => {
@@ -91,6 +85,8 @@ function Noutati() {
   // when a response arrives isLoading = false
   useEffect(() => {
     if (posts || err) dispatch({ type: "isLoading", payload: false });
+    if (posts?.length === 0 && !Boolean(err))
+      dispatch({ type: "noPosts", payload: true });
   }, [posts, err]);
 
   // cancel request if one is active on component dismount
@@ -101,31 +97,29 @@ function Noutati() {
     };
   }, [cancelReq]);
 
-  if (postsList?.length && !Boolean(err)) {
-    return <h1>Pentru moment nu sunt noutăți</h1>;
-  }
-
   return (
     <div>
       <Backdrop show={state.isLoading} />
       {state.isLoading && <Loading />}
       <Backdrop
         onClick={handleClick}
-        show={Boolean(err) || (postsList && !postsList.length)}
+        show={Boolean(err) && !postsList?.length}
       />
-      <Modal show={(postsList && !postsList.length) || Boolean(err)}>
+      <Modal show={!postsList?.length && Boolean(err)}>
         <XBtn onClick={handleClick} />
-        <h1>
-          Momentan nu a fost găsit nici un articol. Te rog să încerci mai
-          târziu.
-        </h1>
+        <h1>Eroare de server. Te rog să încerci mai târziu.</h1>
       </Modal>
       {isAdmin && posts && (
         <NavLink to="/postNou">
           <button className={publishBtn}>Publică articol</button>
         </NavLink>
       )}
-      <main>{postsList}</main>
+      <main>
+        {state.noPosts && (
+          <h1 className={noNews}>Pentru moment nu avem noutăți</h1>
+        )}
+        {postsList}
+      </main>
     </div>
   );
 }
