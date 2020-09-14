@@ -56,9 +56,12 @@ function PostedComment({ comment, editComment, deleteComment }) {
   };
 
   const displayEditBtn =
-    isAuthenticated && jwtDecode(isAuthenticated).sub === comment.author.id;
+    isAuthenticated &&
+    comment?.author &&
+    jwtDecode(isAuthenticated).sub === comment.author.id;
   const displayDeleteBtn =
     isAuthenticated &&
+    comment?.author &&
     (jwtDecode(isAuthenticated).sub === comment.author.id || isAdmin);
   const noBtnShowing = !displayEditBtn && !displayDeleteBtn;
 
@@ -90,7 +93,7 @@ function PostedComment({ comment, editComment, deleteComment }) {
       <article>
         <p className={userInfo}>
           <img src={avatar} alt="avatar icon" />
-          {comment.author.username}
+          {comment?.author?.username}
         </p>
         <p ref={contentRef}></p>
       </article>

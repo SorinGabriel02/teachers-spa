@@ -261,8 +261,6 @@ function SelectedPost() {
     };
   }, [cancelReq]);
 
-  console.log(data);
-
   return (
     <main>
       {!Boolean(err && err.status) && state.isLoading && !state.postData && (

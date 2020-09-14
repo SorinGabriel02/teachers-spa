@@ -12,26 +12,31 @@ import XBtn from "../components/XBtn";
 import { publishBtn, editContainer } from "./Noutati.module.scss";
 import "suneditor/dist/css/suneditor.min.css";
 
-const initialState = { isLoading: true };
+const initialState = { isLoading: true, showModal: false };
 
 function postsReducer(state, action) {
   switch (action.type) {
-    case "fetch":
+    case "isLoading":
       return {
         ...state,
         isLoading: action.payload,
+      };
+    case "showModal":
+      return {
+        ...state,
+        showModal: action.payload,
       };
     default:
       return state;
   }
 }
 
-function Noutati(props) {
+function Noutati() {
   const ref = useRef(null);
   const history = useHistory();
   const { isAdmin } = useContext(AppContext);
   const [state, dispatch] = useReducer(postsReducer, initialState);
-  const [posts, err, makeReq, cancelReq] = useHttpReq();
+  const [posts, err, makeReq, cancelReq, clearErr] = useHttpReq();
 
   const setOptionsObj = {
     height: "65.5vh",
@@ -69,17 +74,23 @@ function Noutati(props) {
         </section>
       ));
 
-  const handleClick = () => history.push("/");
+  const handleClick = () => {
+    if (!isAdmin) {
+      history.push("/");
+    } else {
+      clearErr();
+    }
+  };
 
   // get post on page load
   useEffect(() => {
-    dispatch({ type: "fetch", payload: true });
+    dispatch({ type: "isLoading", payload: true });
     makeReq("get", "/posts");
   }, [makeReq]);
 
   // when a response arrives isLoading = false
   useEffect(() => {
-    if (posts || err) dispatch({ type: "fetch", payload: false });
+    if (posts || err) dispatch({ type: "isLoading", payload: false });
   }, [posts, err]);
 
   // cancel request if one is active on component dismount
@@ -90,15 +101,19 @@ function Noutati(props) {
     };
   }, [cancelReq]);
 
+  if (postsList?.length && !Boolean(err)) {
+    return <h1>Pentru moment nu sunt noutăți</h1>;
+  }
+
   return (
     <div>
       <Backdrop show={state.isLoading} />
       {state.isLoading && <Loading />}
       <Backdrop
         onClick={handleClick}
-        show={!!err || (postsList && !postsList.length)}
+        show={Boolean(err) || (postsList && !postsList.length)}
       />
-      <Modal show={(postsList && !postsList.length) || !!err}>
+      <Modal show={(postsList && !postsList.length) || Boolean(err)}>
         <XBtn onClick={handleClick} />
         <h1>
           Momentan nu a fost găsit nici un articol. Te rog să încerci mai

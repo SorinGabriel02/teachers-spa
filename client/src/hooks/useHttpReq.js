@@ -19,7 +19,9 @@ function useHttpReq() {
     []
   );
 
-  return [data, err, makeReq, cancelFetch.current];
+  const clearErr = () => setErr(null);
+
+  return [data, err, makeReq, cancelFetch.current, clearErr];
 }
 
 export default useHttpReq;

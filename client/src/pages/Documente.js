@@ -1,4 +1,6 @@
 import React from "react";
+import Popup from "reactjs-popup";
+import "reactjs-popup/dist/index.css";
 
 import {
   documente,
@@ -24,7 +26,7 @@ function Documente() {
   return (
     <main className={documente}>
       <h1>Certificatul de Orientare Școlară și Profesională &#40;COSP&#41;</h1>
-      <section>
+      <section className="tooltipContainer">
         <h2>Documente necesare pentru obținerea COSP ordinul 1985/2016</h2>
         <h3>Acte necesare pentru dosar</h3>
         <div className={requestContainer}>
@@ -35,10 +37,33 @@ function Documente() {
             className={cerereFig}
           >
             <p>Cerere Evaluare</p>
-            <img
-              src={cerereTip}
-              alt="cerere tip pentru evaluarea copiilor cu dizabilități"
-            />
+            <Popup
+              trigger={() => (
+                <img
+                  src={cerereTip}
+                  alt="cerere tip pentru evaluarea copiilor cu dizabilități"
+                />
+              )}
+              position={"center center"}
+              on={["hover"]}
+              closeOnEscape
+              closeOnDocumentClick
+              mouseEnterDelay={250}
+              contentStyle={{
+                backgroundColor: "darkgray",
+                zIndex: 3,
+                textAlign: "center",
+              }}
+              overlayStyle={{
+                boxShadow: "0 0 10px rgb(173, 176, 201)",
+              }}
+              arrow={false}
+              keepTooltipInside={".tooltipContainer"}
+            >
+              <span>
+                Click pentru a vedea imaginea detaliat într-o nouă fereastră
+              </span>
+            </Popup>
           </a>
           <ul>
             <li>

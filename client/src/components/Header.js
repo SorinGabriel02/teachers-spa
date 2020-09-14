@@ -15,22 +15,32 @@ function Header() {
       </NavLink>
       <nav>
         <ul>
-          <NavLink activeClassName={activeLink} to="/legislatie">
-            <li>Legislație</li>
-          </NavLink>
-          <NavLink activeClassName={activeLink} to="/documente">
-            <li>Documente COSP</li>
-          </NavLink>
-          <NavLink activeClassName={activeLink} to="/materiale">
-            <li>Materiale Suport</li>
-          </NavLink>
-          <NavLink activeClassName={activeLink} to="/noutati">
-            <li>Noutăți</li>
-          </NavLink>
-          {!isAuthenticated ? (
-            <NavLink activeClassName={activeLink} to="/autentificare">
-              <li>Autentificare</li>
+          <li>
+            <NavLink activeClassName={activeLink} to="/legislatie">
+              Legislație
             </NavLink>
+          </li>
+          <li>
+            <NavLink activeClassName={activeLink} to="/documente">
+              Documente COSP
+            </NavLink>
+          </li>
+          <li>
+            <NavLink activeClassName={activeLink} to="/materiale">
+              Materiale Suport
+            </NavLink>
+          </li>
+          <li>
+            <NavLink activeClassName={activeLink} to="/noutati">
+              Noutăți
+            </NavLink>
+          </li>
+          {!isAuthenticated ? (
+            <li>
+              <NavLink activeClassName={activeLink} to="/autentificare">
+                Autentificare
+              </NavLink>
+            </li>
           ) : (
             <li>
               <button onClick={logout}>Delogare</button>

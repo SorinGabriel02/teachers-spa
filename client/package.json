@@ -17,6 +17,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.3",
     "react-transition-group": "^4.4.1",
+    "reactjs-popup": "^2.0.3",
     "suneditor-react": "^2.13.1"
   },
   "scripts": {

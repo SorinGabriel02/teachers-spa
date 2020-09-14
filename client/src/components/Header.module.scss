@@ -34,7 +34,7 @@
     }
   }
   nav {
-    width: 90%;
+    width: 92%;
     ul {
       height: 100%;
       margin: 0 2vmax;
@@ -43,10 +43,16 @@
       justify-content: space-between;
       align-items: center;
     }
+    li {
+      padding: 0.2rem;
+    }
     a {
       @extend .linkShared;
-      margin: 0.2vh;
-      text-align: center;
+      display: inline-block;
+      text-decoration: none;
+    }
+    a:visited {
+      color: black;
     }
     button {
       @extend .sharedBtn;
