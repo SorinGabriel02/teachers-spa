@@ -36,7 +36,7 @@ function AppContextProvider({ children }) {
   useEffect(() => {
     const initialRefresh = async () => {
       try {
-        const response = await axios.get("/api/users/refresh");
+        const response = await axios.get("/users/refresh");
         const token = response.data.token;
         if (token) {
           login(token, !!response.data.admin);
