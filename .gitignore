@@ -9,6 +9,8 @@ node_modules
 # testing
 /coverage
 
+build
+.netlify
 # production
 /build
 
