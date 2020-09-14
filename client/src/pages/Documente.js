@@ -6,6 +6,7 @@ import {
   requestContainer,
   exemplare,
   acteStabilire,
+  instiintari,
 } from "./Documente.module.scss";
 import cerereTip from "../assets/cerereTip.jpg";
 import cerereEval from "../assets/cerere_evaluare.pdf";
@@ -16,6 +17,8 @@ import cerereDirector from "../assets/cerere_director.pdf";
 import cerereTip1 from "../assets/cerere_tip_1.pdf";
 import cerereTip2a from "../assets/cerere_tip_2a.pdf";
 import cerereTip2b from "../assets/cerere_tip_2b.pdf";
+import acordIncudere from "../assets/acord_includere_evaluare.jpg";
+import acordMentinere from "../assets/acord_mentinere_integrare.jpg";
 
 function Documente() {
   return (
@@ -259,9 +262,27 @@ function Documente() {
           </li>
         </ul>
       </section>
-      <section>
+      <section className={instiintari}>
         <h2>Înștiințări gererale</h2>
-        <p>soon...</p>
+        <p>
+          Există deasemenea și două fișe ce exprimă acordul părintelui în
+          vederea includerii, respectiv menținerii în cadrul programului de
+          sprijin educațional.
+        </p>
+        <aside>
+          <a href={acordIncudere} target="_blank" rel="noopener noreferrer">
+            <img
+              src={acordIncudere}
+              alt="Acordul părintelui în vederea includerii în programul de sprijin educațional"
+            />
+          </a>
+          <a href={acordMentinere} target="_blank" rel="noopener noreferrer">
+            <img
+              src={acordMentinere}
+              alt="Acordul părintelui în vederea menținerii în programul de sprijin educațional"
+            />
+          </a>
+        </aside>
       </section>
     </main>
   );
