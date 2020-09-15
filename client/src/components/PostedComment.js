@@ -67,9 +67,6 @@ function PostedComment({ comment, editComment, deleteComment }) {
 
   // add line breaks maximum 15 lines
   useEffect(() => {
-    // contentRef.current.innerHTML =
-    //   contentRef.current &&
-    //   comment.content.replace(/(?:\r\n|\r|\n)/g, "<br />");
     if (contentRef.current) {
       let iterator = 14;
       const stringBreaks = comment.content.replace(

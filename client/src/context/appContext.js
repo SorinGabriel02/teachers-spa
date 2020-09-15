@@ -36,10 +36,10 @@ function AppContextProvider({ children }) {
   useEffect(() => {
     const initialRefresh = async () => {
       try {
-        const response = await axios.get("/users/refresh");
+        const response = await axios.get("/api/users/refresh");
         const token = response.data.token;
         if (token) {
-          login(token, !!response.data.admin);
+          login(token, Boolean(response.data.admin));
           setRefreshInterval(true);
         }
       } catch (error) {
@@ -56,7 +56,7 @@ function AppContextProvider({ children }) {
     if (refreshInterval) {
       const id = setInterval(async () => {
         try {
-          const response = await axios.get("/users/refresh");
+          const response = await axios.get("/api/users/refresh");
           if (response.data.token) {
             login(response.data.token, response.data.admin);
           }

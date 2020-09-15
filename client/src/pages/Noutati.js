@@ -79,7 +79,7 @@ function Noutati() {
   // get post on page load
   useEffect(() => {
     dispatch({ type: "isLoading", payload: true });
-    makeReq("get", "/posts");
+    makeReq("get", "/api/posts");
   }, [makeReq]);
 
   // when a response arrives isLoading = false

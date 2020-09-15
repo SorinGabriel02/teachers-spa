@@ -57,7 +57,7 @@ function NewPost(props) {
     dispatch({ type: "publish" });
     await makeReq(
       "post",
-      "/posts/new",
+      "/api/posts/new",
       { content: state.editorState },
       { headers: { Authorization: `Bearer ${isAuthenticated}` } }
     );

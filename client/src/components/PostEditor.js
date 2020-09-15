@@ -11,10 +11,11 @@ const editorOptions = {
   height: "auto",
   minWidth: "95vw",
   minHeight: "53vh",
-  placeholder: ` Imaginile trebuie să aibă sub 1.5MB.
+  placeholder: ` Imaginile trebuie să aibă sub 1MB.
      Apasă butonul de full screen pentru o experiență mai bună.`,
-  imageUploadSizeLimit: 1500000,
-  imageUploadUrl: "http://localhost:8080/api/media/images/new",
+  imageUploadSizeLimit: 1000000,
+  imageUploadUrl:
+    "https://profesoridesprijin.herokuapp.com/api/media/images/new",
   showPathLabel: false,
   resizingBar: false,
   buttonList: [
@@ -45,18 +46,11 @@ const editorOptions = {
     "Trebuchet MS",
     "Verdana",
   ],
-  formats: [
-    "p",
-    "h1",
-    "h2",
-    "h3",
-    "h4",
-    // "blockquote": range format, "pre": free format, "Other tags": replace format
-  ],
+  formats: ["p", "h1", "h2", "h3", "h4"],
 };
 
 function PostEditor(props) {
-  const ref = useRef();
+  const ref = useRef(null);
 
   const handleChange = (content) => {
     props.handleChange(content);

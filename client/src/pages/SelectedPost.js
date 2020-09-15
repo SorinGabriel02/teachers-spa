@@ -130,7 +130,7 @@ function SelectedPost() {
   const deleteArticle = async () => {
     hideDeleteModal();
     dispatch({ type: "apiCall" });
-    await makeReq("delete", `/posts/delete/${postId}`, {
+    await makeReq("delete", `/api/posts/delete/${postId}`, {
       headers: { Authorization: `Bearer ${isAuthenticated}` },
     });
     history.push("/noutati");
@@ -149,7 +149,7 @@ function SelectedPost() {
     dispatch({ type: "apiCall" });
     makeReq(
       "post",
-      `/comments/${postId}/new`,
+      `/api/comments/${postId}/new`,
       { content: DOMPurify.sanitize(state.commentInput) },
       {
         headers: {
@@ -164,7 +164,7 @@ function SelectedPost() {
       dispatch({ type: "apiCall" });
       await makeReq(
         "patch",
-        `/comments/${commentId}`,
+        `/api/comments/${commentId}`,
         { content: DOMPurify.sanitize(edited) },
         {
           headers: {
@@ -179,7 +179,7 @@ function SelectedPost() {
   const deleteComment = useCallback(
     async (commentId) => {
       dispatch({ type: "apiCall" });
-      await makeReq("delete", `/comments/${commentId}`, {
+      await makeReq("delete", `/api/comments/${commentId}`, {
         headers: {
           Authorization: `Bearer ${isAuthenticated}`,
         },
@@ -197,7 +197,7 @@ function SelectedPost() {
       dispatch({ type: "apiRequest" });
       makeReq(
         "patch",
-        `/posts/update/${postId}`,
+        `/api/posts/update/${postId}`,
         { content: state.postData },
         { headers: { Authorization: `Bearer ${isAuthenticated}` } }
       );
@@ -230,7 +230,7 @@ function SelectedPost() {
   // get post data when component mounts
   useEffect(() => {
     dispatch({ type: "apiCall" });
-    makeReq("get", `/posts/${postId}`);
+    makeReq("get", `/api/posts/${postId}`);
   }, [makeReq, postId]);
 
   useEffect(() => {

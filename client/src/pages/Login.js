@@ -102,7 +102,7 @@ function Login() {
 
     try {
       cancelFetch.current = axios.CancelToken.source();
-      const reqRoute = state.isLogin ? "/users/login" : "/users/signup";
+      const reqRoute = state.isLogin ? "/api/users/login" : "/api/users/signup";
       const reqBody = state.isLogin
         ? { email: state.email, password: state.password }
         : {
