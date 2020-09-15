@@ -56,7 +56,7 @@ function Header() {
 
   return (
     <header className={mainHeader}>
-      <NavLink onClick={handleClick} className={logoLink} to="/">
+      <NavLink onClick={() => setActive(false)} className={logoLink} to="/">
         <img src={logo} alt="logo" />
       </NavLink>
       <div onClick={handleClick} ref={hamburgerRef} className={hamburger}>
@@ -68,7 +68,7 @@ function Header() {
         <ul>
           <li>
             <NavLink
-              onClick={handleClick}
+              onClick={() => setActive(false)}
               activeClassName={activeLink}
               to="/legislatie"
             >
@@ -77,7 +77,7 @@ function Header() {
           </li>
           <li>
             <NavLink
-              onClick={handleClick}
+              onClick={() => setActive(false)}
               activeClassName={activeLink}
               to="/documente"
             >
@@ -86,7 +86,7 @@ function Header() {
           </li>
           <li>
             <NavLink
-              onClick={handleClick}
+              onClick={() => setActive(false)}
               activeClassName={activeLink}
               to="/materiale"
             >
@@ -95,7 +95,7 @@ function Header() {
           </li>
           <li>
             <NavLink
-              onClick={handleClick}
+              onClick={() => setActive(false)}
               activeClassName={activeLink}
               to="/noutati"
             >
@@ -105,7 +105,7 @@ function Header() {
           {!isAuthenticated ? (
             <li>
               <NavLink
-                onClick={handleClick}
+                onClick={() => setActive(false)}
                 activeClassName={activeLink}
                 to="/autentificare"
               >
