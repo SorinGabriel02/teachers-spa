@@ -2,11 +2,6 @@
 @import "../styles/link";
 @import "../styles/button";
 
-.activeLink {
-  border: 1px solid white;
-  box-shadow: 0 0 10px whitesmoke;
-}
-
 .mainHeader {
   position: fixed;
   top: 0;
@@ -16,49 +11,117 @@
   display: flex;
   justify-content: space-between;
   box-shadow: 0 0 3px $shadowColor;
-  z-index: 4;
+  z-index: 5;
+}
+
+.activeLink {
+  box-shadow: 0 0 10px whitesmoke;
+}
+
+.navBar {
+  width: 92%;
+  transition: all 0.3s linear;
+  ul {
+    height: 100%;
+    margin: 0 2vmax;
+    display: flex;
+    list-style: none;
+    justify-content: space-between;
+    align-items: center;
+  }
+  li {
+    padding: 0.2rem;
+  }
+  a {
+    @extend .linkShared;
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+  }
+  a:visited {
+    color: black;
+  }
+  button {
+    @extend .sharedBtn;
+    padding: 0.5vmax;
+    font-size: 1rem;
+    background-color: $redBtn;
+  }
+}
+
+.logoLink {
   img {
+    display: inline-block;
     width: 9vh;
     margin: 0 2vmax;
-    animation: imageHover 3s ease-in-out infinite alternate forwards paused;
+    transition: transform 1.2s ease-in-out;
   }
   img:hover {
-    animation-play-state: running;
+    transform: rotate(1turn);
   }
-  @keyframes imageHover {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+}
+
+.hamburger {
+  z-index: 12;
+  position: fixed;
+  display: none;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-content: space-between;
+  top: 2vh;
+  right: 4vw;
+  width: 33px;
+  height: 33px;
+  padding: 3px;
+  z-index: 6;
+  cursor: pointer;
+  .lineOne,
+  .lineTwo,
+  .lineThree {
+    transition: all 0.3s linear;
+    width: 25px;
+    height: 4px;
+    border-radius: 1px;
+    background-color: black;
+    transform-origin: center;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 0 2px whitesmoke;
   }
-  nav {
-    width: 92%;
+}
+
+.activeHamburger {
+  .lineOne {
+    transform: rotateZ(45deg) translate(28%, 100%);
+  }
+  .lineTwo {
+    transform: rotate(2turn);
+    opacity: 0;
+  }
+  .lineThree {
+    transform: rotateZ(-45deg) translate(28%, -100%);
+  }
+}
+
+.activeNav {
+  transform: translateX(0%);
+}
+
+@media only screen and (max-width: 750px) {
+  .hamburger {
+    display: flex;
+  }
+  .navBar {
+    height: 100vh;
+    width: max-content;
+    background-color: $headerBackground;
+    transform: translateX(100%);
     ul {
-      height: 100%;
-      margin: 0 2vmax;
-      display: flex;
-      list-style: none;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      justify-content: space-around;
+      margin: 3vmax 3vmax;
     }
-    li {
-      padding: 0.2rem;
-    }
-    a {
-      @extend .linkShared;
-      display: inline-block;
-      text-decoration: none;
-    }
-    a:visited {
-      color: black;
-    }
-    button {
-      @extend .sharedBtn;
-      padding: 0.5vmax;
-      font-size: 1rem;
-      background-color: $redBtn;
-    }
+  }
+  .activeNav {
+    transform: translateX(0%);
   }
 }

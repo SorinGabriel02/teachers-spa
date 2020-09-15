@@ -30,7 +30,7 @@ Backdrop.defaultProps = {
 };
 
 Backdrop.propTypes = {
-  show: PropTypes.bool,
+  show: PropTypes.bool.isRequired,
   onClick: PropTypes.func,
 };
 
