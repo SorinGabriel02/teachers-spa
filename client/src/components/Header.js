@@ -24,7 +24,6 @@ function Header() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const handleClick = (e) => {
-    console.log(e.target);
     setActive((prevActive) => !prevActive);
   };
 
@@ -54,8 +53,6 @@ function Header() {
       window.removeEventListener("resize", handleResize);
     };
   }, [windowWidth]);
-
-  console.log(windowWidth, active);
 
   return (
     <header className={mainHeader}>
