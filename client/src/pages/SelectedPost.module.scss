@@ -3,6 +3,11 @@
 @import "../styles/card";
 @import "../styles/label";
 
+.selectedContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 .btnSection {
   display: flex;
   justify-content: space-around;
@@ -19,6 +24,8 @@
 }
 
 .commentsSection {
+  display: flex;
+  flex-direction: column;
   margin: 2vmax;
   h2 {
     @extend .labelShared;
@@ -38,6 +45,7 @@
 
 .sendCommentBtn {
   @extend .sharedBtn;
+  margin-left: 5vw;
 }
 
 .deleteModal {

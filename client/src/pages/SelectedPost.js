@@ -20,11 +20,14 @@ import XBtn from "../components/XBtn";
 
 import "suneditor/dist/css/suneditor.min.css";
 import {
+  selectedContainer,
   btnSection,
   sendCommentBtn,
   editBtn,
   deleteBtn,
   commentsSection,
+  commentContainer,
+  editorContainer,
   deleteModal,
 } from "./SelectedPost.module.scss";
 
@@ -262,7 +265,7 @@ function SelectedPost() {
   }, [cancelReq]);
 
   return (
-    <main>
+    <main className={selectedContainer}>
       {!Boolean(err && err.status) && state.isLoading && !state.postData && (
         <Loading styles={{ top: "45vh" }} />
       )}
@@ -307,7 +310,7 @@ function SelectedPost() {
           </button>
         </section>
       )}
-      <section>
+      <section className={editorContainer}>
         <PostEditor
           handleChange={handlePostChange}
           editorContent={state.postData}
@@ -324,7 +327,7 @@ function SelectedPost() {
           <ul>{updateComments()}</ul>
         )}
       </section>
-      <section>
+      <section className={commentContainer}>
         <button className={sendCommentBtn} onClick={postComment}>
           {isAuthenticated ? "Adaugă Comentariu" : "Logează-te pentru a posta"}
         </button>

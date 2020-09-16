@@ -6,7 +6,9 @@ import axios from "axios";
 import { AppContext } from "../context/appContext";
 import useValidation from "../hooks/useValidation";
 import Loading from "../components/Loading";
-import { loginForm } from "./Login.module.scss";
+import Backdrop from "../components/Backdrop";
+import Modal from "../components/Modal";
+import { loginContainer, loginForm } from "./Login.module.scss";
 
 const initialState = {
   // intervalId is an array in case there's more than 1 active interval;
@@ -181,7 +183,7 @@ function Login() {
   );
 
   return (
-    <section>
+    <section className={loginContainer}>
       {state.isLoading && <Loading size={"5vmax"} />}
       <form onSubmit={handleSubmit} className={loginForm}>
         <h2>{state.isLogin ? "Autentificare" : "Creează cont"}</h2>

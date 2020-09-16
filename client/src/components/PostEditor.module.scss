@@ -1,6 +1,7 @@
 @import "../variables.scss";
 
 .editContainer {
+  width: 100%;
   min-width: 90%;
   min-height: fit-content;
   height: fit-content;
@@ -9,6 +10,6 @@
   box-shadow: $boxShadow;
   background-color: whitesmoke;
   .postToolbarContainer {
-    z-index: 100;
+    z-index: 20;
   }
 }

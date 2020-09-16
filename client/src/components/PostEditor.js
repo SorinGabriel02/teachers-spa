@@ -15,9 +15,12 @@ const editorOptions = {
      Apasă butonul de full screen pentru o experiență mai bună.`,
   imageUploadSizeLimit: 1000000,
   imageUploadUrl:
-    "https://profesoridesprijin.herokuapp.com/api/media/images/new",
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:8080/api/media/images/new"
+      : "https://profesoridesprijin.herokuapp.com/api/media/images/new",
   showPathLabel: false,
   resizingBar: false,
+  imageAccept: ".jpg, .jpeg, .png, .webp",
   buttonList: [
     ["undo", "redo"],
     [
@@ -56,6 +59,8 @@ function PostEditor(props) {
     props.handleChange(content);
   };
 
+  console.log(ref.current?.editor.getImagesInfo());
+
   return (
     <div className={editContainer}>
       <SunEditor
@@ -80,6 +85,7 @@ PostEditor.defaultProps = {
 PostEditor.propTypes = {
   editorContent: PropTypes.string,
   handleChange: PropTypes.func.isRequired,
+  handleImages: PropTypes.func,
   setDefaultStyle: PropTypes.string,
 };
 
