@@ -6,7 +6,6 @@ const AppContext = createContext();
 function AppContextProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
-
   const [refreshInterval, setRefreshInterval] = useState(false);
   const [intervalId, setIntervalId] = useState(0);
 

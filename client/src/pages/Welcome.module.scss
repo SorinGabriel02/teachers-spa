@@ -8,18 +8,33 @@
   align-items: center;
   background-image: url("../assets/landingBgWide.png");
   background-position: center;
-  background-size: 70%;
+  background-size: 80%;
   background-repeat: no-repeat;
   h1 {
-    width: 34%;
+    width: 45%;
     text-align: center;
     color: black;
     text-shadow: 1px 1px 10px rgb(1, 38, 109);
     margin-bottom: 2vmax;
   }
   h2 {
-    width: 30%;
+    width: 45%;
     text-align: center;
     text-shadow: 1px 1px 5px rgb(1, 38, 109);
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .landing {
+    background-size: 94%;
+    justify-content: space-between;
+    h1 {
+      width: 95%;
+      margin-top: 3vh;
+    }
+    h2 {
+      width: 95%;
+      margin-bottom: 3vh;
+    }
   }
 }
