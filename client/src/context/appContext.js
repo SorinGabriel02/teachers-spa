@@ -14,7 +14,7 @@ function AppContextProvider({ children }) {
     setIsAuthenticated("");
     setIsAdmin(false);
     try {
-      await axios.get("/users/logout", {
+      await axios.get("/api/users/logout", {
         headers: {
           Authorization: `Bearer ${isAuthenticated}`,
         },
