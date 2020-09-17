@@ -11,7 +11,7 @@ const editorOptions = {
   height: "auto",
   minWidth: "95vw",
   minHeight: "53vh",
-  placeholder: ` Imaginile trebuie să aibă sub 1MB.
+  placeholder: ` Imaginile trebuie să fie de cel mult 1MB.
      Apasă butonul de full screen pentru o experiență mai bună.`,
   imageUploadSizeLimit: 1000000,
   imageUploadUrl:
@@ -85,7 +85,6 @@ PostEditor.defaultProps = {
 PostEditor.propTypes = {
   editorContent: PropTypes.string,
   handleChange: PropTypes.func.isRequired,
-  handleImages: PropTypes.func,
   setDefaultStyle: PropTypes.string,
 };
 
