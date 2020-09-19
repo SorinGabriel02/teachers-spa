@@ -59,8 +59,6 @@ function PostEditor(props) {
     props.handleChange(content);
   };
 
-  console.log(ref.current?.editor.getImagesInfo());
-
   return (
     <div className={editContainer}>
       <SunEditor
