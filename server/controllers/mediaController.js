@@ -11,7 +11,7 @@ const s3 = new AWS.S3({
 });
 // save an image file and send back response
 // is the user admin ??
-const uploadImage = (req, res, next) => {
+const uploadImage = (req, res) => {
   // permitted myme types
   const mymeTypes = ["image/png", "image/jpeg", "image/webp"];
   const myme = req.file.mimetype;

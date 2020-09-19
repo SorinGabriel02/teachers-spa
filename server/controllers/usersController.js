@@ -22,9 +22,8 @@ const refreshTokenAsCookie = (userId, admin, res) => {
   return res.cookie("refresh", token, {
     maxAge: cookieExpiresIn,
     httpOnly: true,
-    // add these in production here and in logout function
-    // secure: true,
-    // sameSite: true,
+    secure: process.env.NODE_ENV === "production" ? true : null,
+    sameSite: process.env.NODE_ENV === "production" ? true : null,
   });
 };
 
@@ -40,9 +39,8 @@ const logout = (req, res) => {
     res.cookie("refresh", "", {
       maxAge: 60 * 1000,
       httpOnly: true,
-      // add these in production here and in refreshTokenAsCookie()
-      // secure: true,
-      // sameSite: true,
+      secure: process.env.NODE_ENV === "production" ? true : null,
+      sameSite: process.env.NODE_ENV === "production" ? true : null,
     });
     res.json({ msg: "Delogare completă." });
   } catch (error) {
