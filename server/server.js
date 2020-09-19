@@ -8,8 +8,6 @@ const usersRouter = require("./routes/usersRoutes");
 const postsRouter = require("./routes/postsRoutes");
 const commentsRouter = require("./routes/commentsRoutes");
 const mediaRouter = require("./routes/mediaRoutes");
-// save the base directory of the app as __basedir
-// global.__basedir = __dirname;
 
 const app = express();
 
