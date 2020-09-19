@@ -3,34 +3,30 @@ const express = require("express");
 const mongoose = require("mongoose");
 const helmet = require("helmet");
 const cors = require("cors");
-const morgan = require("morgan");
-const fileUpload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
-
 const usersRouter = require("./routes/usersRoutes");
 const postsRouter = require("./routes/postsRoutes");
 const commentsRouter = require("./routes/commentsRoutes");
 const mediaRouter = require("./routes/mediaRoutes");
+// save the base directory of the app as __basedir
+// global.__basedir = __dirname;
 
 const app = express();
 
+if (process.env.NODE_ENV === "development") app.use(require("morgan")("dev"));
+
 // middleware
 app.use(helmet());
-app.use(helmet.hidePoweredBy({ setTo: "PHP 7.4.0" }));
-app.use(morgan("dev"));
+app.use(helmet.hidePoweredBy({ setTo: "PHP 7.4.8" }));
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
     credentials: true,
   })
 );
 app.use(cookieParser());
 app.use(express.json());
-// static directory that servers images to the rich text editor
-// when "/api/media/images" endpoint is requested
-// serve images from "/upload/images" directory
-app.use("/api/media/images", express.static(`${__dirname}/upload/images/`));
-app.use(fileUpload());
+app.use(express.urlencoded({ extended: false }));
 
 // routes
 app.use("/api/users", usersRouter);

@@ -22,8 +22,38 @@ const refreshTokenAsCookie = (userId, admin, res) => {
   return res.cookie("refresh", token, {
     maxAge: cookieExpiresIn,
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production" ? true : false,
+    // add these in production here and in logout function
+    // secure: true,
+    // sameSite: true,
   });
+};
+
+const logout = (req, res) => {
+  // access token is valid at this point
+  // if refresh token is valid, log the user out by emptying cookie
+  try {
+    refreshToken = req.cookies.refresh;
+    if (!refreshToken)
+      return res.status(401).json({ error: "Date incomplete." });
+    jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+    res.cookie("refresh", "", {
+      maxAge: 60 * 1000,
+      httpOnly: true,
+      // add these in production here and in refreshTokenAsCookie()
+      // secure: true,
+      // sameSite: true,
+    });
+    res.json({ msg: "Delogare completă." });
+  } catch (error) {
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      return res.status(401).json({ error: "Date incorecte." });
+    }
+    res.sendStatus(500);
+  }
 };
 
 const signup = async (req, res, next) => {
@@ -102,33 +132,6 @@ const refreshAccessToken = (req, res, next) => {
       return res.status(401).json({ errorMessage: "Autentificare necesară" });
     }
     console.log(err);
-    res.sendStatus(500);
-  }
-};
-
-const logout = (req, res, next) => {
-  // access token is valid at this point
-  // if refresh token is valid, log the user out by emptying cookie
-  try {
-    refreshToken = req.cookies.refresh;
-    if (!refreshToken)
-      return res.status(401).json({ error: "Date incomplete." });
-    jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-
-    res.cookie("refresh", "", {
-      maxAge: 60 * 1000,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production" ? true : false,
-    });
-    res.json({ msg: "Delogare completă." });
-  } catch (error) {
-    if (
-      error.name === "JsonWebTokenError" ||
-      error.name === "TokenExpiredError"
-    ) {
-      return res.status(401).json({ error: "Date incorecte." });
-    }
-
     res.sendStatus(500);
   }
 };
