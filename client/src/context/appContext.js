@@ -4,6 +4,8 @@ import axios from "axios";
 const AppContext = createContext();
 
 function AppContextProvider({ children }) {
+  // show loading until we get a response from the refresh token answer
+  const [appLoading, setAppLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [refreshInterval, setRefreshInterval] = useState(false);
@@ -28,6 +30,7 @@ function AppContextProvider({ children }) {
   const login = useCallback((token, admin) => {
     setIsAuthenticated(token);
     setIsAdmin(admin);
+    setAppLoading(false);
     setRefreshInterval(true);
   }, []);
 
@@ -39,10 +42,11 @@ function AppContextProvider({ children }) {
         const token = response.data.token;
         if (token) {
           login(token, Boolean(response.data.admin));
-          setRefreshInterval(true);
         }
       } catch (error) {
-        console.log(error.response);
+        if (error.response?.status === 401)
+          console.log("User is not logged in.");
+        setAppLoading(false);
       }
     };
     initialRefresh();
@@ -74,6 +78,7 @@ function AppContextProvider({ children }) {
         isAdmin,
         login,
         logout,
+        appLoading,
       }}
     >
       {children}

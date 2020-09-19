@@ -12,11 +12,14 @@ import Noutati from "./pages/Noutati";
 import Login from "./pages/Login";
 import NewPost from "./pages/NewPost";
 import SelectedPost from "./pages/SelectedPost";
+import Loading from "./components/Loading";
 
 import { app } from "./App.module.scss";
 
 function App() {
-  const { isAuthenticated, isAdmin } = useContext(AppContext);
+  const { isAuthenticated, isAdmin, appLoading } = useContext(AppContext);
+
+  if (appLoading) return <Loading />;
 
   return (
     <div className={app}>
