@@ -1,18 +1,18 @@
 import React, { useReducer, useContext, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
-import axios from "axios";
 
 import { AppContext } from "../context/appContext";
+import useHttpReq from "../hooks/useHttpReq";
 import useValidation from "../hooks/useValidation";
 import Loading from "../components/Loading";
 import Backdrop from "../components/Backdrop";
 import Modal from "../components/Modal";
+import XBtn from "../components/XBtn";
+
 import { loginContainer, loginForm } from "./Login.module.scss";
 
 const initialState = {
-  // intervalId is an array in case there's more than 1 active interval;
-  intervalId: [],
   isLoading: false,
   isLogin: true,
   name: "",
@@ -55,11 +55,6 @@ function loginReducer(state, action) {
         ...state,
         passwordRepeat: action.payload,
       };
-    case "intervalId":
-      return {
-        ...state,
-        intervalId: [...state.intervalId, action.payload],
-      };
     case "isLogin":
       return {
         ...state,
@@ -73,8 +68,9 @@ function loginReducer(state, action) {
 function Login() {
   const { login } = useContext(AppContext);
   const history = useHistory();
-  // for canceling axios call if component dismounts
-  const cancelFetch = useRef(null);
+  const nameRef = useRef();
+  const emailRef = useRef();
+  const [data, err, makeReq, cancelReq, clearErr] = useHttpReq();
   const [state, dispatch] = useReducer(loginReducer, initialState);
   const {
     isName,
@@ -90,7 +86,6 @@ function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    let id = 0;
     // pre-fetch validation
     if (!state.isLogin && !validateName(state.name)) return;
     if (!validateEmail(state.email) || !validatePassword(state.password))
@@ -102,53 +97,19 @@ function Login() {
       );
     }
 
-    try {
-      cancelFetch.current = axios.CancelToken.source();
-      const reqRoute = state.isLogin ? "/api/users/login" : "/api/users/signup";
-      const reqBody = state.isLogin
-        ? { email: state.email, password: state.password }
-        : {
-            username: state.name,
-            email: state.email,
-            password: state.password,
-          };
-      dispatch({ type: "isLoading" });
+    const reqRoute = state.isLogin ? "/api/users/login" : "/api/users/signup";
+    const reqBody = state.isLogin
+      ? { email: state.email, password: state.password }
+      : {
+          username: state.name,
+          email: state.email,
+          password: state.password,
+        };
+    dispatch({ type: "isLoading" });
 
-      const response = await axios.post(reqRoute, reqBody, {
-        cancelToken: cancelFetch.current.token,
-      });
-      dispatch({ type: "isLoading" });
+    await makeReq("post", reqRoute, reqBody);
 
-      login(response.data.token, Boolean(response.data.admin));
-      if (state.goBackTo && state.goBackTo.backToComment) {
-        return history.push(`/noutati/${state.goBackTo.backToComment}`, {
-          focusOnComment: true,
-        });
-      } else {
-        history.goBack();
-      }
-    } catch (error) {
-      console.log(error.response);
-      if (error.response && error.response.status >= 500) {
-        displayErrorMessage(
-          "res",
-          "Eroare de server. Te rugam să încerci mai tarziu."
-        );
-        id = setInterval(() => clearError("res"), 4000);
-        dispatch({ type: "intervalId", payload: id });
-      }
-      if (error.response && error.response.status === 409) {
-        displayErrorMessage("res", error.response.data.errorMessage);
-        id = setInterval(() => clearError("res"), 4000);
-        dispatch({ type: "intervalId", payload: id });
-      }
-      if (error.response && error.response.status === 422) {
-        displayErrorMessage("res", error.response.data.errorMessage);
-        id = setInterval(() => clearError("res"), 4000);
-        dispatch({ type: "intervalId", payload: id });
-      }
-      dispatch({ type: "isLoading" });
-    }
+    dispatch({ type: "isLoading" });
   };
 
   const handleChange = (e) => {
@@ -156,6 +117,42 @@ function Login() {
     dispatch({ type: name, payload: value });
     clearError(name);
   };
+
+  const passwordError = Boolean(!isPassword && errorMessage.password);
+  const emailError = Boolean(!isEmail && errorMessage.email);
+  const nameError = Boolean(!isName && errorMessage.name);
+  const samePassword = Boolean(
+    state.password && state.password === state.passwordRepeat
+  );
+
+  const modalMessage = () => {
+    if (err.data.errorMessage) {
+      return <h3>{err.data.errorMessage}</h3>;
+    }
+    if (err.status === 401) {
+      return <h3>Emailul sau parola nu se potrivesc.</h3>;
+    }
+    return <h3>Eroare de server. Te rugăm să încerci mai târziu.</h3>;
+  };
+
+  const clearErrModal = () => {
+    clearErr();
+    emailRef?.current && emailRef.current.focus();
+  };
+
+  useEffect(() => {
+    if (data?.token) {
+      login(data.token, Boolean(data.admin));
+      // if user came here from comments section and has to be sent back
+      if (state.goBackTo?.backToComment) {
+        return history.push(`/noutati/${state.goBackTo.backToComment}`, {
+          focusOnComment: true,
+        });
+      } else {
+        history.goBack();
+      }
+    }
+  }, [data, history, login, state.goBackTo.backToComment]);
 
   useEffect(() => {
     // save the state from history for a targeted push after login
@@ -165,31 +162,35 @@ function Login() {
   }, [history.location.state]);
 
   useEffect(() => {
-    // stop changing state if component is unmounted
+    // focus on email or name input
+    state.isLogin
+      ? emailRef?.current && emailRef.current.focus()
+      : nameRef?.current && nameRef.current.focus();
+    // cancel request if user navigates away before a response arrives
     return () => {
-      cancelFetch.current &&
-        cancelFetch.current.cancel(
-          "component dismounts, api is being canceled"
-        );
-      state.intervalId.forEach((id) => clearInterval(id));
+      cancelReq && cancelReq.cancel("Request is being canceled");
     };
-  }, [state.intervalId]);
+  }, [state.isLogin, cancelReq]);
 
-  const passwordError = Boolean(!isPassword && errorMessage.password);
-  const emailError = Boolean(!isEmail && errorMessage.email);
-  const nameError = Boolean(!isName && errorMessage.name);
-  const samePassword = Boolean(
-    state.password && state.password === state.passwordRepeat
-  );
+  console.log(err);
 
   return (
     <section className={loginContainer}>
       {state.isLoading && <Loading size={"5vmax"} />}
+      {err && (
+        <React.Fragment>
+          <Backdrop show={Boolean(err)} onClick={clearErrModal} />
+          <Modal show={Boolean(err)}>
+            <XBtn onClick={clearErrModal} />
+            {modalMessage()}
+          </Modal>
+        </React.Fragment>
+      )}
       <form onSubmit={handleSubmit} className={loginForm}>
         <h2>{state.isLogin ? "Autentificare" : "Creează cont"}</h2>
         {!state.isLogin && (
           <React.Fragment>
-            <label htmlFor="nume">Nume</label>
+            <label htmlFor="nume">Nume și Prenume</label>
             <CSSTransition
               in={nameError}
               unmountOnExit
@@ -199,6 +200,7 @@ function Login() {
               <p className="errorMessage">{errorMessage.name}</p>
             </CSSTransition>
             <input
+              ref={nameRef}
               autoComplete="off"
               type="text"
               name="name"
@@ -218,6 +220,7 @@ function Login() {
           <p className="errorMessage">{errorMessage.email}</p>
         </CSSTransition>
         <input
+          ref={emailRef}
           autoComplete="off"
           type="text"
           name="email"
@@ -269,36 +272,19 @@ function Login() {
             />
             <CSSTransition
               unmountOnExit
-              in={isPassword}
-              timeout={250}
-              classNames="infoMessage"
-            >
-              <p className="infoMessage">
-                Parola trebuie să aibă cel puțin opt caractere și să conțină cel
-                puțin o literă mică, o majusculă, o cifră și un caracter special
-                @ $ ! % * ? &amp;
-              </p>
-            </CSSTransition>
-            <CSSTransition
-              unmountOnExit
               in={Boolean(errorMessage.unequalPassword && !samePassword)}
               timeout={250}
               classNames="errorMessage"
             >
               <p className="errorMessage">{errorMessage.unequalPassword}</p>
             </CSSTransition>
+            <p className="infoMessage">
+              Parola trebuie să aibă cel puțin opt caractere și să conțină cel
+              puțin o literă mică, o majusculă, o cifră și un caracter special @
+              $ ! % * ? &amp;
+            </p>
           </React.Fragment>
         )}
-
-        {/* error sent back from the server */}
-        <CSSTransition
-          unmountOnExit
-          in={Boolean(errorMessage.res)}
-          timeout={250}
-          classNames="errorMessage"
-        >
-          <p className="errorMessage">{errorMessage.res}</p>
-        </CSSTransition>
         <button>{state.isLogin ? "Logheză-te" : "Creează Cont"}</button>
         <p>
           {state.isLogin ? "Nu ai cont?" : "Ai deja cont?"}{" "}
