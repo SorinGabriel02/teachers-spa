@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import { newsBtn } from "./XBtn.module.scss";
 
@@ -9,5 +10,9 @@ function XBtn(props) {
     </button>
   );
 }
+
+XBtn.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
 
 export default XBtn;

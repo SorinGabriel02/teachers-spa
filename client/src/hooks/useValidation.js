@@ -1,5 +1,5 @@
 import { useState } from "react";
-import _ from "lodash";
+import omit from "lodash/omit";
 
 function useValidation() {
   const [isName, setIsName] = useState(true);
@@ -59,7 +59,7 @@ function useValidation() {
     if (name === "email") setIsEmail(true);
     if (name === "password") setIsPassword(true);
     if (name === "name") setIsName(true);
-    setErrorMessage((prevErrors) => _.omit(prevErrors, name));
+    setErrorMessage((prevErrors) => omit(prevErrors, name));
   }
 
   return {

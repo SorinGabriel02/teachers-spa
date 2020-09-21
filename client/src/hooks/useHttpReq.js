@@ -7,10 +7,10 @@ function useHttpReq() {
   const [err, setErr] = useState(null);
 
   const makeReq = useCallback(
-    async (reqMethod, url, reqOptions = null, reqBody = null) => {
+    async (reqMethod, url, body = null, options = null) => {
       try {
         cancelFetch.current = axios.CancelToken.source();
-        const response = await axios[reqMethod](url, reqOptions, reqBody);
+        const response = await axios[reqMethod](url, body, options);
         setData(response.data);
       } catch (error) {
         setErr(error.response);

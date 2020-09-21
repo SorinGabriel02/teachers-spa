@@ -32,20 +32,24 @@ body {
 
 .errorMessage-enter {
   opacity: 0;
+  height: 0%;
 }
 
 .errorMessage-enter-active {
   opacity: 1;
-  transition: opacity 250ms;
+  height: 100%;
+  transition: all 250ms linear;
 }
 
 .errorMessage-exit {
   opacity: 1;
+  height: 100%;
 }
 
 .errorMessage-exit-active {
   opacity: 0;
-  transition: opacity 250ms;
+  height: 0%;
+  transition: all 250ms linear;
 }
 
 .okMessage {
