@@ -36,7 +36,7 @@ const getPostById = async (req, res, next) => {
     res.json({ post: post.toObject({ getters: true }) });
   } catch (error) {
     res.status(500).json({
-      errorMessage: "A intervenit o eroare. Te rog să încerci mai târziu.",
+      errorMessage: error.response,
     });
   }
 };
