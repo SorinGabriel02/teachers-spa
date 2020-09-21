@@ -83,7 +83,7 @@ PostEditor.defaultProps = {
 };
 
 PostEditor.propTypes = {
-  editorContent: PropTypes.string,
+  editorContent: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   setDefaultStyle: PropTypes.string,
 };

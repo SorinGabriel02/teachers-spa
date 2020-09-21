@@ -1,2 +1,13 @@
+@import "../variables.scss";
+@import "../styles/button";
+
 .matsContainer {
+  .editBtn {
+    @extend .sharedBtn;
+    background-color: $greenBtn;
+    margin-left: 3vw;
+  }
+  .editBtn:disabled {
+    cursor: not-allowed;
+  }
 }

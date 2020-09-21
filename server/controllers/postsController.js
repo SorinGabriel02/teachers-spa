@@ -1,3 +1,4 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 const User = require("../models/userModel");
 const Post = require("../models/postModel");
@@ -5,7 +6,9 @@ const Comment = require("../models/commentModel");
 
 const getPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find({});
+    // get all posts except one
+    // this one is used for "Materiale Suport" page exclusively
+    const posts = await Post.find({ _id: { $ne: process.env.RESERVED_POST } });
     const mappedPosts = posts.map((post) => ({
       id: post._id,
       content: post.content,
@@ -64,8 +67,8 @@ const updatePost = async (req, res, next) => {
   try {
     const { postId } = req.params;
     const { content } = req.body;
-    await Post.findOneAndUpdate({ _id: postId }, { content });
-    res.json({ message: "Post successfully updated." });
+    const updated = await Post.findOneAndUpdate({ _id: postId }, { content });
+    res.json({ message: "Success" });
   } catch (error) {
     console.log(error);
     res.status(500).json({
