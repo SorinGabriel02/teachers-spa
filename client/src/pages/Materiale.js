@@ -74,7 +74,12 @@ function Materiale() {
     dispatch({ type: "makeRequest", payload: true });
     // post with this id (the oldest post) is reserved for this page
     // Noutăți page will receive all posts except this one
-    if (!data) makeReq("get", "/api/posts/5f6860f9b492ab40ccd59687");
+    const postId =
+      process.env.NODE_ENV === "development"
+        ? "5f6860f9b492ab40ccd59687"
+        : // this post id should be equal with the first post in production
+          "5f5fc4ae1d69d0001737ea98";
+    if (!data) makeReq("get", `/api/posts/${postId}`);
   }, [makeReq, data]);
 
   useEffect(() => {
