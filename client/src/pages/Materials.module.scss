@@ -1,0 +1,106 @@
+@import "../variables.scss";
+@import "../styles/link";
+
+.materials {
+  margin: 1%;
+}
+
+.headerSection,
+.cycle {
+  box-shadow: $sectionBoxShadow;
+  border-radius: 5px;
+  padding: 2%;
+}
+
+.headerSection {
+  margin: 2vh;
+  h1 {
+    text-align: center;
+    text-shadow: 0 0 2px $headerBackground;
+    margin-bottom: 2vh;
+  }
+  p {
+    font-size: 1.1rem;
+    text-indent: 5%;
+    text-shadow: 0 0 1px $headerBackground;
+  }
+}
+
+.linksContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.cycle {
+  margin: 1%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  h2 {
+    margin-bottom: 2vh;
+    text-shadow: 0 0 2px $headerBackground;
+  }
+  ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0 3%;
+    list-style: none;
+  }
+  li {
+    padding: 0.2rem;
+    margin: 0.5vmax;
+    border-radius: 3px;
+  }
+  li:first-child {
+    background-color: rgb(214, 179, 179);
+  }
+  li:nth-child(2) {
+    background-color: rgb(167, 167, 255);
+  }
+  li:nth-child(3) {
+    background-color: rgb(201, 245, 115);
+  }
+  li:nth-child(4) {
+    background-color: rgb(255, 219, 153);
+  }
+  li:last-child() {
+    background-color: rgb(128, 173, 128);
+  }
+  a {
+    @extend .linkShared;
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 4px;
+    box-shadow: $boxShadow;
+    transition: all 0.2s linear;
+  }
+  a:visited {
+    color: black;
+  }
+  a:active {
+    box-shadow: 0 0 15px;
+  }
+  a::after {
+    height: 3px;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .linksContainer {
+    flex-direction: column;
+  }
+  .cycle {
+    margin: 2%;
+    li {
+      margin: 1%;
+    }
+    a {
+      letter-spacing: 0.01rem;
+    }
+  }
+}

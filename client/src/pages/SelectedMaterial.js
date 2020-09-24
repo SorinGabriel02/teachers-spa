@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useReducer, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
-import { matsContainer, editBtn } from "./Materiale.module.scss";
+import { matsContainer, editBtn } from "./SelectedMaterial.module.scss";
 import { AppContext } from "../context/appContext";
 import useHttpReq from "../hooks/useHttpReq";
 import PostEditor from "../components/PostEditor";
@@ -45,7 +45,8 @@ const matsReducer = (state, action) => {
   }
 };
 
-function Materiale() {
+function SelectedMaterial() {
+  const { pageName } = useParams();
   const editorRef = useRef();
   const history = useHistory();
   const { isAuthenticated, isAdmin } = useContext(AppContext);
@@ -57,7 +58,7 @@ function Materiale() {
     dispatch({ type: "makeRequest", payload: true });
     makeReq(
       "patch",
-      "/api/posts/update/5f6860f9b492ab40ccd59687",
+      `/api/posts/update/${data.post.id}`,
       { content: state.editorContent },
       { headers: { Authorization: `Bearer ${isAuthenticated}` } }
     );
@@ -72,15 +73,8 @@ function Materiale() {
 
   useEffect(() => {
     dispatch({ type: "makeRequest", payload: true });
-    // post with this id (the oldest post) is reserved for this page
-    // Noutăți page will receive all posts except this one
-    const postId =
-      process.env.NODE_ENV === "development"
-        ? "5f6860f9b492ab40ccd59687"
-        : // this post id should be equal with the first post in production
-          "5f5fc4ae1d69d0001737ea98";
-    if (!data) makeReq("get", `/api/posts/${postId}`);
-  }, [makeReq, data]);
+    if (!data) makeReq("get", `/api/posts/page/${pageName}`);
+  }, [makeReq, data, pageName]);
 
   useEffect(() => {
     if (data && data.post)
@@ -136,4 +130,4 @@ function Materiale() {
   );
 }
 
-export default Materiale;
+export default SelectedMaterial;

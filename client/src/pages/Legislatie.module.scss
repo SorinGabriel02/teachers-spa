@@ -4,18 +4,21 @@
 .legislation {
   display: flex;
   flex-direction: column;
+  h1,
+  section {
+    box-shadow: $sectionBoxShadow;
+    border-radius: 5px;
+    padding: 1rem;
+  }
   h1 {
     text-align: center;
     text-shadow: 0 0 2px rgba(121, 134, 250, 0.8);
-    margin: 2vmax;
+    margin: 1.7vmax;
   }
   section {
     width: 95%;
-    border-radius: 5px;
     align-self: center;
-    padding: 1rem;
     margin: 2vh 0;
-    box-shadow: $sectionBoxShadow;
   }
   h2 {
     margin: 1vmax;
