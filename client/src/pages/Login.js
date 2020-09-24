@@ -172,8 +172,6 @@ function Login() {
     };
   }, [state.isLogin, cancelReq]);
 
-  console.log(err);
-
   return (
     <section className={loginContainer}>
       {state.isLoading && <Loading size={"5vmax"} />}
