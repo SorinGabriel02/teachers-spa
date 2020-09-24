@@ -14,11 +14,12 @@
     text-align: center;
   }
   h1 {
-    margin: 1vmax;
+    margin-top: 1vmax;
   }
-  section {
+  section,
+  h1 {
     padding: 1vmax;
-    margin-bottom: 2vmax;
+    margin-bottom: 3vmax;
     border-radius: 5px;
     box-shadow: $sectionBoxShadow;
   }

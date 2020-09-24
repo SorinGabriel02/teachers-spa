@@ -9,7 +9,7 @@ import {
   exemplare,
   acteStabilire,
   instiintari,
-} from "./Documente.module.scss";
+} from "./Documents.module.scss";
 import cerereTip from "../assets/cerereTip.jpg";
 import cerereEval from "../assets/cerere_evaluare.pdf";
 import fisaMedicala from "../assets/fisa_medicala_sintetica.pdf";
@@ -22,7 +22,7 @@ import cerereTip2b from "../assets/cerere_tip_2b.pdf";
 import acordIncudere from "../assets/acord_includere_evaluare.jpg";
 import acordMentinere from "../assets/acord_mentinere_integrare.jpg";
 
-function Documente() {
+function Documents() {
   return (
     <main className={documente}>
       <h1>Certificatul de Orientare Școlară și Profesională &#40;COSP&#41;</h1>
@@ -313,4 +313,4 @@ function Documente() {
   );
 }
 
-export default Documente;
+export default Documents;

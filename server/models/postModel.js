@@ -9,6 +9,7 @@ const postSchema = new Schema(
     comments: [
       { type: mongoose.Types.ObjectId, required: true, ref: "Comment" },
     ],
+    forPage: { type: String, required: true, default: "news" },
   },
   { timestamps: true }
 );

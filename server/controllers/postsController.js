@@ -3,12 +3,13 @@ const mongoose = require("mongoose");
 const User = require("../models/userModel");
 const Post = require("../models/postModel");
 const Comment = require("../models/commentModel");
+const { compareSync } = require("bcrypt");
 
 const getPosts = async (req, res, next) => {
   try {
     // get all posts except one
     // this one is used for "Materiale Suport" page exclusively
-    const posts = await Post.find({ _id: { $ne: process.env.RESERVED_POST } });
+    const posts = await Post.find({ forPage: "news" });
     const mappedPosts = posts.map((post) => ({
       id: post._id,
       content: post.content,
@@ -33,6 +34,18 @@ const getPostById = async (req, res, next) => {
         select: { _id: 1, username: 1 },
       },
     });
+    res.json({ post: post.toObject({ getters: true }) });
+  } catch (error) {
+    res.status(500).json({
+      errorMessage: "A intervenit o eroare. Te rog să încerci mai târziu.",
+    });
+  }
+};
+
+const getPostByPage = async (req, res) => {
+  const { pageName } = req.params;
+  try {
+    const post = await Post.findOne({ forPage: pageName });
     res.json({ post: post.toObject({ getters: true }) });
   } catch (error) {
     res.status(500).json({
@@ -142,6 +155,7 @@ const deletePost = async (req, res, next) => {
 module.exports = {
   getPosts,
   getPostById,
+  getPostByPage,
   createPost,
   updatePost,
   deletePost,

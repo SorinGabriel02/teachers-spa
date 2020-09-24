@@ -6,8 +6,9 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Welcome from "./pages/Welcome";
 import Legislatie from "./pages/Legislatie";
-import Documente from "./pages/Documente";
-import Materiale from "./pages/Materiale";
+import Documents from "./pages/Documents";
+import Materials from "./pages/Materials";
+import SelectedMaterial from "./pages/SelectedMaterial";
 import Noutati from "./pages/Noutati";
 import Login from "./pages/Login";
 import NewPost from "./pages/NewPost";
@@ -32,10 +33,13 @@ function App() {
           <Legislatie />
         </Route>
         <Route path="/documente">
-          <Documente />
+          <Documents />
         </Route>
-        <Route path="/materiale">
-          <Materiale />
+        <Route exact path="/materiale">
+          <Materials />
+        </Route>
+        <Route path="/materiale/:pageName">
+          <SelectedMaterial />
         </Route>
         <Route exact path="/noutati">
           <Noutati />
