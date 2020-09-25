@@ -124,7 +124,7 @@ function Noutati() {
         <React.Fragment>
           <header className={headerContainer}>
             <h1>{chooseHeader(pageName)}</h1>
-            <h4>Accesați pentru a vedea fiecare articol în detaliu</h4>
+            <h4>Accesează pentru a vedea fiecare articol în detaliu</h4>
             {isAdmin && posts && (
               <NavLink to={`/${pageName}/postNou`}>
                 <button className={publishBtn}>Publică articol</button>
