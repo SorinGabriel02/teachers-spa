@@ -1,6 +1,6 @@
 /legislatie    /index.html   200
 /documente     /index.html   200
-/materiale    /index.html   200
+/materiale/*    /index.html   200
 /noutati/*    /index.html   200
 /autentificare    /index.html   200
 /api/* https://profesoridesprijin.herokuapp.com/api/:splat 200
