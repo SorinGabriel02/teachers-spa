@@ -4,12 +4,20 @@ import SunEditor from "suneditor-react";
 
 import { AppContext } from "../context/appContext";
 import useHttpReq from "../hooks/useHttpReq";
+import useHeader from "../hooks/useHeader";
 import Loading from "../components/Loading";
 import Backdrop from "../components/Backdrop";
 import Modal from "../components/Modal";
 import XBtn from "../components/XBtn";
 
-import { publishBtn, editContainer, noNews } from "./Noutati.module.scss";
+import {
+  newsContainer,
+  headerContainer,
+  publishBtn,
+  postsSection,
+  editorContainer,
+  notFound,
+} from "./Noutati.module.scss";
 import "suneditor/dist/css/suneditor.min.css";
 
 const initialState = { isLoading: true, noPosts: false };
@@ -38,6 +46,7 @@ function Noutati() {
   const { isAdmin } = useContext(AppContext);
   const [state, dispatch] = useReducer(postsReducer, initialState);
   const [posts, err, makeReq, cancelReq] = useHttpReq();
+  const [chooseHeader] = useHeader();
 
   const setOptionsObj = {
     height: "65.5vh",
@@ -55,7 +64,7 @@ function Noutati() {
         return bCreatedAt - aCreatedAt;
       })
       .map((post) => (
-        <section key={post.id} className={editContainer}>
+        <article key={post.id} className={editorContainer}>
           <NavLink
             style={{ textDecoration: "none" }}
             to={`/noutati/${pageName}/${post.id}`}
@@ -72,7 +81,7 @@ function Noutati() {
               setOptions={setOptionsObj}
             />
           </NavLink>
-        </section>
+        </article>
       ));
 
   const handleClick = () => history.push("/");
@@ -99,29 +108,33 @@ function Noutati() {
   }, [cancelReq]);
 
   return (
-    <div>
-      <Backdrop show={state.isLoading} />
+    <main className={newsContainer}>
       {state.isLoading && <Loading />}
       <Backdrop
         onClick={handleClick}
-        show={Boolean(err) && !postsList?.length}
+        show={(Boolean(err) && !postsList?.length) || state.isLoading}
       />
       <Modal show={!postsList?.length && Boolean(err)}>
         <XBtn onClick={handleClick} />
         <h1>Eroare de server. Te rog să încerci mai târziu.</h1>
       </Modal>
-      {isAdmin && posts && (
-        <NavLink to={`/${pageName}/postNou`}>
-          <button className={publishBtn}>Publică articol</button>
-        </NavLink>
+      {state.noPosts ? (
+        <h1 className={notFound}>Această pagină va fi actualizată în curând</h1>
+      ) : (
+        <React.Fragment>
+          <header className={headerContainer}>
+            <h1>{chooseHeader(pageName)}</h1>
+            <h4>Accesați pentru a vedea fiecare articol în detaliu</h4>
+            {isAdmin && posts && (
+              <NavLink to={`/${pageName}/postNou`}>
+                <button className={publishBtn}>Publică articol</button>
+              </NavLink>
+            )}
+          </header>
+          <section className={postsSection}>{postsList}</section>
+        </React.Fragment>
       )}
-      <main>
-        {state.noPosts && (
-          <h1 className={noNews}>Pentru moment nu avem noutăți</h1>
-        )}
-        {postsList}
-      </main>
-    </div>
+    </main>
   );
 }
 

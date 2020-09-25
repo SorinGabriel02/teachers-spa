@@ -4,7 +4,7 @@
   width: fit-content;
   font-size: 1.1rem;
   text-shadow: 0 0 1px $shadowColor;
-  padding: 1vmax;
+  padding: 0.3rem 0.4rem;
   margin: 1vmax;
   border: 1px solid $headerBackground;
   border-radius: 1vmax;
@@ -22,5 +22,11 @@
   &:active {
     box-shadow: $boxShadow;
     transform: scale(0.98);
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .sharedBtn {
+    font-size: 1rem;
   }
 }

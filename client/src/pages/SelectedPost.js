@@ -290,7 +290,7 @@ function SelectedPost() {
           </React.Fragment>
         )}
         <button onClick={handleXBtn} className={editBtn}>
-          &lt;&lt; Mergi Înapoi
+          &lt;&lt; Pagina Anterioară
         </button>
       </section>
       <section className={editorContainer}>

@@ -1,18 +1,25 @@
 @import "../variables.scss";
 @import "../styles/button";
 
+.newsContainer {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.postsSection {
+  display: flex;
+  align-content: center;
+}
+
 .publishBtn {
   @extend .sharedBtn;
   background-color: $greenBtn;
 }
 
-main {
-  display: flex;
-  flex-wrap: wrap;
-  flex-shrink: 0;
-}
-
-.editContainer {
+.editorContainer {
   width: 45%;
   height: 70vh;
   margin: 2vmax auto;
@@ -30,22 +37,53 @@ main {
   }
 }
 
+.headerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  h1,
+  h4 {
+    text-align: center;
+    text-shadow: 0 0 2px $headerBackground;
+  }
+  h1 {
+    margin: 2vh;
+  }
+  h4 {
+    margin-bottom: 2vh;
+  }
+}
+
 .notFound {
   text-align: center;
   position: fixed;
   top: 50%;
   left: 50%;
+  padding: 1vmax;
   transform: translate(-50%, -50%);
-}
-
-.noNews {
-  width: 100%;
-  margin-top: 15%;
-  text-align: center;
+  box-shadow: $boxShadow;
+  border-radius: 10px;
 }
 
 @media only screen and (max-width: 750px) {
-  .editContainer {
-    width: 92%;
+  .postsSection {
+    flex-direction: column;
+  }
+  .editorContainer {
+    width: 88%;
+  }
+  .notFound {
+    width: 95%;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .headerContainer {
+    h1 {
+      font-size: 1.4rem;
+    }
+  }
+  .editorContainer {
+    width: 95%;
   }
 }

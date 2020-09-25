@@ -23,58 +23,58 @@ function Materials() {
       </section>
       <section className={linksContainer}>
         <article className={cycle}>
-          <h2>Ciclul primar</h2>
+          <h2>Ciclul Primar</h2>
           <ul>
             <li>
               <NavLink to="/materiale/primary1">
-                Stimulare cognitivă- Limba și literatura română
+                Stimulare Cognitivă- Limba și Literatura Română
               </NavLink>
             </li>
             <li>
               <NavLink to="/materiale/primary2">
-                Stimulare cognitivă- Matematică
+                Stimulare Cognitivă- Matematică
               </NavLink>
             </li>
             <li>
               <NavLink to="/materiale/primary3">
-                Structuri perceptiv-motrice: formă, mărime, culoare
+                Structuri Perceptiv-Motrice: Formă, Mărime, Culoare
               </NavLink>
             </li>
             <li>
               <NavLink to="/materiale/primary4">
-                Orientare și organizare spațio-temporală
+                Orientare și Organizare Spațio-Temporală
               </NavLink>
             </li>
             <li>
-              <NavLink to="/materiale/primary5">Dezvoltare personală</NavLink>
+              <NavLink to="/materiale/primary5">Dezvoltare Personală</NavLink>
             </li>
           </ul>
         </article>
         <article className={cycle}>
-          <h2>Ciclul gimnazial</h2>
+          <h2>Ciclul Gimnazial</h2>
           <ul>
             <li>
               <NavLink to="/materiale/gymnasium1">
-                Stimulare cognitivă- Limba și literatura română
+                Stimulare Cognitivă- Limba și Literatura Română
               </NavLink>
             </li>
             <li>
               <NavLink to="/materiale/gymnasium2">
-                Stimulare cognitivă- Matematică
+                Stimulare Cognitivă- Matematică
               </NavLink>
             </li>
             <li>
               <NavLink to="/materiale/gymnasium3">
-                Structuri perceptiv-motrice: formă, mărime, culoare
+                Structuri Perceptiv-Motrice: Formă, Mărime, Culoare
               </NavLink>
             </li>
             <li>
               <NavLink to="/materiale/gymnasium4">
-                Orientare și organizare spațio-temporală
+                Orientare și Organizare Spațio-Temporală
               </NavLink>
             </li>
             <li>
-              <NavLink to="/materiale/gymnasium5">Dezvoltare personală</NavLink>
+              <NavLink to="/materiale/gymnasium5">Dezvoltare Personală</NavLink>
             </li>
           </ul>
         </article>
