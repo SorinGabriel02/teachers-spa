@@ -75,10 +75,7 @@ function postReducer(state, action) {
         editPostMode: !state.editPostMode,
       };
     case "postChange":
-      return {
-        ...state,
-        postData: action.payload,
-      };
+      return { ...state, postData: action.payload };
     case "editedComment": {
       const updatedComments =
         action.payload &&
@@ -122,6 +119,7 @@ function SelectedPost() {
 
   const showDeleteModal = () =>
     dispatch({ type: "deleteModal", payload: true });
+
   const hideDeleteModal = () =>
     dispatch({ type: "deleteModal", payload: false });
 
@@ -136,11 +134,9 @@ function SelectedPost() {
 
   const postComment = () => {
     if (!isAuthenticated) {
-      // adding a piece of state, login component will know
+      // add state to history, login component will see
       // the user wants to post a comment and bring him back
-      return history.push("/autentificare", {
-        backToComment: postId,
-      });
+      return history.push("/autentificare", { backToComment: postId });
     }
     if (isAuthenticated && !state.commentInput) return ref.current.focus();
 
@@ -149,26 +145,18 @@ function SelectedPost() {
       "post",
       `/api/comments/${postId}/new`,
       { content: DOMPurify.sanitize(state.commentInput) },
-      {
-        headers: {
-          Authorization: `Bearer ${isAuthenticated}`,
-        },
-      }
+      { headers: { Authorization: `Bearer ${isAuthenticated}` } }
     );
   };
 
   const editComment = useCallback(
-    async (commentId, edited) => {
+    (commentId, edited) => {
       dispatch({ type: "apiCall", payload: true });
-      await makeReq(
+      makeReq(
         "patch",
         `/api/comments/${commentId}`,
         { content: DOMPurify.sanitize(edited) },
-        {
-          headers: {
-            Authorization: `Bearer ${isAuthenticated}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${isAuthenticated}` } }
       );
     },
     [isAuthenticated, makeReq]
@@ -178,13 +166,9 @@ function SelectedPost() {
     async (commentId) => {
       dispatch({ type: "apiCall", payload: true });
       await makeReq("delete", `/api/comments/${commentId}`, {
-        headers: {
-          Authorization: `Bearer ${isAuthenticated}`,
-        },
+        headers: { Authorization: `Bearer ${isAuthenticated}` },
       });
-      if (!err) {
-        dispatch({ type: "deleteComment", payload: commentId });
-      }
+      if (!err) dispatch({ type: "deleteComment", payload: commentId });
     },
     [isAuthenticated, makeReq, err]
   );
@@ -202,11 +186,23 @@ function SelectedPost() {
     }
   };
 
-  const handlePostChange = (content) => {
+  const handlePostChange = (content) =>
     dispatch({ type: "postChange", payload: content });
-  };
 
   const handleXBtn = () => history.goBack();
+
+  const showBackdrop =
+    Boolean(err && err.status) ||
+    state.editCommentMode ||
+    state.deleteModal ||
+    (state.isLoading && !state.postData);
+
+  const showLoading =
+    !Boolean(err?.status) && state.isLoading && !state.postData;
+
+  const showErrorMessage = err?.data?.errorMessage
+    ? err.data.errorMessage
+    : "A intervenit o eroare. Te rog să încerci mai târziu.";
 
   const updateComments = useCallback(() => {
     return (
@@ -221,13 +217,12 @@ function SelectedPost() {
       ))
     );
   }, [deleteComment, editComment, state.commentsData]);
-
   // get post data when component mounts
   useEffect(() => {
     dispatch({ type: "apiCall", payload: true });
     makeReq("get", `/api/posts/${postId}`);
   }, [makeReq, postId]);
-
+  // watch for incoming data and refresh UI
   useEffect(() => {
     if (data?.post) {
       dispatch({
@@ -237,8 +232,7 @@ function SelectedPost() {
           comments: [...data.post.comments],
         },
       });
-      if (history.location.state && history.location.state.focusOnComment)
-        ref.current.focus();
+      if (history?.location?.state?.focusOnComment) ref.current.focus();
     }
     if (data?.comment) {
       dispatch({ type: "newComment", payload: data.comment });
@@ -247,8 +241,7 @@ function SelectedPost() {
       dispatch({ type: "editedComment", payload: data.updatedComment });
     }
   }, [data, err, history.location]);
-
-  // cancel request if active on componentWillUnmount
+  // cancel request if active and component dismounts
   useEffect(() => {
     return () => {
       cancelReq &&
@@ -258,31 +251,18 @@ function SelectedPost() {
 
   return (
     <main className={selectedContainer}>
-      {!Boolean(err && err.status) && state.isLoading && !state.postData && (
-        <Loading styles={{ top: "45vh" }} />
-      )}
+      {showLoading && <Loading styles={{ top: "45vh" }} />}
       <Modal show={Boolean(err && err.status)}>
         <XBtn onClick={handleXBtn} />
         <hr />
-        {err && err.data.errorMessage
-          ? err.data.errorMessage
-          : "A intervenit o eroare. Te rog să încerci mai târziu."}
+        {showErrorMessage}
       </Modal>
-      <Backdrop
-        show={
-          Boolean(err && err.status) ||
-          state.editCommentMode ||
-          state.deleteModal ||
-          (state.isLoading && !state.postData)
-        }
-        onClick={hideDeleteModal}
-      />
+      <Backdrop show={showBackdrop} onClick={hideDeleteModal} />
       {/* Modal to confirm post delete */}
       <Modal show={state.deleteModal} className={deleteModal}>
         <header>
           <h3>Te rog confirmă ștergerea permanentă a articolului.</h3>
         </header>
-        <hr />
         <main>
           <button className={deleteBtn} onClick={deleteArticle}>
             Șterge
@@ -292,11 +272,14 @@ function SelectedPost() {
           </button>
         </main>
       </Modal>
-
       <section className={btnSection}>
         {isAdmin && (
           <React.Fragment>
-            <button className={editBtn} onClick={handlePostEdit}>
+            <button
+              disabled={state.isLoading}
+              className={editBtn}
+              onClick={handlePostEdit}
+            >
               {!state.editPostMode
                 ? "Editează Articolul"
                 : "Salvează articolul"}
@@ -310,7 +293,6 @@ function SelectedPost() {
           &lt;&lt; Mergi Înapoi
         </button>
       </section>
-
       <section className={editorContainer}>
         <PostEditor
           handleChange={handlePostChange}
@@ -329,7 +311,11 @@ function SelectedPost() {
         )}
       </section>
       <section className={commentContainer}>
-        <button className={sendCommentBtn} onClick={postComment}>
+        <button
+          disabled={state.isLoading}
+          className={sendCommentBtn}
+          onClick={postComment}
+        >
           {isAuthenticated ? "Adaugă Comentariu" : "Logează-te pentru a posta"}
         </button>
         <Comment

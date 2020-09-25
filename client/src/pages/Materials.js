@@ -17,7 +17,7 @@ function Materials() {
           intervenție
         </h1>
         <p>
-          Accesați fiecare rubrică pentru a vedea detaliat informațiile
+          Puteți accesa fiecare rubrică pentru a vedea detaliat articolele
           corespunzătoare.
         </p>
       </section>

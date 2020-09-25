@@ -54,9 +54,10 @@
     padding: 3%;
     color: rgb(255, 172, 172);
     text-align: center;
-    text-shadow: 1px 1px $shadowColor, -1px -1px $shadowColor,
-      -1px 1px $shadowColor, 1px -1px $shadowColor;
+    text-shadow: 0 0 2px $shadowColor, 0 0 2px $shadowColor,
+      0 0 2px $shadowColor, 0 0 2px $shadowColor;
     letter-spacing: 0.1rem;
+    border-bottom: 1px solid black;
   }
   main {
     display: flex;
