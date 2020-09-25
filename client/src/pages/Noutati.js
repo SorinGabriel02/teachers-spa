@@ -1,5 +1,5 @@
 import React, { useReducer, useEffect, useContext, useRef } from "react";
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink, useHistory, useParams } from "react-router-dom";
 import SunEditor from "suneditor-react";
 
 import { AppContext } from "../context/appContext";
@@ -34,6 +34,7 @@ function postsReducer(state, action) {
 function Noutati() {
   const ref = useRef(null);
   const history = useHistory();
+  const { pageName } = useParams();
   const { isAdmin } = useContext(AppContext);
   const [state, dispatch] = useReducer(postsReducer, initialState);
   const [posts, err, makeReq, cancelReq] = useHttpReq();
@@ -57,7 +58,7 @@ function Noutati() {
         <section key={post.id} className={editContainer}>
           <NavLink
             style={{ textDecoration: "none" }}
-            to={`/noutati/${post.id}`}
+            to={`/noutati/${pageName}/${post.id}`}
           >
             <SunEditor
               ref={ref}
@@ -79,8 +80,8 @@ function Noutati() {
   // get post on page load
   useEffect(() => {
     dispatch({ type: "isLoading", payload: true });
-    makeReq("get", "/api/posts");
-  }, [makeReq]);
+    makeReq("get", `/api/posts/page/${pageName}`);
+  }, [makeReq, pageName]);
 
   // when a response arrives isLoading = false
   useEffect(() => {
@@ -110,7 +111,7 @@ function Noutati() {
         <h1>Eroare de server. Te rog să încerci mai târziu.</h1>
       </Modal>
       {isAdmin && posts && (
-        <NavLink to="/postNou">
+        <NavLink to={`/${pageName}/postNou`}>
           <button className={publishBtn}>Publică articol</button>
         </NavLink>
       )}

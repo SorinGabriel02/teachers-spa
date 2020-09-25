@@ -8,7 +8,6 @@ import Welcome from "./pages/Welcome";
 import Legislatie from "./pages/Legislatie";
 import Documents from "./pages/Documents";
 import Materials from "./pages/Materials";
-import SelectedMaterial from "./pages/SelectedMaterial";
 import Noutati from "./pages/Noutati";
 import Login from "./pages/Login";
 import NewPost from "./pages/NewPost";
@@ -38,19 +37,22 @@ function App() {
         <Route exact path="/materiale">
           <Materials />
         </Route>
-        <Route path="/materiale/:pageName">
-          <SelectedMaterial />
-        </Route>
-        <Route exact path="/noutati">
+        <Route exact path="/materiale/:pageName">
           <Noutati />
         </Route>
-        <Route path="/noutati/:postId">
+        <Route path="/materiale/:pageName/:postId">
+          <SelectedPost />
+        </Route>
+        <Route exact path="/noutati/:pageName">
+          <Noutati />
+        </Route>
+        <Route exact path="/noutati/:pageName/:postId">
           <SelectedPost />
         </Route>
         <Route path="/autentificare">
           {!isAuthenticated ? <Login /> : <Redirect to="/" />}
         </Route>
-        <Route path="/postNou">
+        <Route path="/:pageName/postNou">
           {isAuthenticated && isAdmin ? <NewPost /> : <Redirect to="/" />}
         </Route>
         <Redirect to="/" />

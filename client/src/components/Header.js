@@ -97,7 +97,7 @@ function Header() {
             <NavLink
               onClick={() => setActive(false)}
               activeClassName={activeLink}
-              to="/noutati"
+              to="/noutati/news"
             >
               Noutăți
             </NavLink>

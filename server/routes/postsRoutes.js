@@ -6,7 +6,7 @@ const { body } = require("express-validator");
 const {
   getPosts,
   getPostById,
-  getPostByPage,
+  getPostsByPage,
   createPost,
   updatePost,
   deletePost,
@@ -23,14 +23,12 @@ const requireAdmin = (req, res, next) => {
   });
 };
 
-router.get("/", getPosts);
-
 router.get("/:postId", getPostById);
 
-router.get("/page/:pageName", getPostByPage);
+router.get("/page/:pageName", getPostsByPage);
 
 router.post(
-  "/new",
+  "/:pageName/new",
   [body("content").isString().notEmpty()],
   requireAuth,
   requireAdmin,

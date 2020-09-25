@@ -3,13 +3,11 @@ const mongoose = require("mongoose");
 const User = require("../models/userModel");
 const Post = require("../models/postModel");
 const Comment = require("../models/commentModel");
-const { compareSync } = require("bcrypt");
 
-const getPosts = async (req, res, next) => {
+const getPostsByPage = async (req, res) => {
+  const { pageName } = req.params;
   try {
-    // get all posts except one
-    // this one is used for "Materiale Suport" page exclusively
-    const posts = await Post.find({ forPage: "news" });
+    const posts = await Post.find({ forPage: pageName });
     const mappedPosts = posts.map((post) => ({
       id: post._id,
       content: post.content,
@@ -42,25 +40,19 @@ const getPostById = async (req, res, next) => {
   }
 };
 
-const getPostByPage = async (req, res) => {
-  const { pageName } = req.params;
-  try {
-    const post = await Post.findOne({ forPage: pageName });
-    res.json({ post: post.toObject({ getters: true }) });
-  } catch (error) {
-    res.status(500).json({
-      errorMessage: "A intervenit o eroare. Te rog să încerci mai târziu.",
-    });
-  }
-};
-
 const createPost = async (req, res, next) => {
   // user is authenticated, admin and passed on by passport
   const user = req.user;
+  const { pageName } = req.params;
   try {
     const { content } = req.body;
 
-    const newPost = new Post({ content, author: req.user.id, comments: [] });
+    const newPost = new Post({
+      content,
+      author: req.user.id,
+      comments: [],
+      forPage: pageName,
+    });
     // save post and add it's id as reference to it's creator
     const session = await mongoose.startSession();
     session.startTransaction();
@@ -80,8 +72,23 @@ const updatePost = async (req, res, next) => {
   try {
     const { postId } = req.params;
     const { content } = req.body;
-    const updated = await Post.findOneAndUpdate({ _id: postId }, { content });
-    res.json({ message: "Success" });
+    const updated = await Post.findOneAndUpdate(
+      { _id: postId },
+      { content }
+    ).populate({
+      path: "comments",
+      populate: {
+        path: "author",
+        select: { _id: 1, username: 1 },
+      },
+    });
+    // send back refreshed comments
+    const comments = updated.comments.map((comment) =>
+      comment.toObject({ getters: true })
+    );
+    res.json({
+      post: { id: updated._id, content, comments },
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -153,9 +160,8 @@ const deletePost = async (req, res, next) => {
 };
 
 module.exports = {
-  getPosts,
   getPostById,
-  getPostByPage,
+  getPostsByPage,
   createPost,
   updatePost,
   deletePost,
