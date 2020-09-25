@@ -9,10 +9,3 @@
     cursor: not-allowed;
   }
 }
-
-.modalClose {
-  @extend .sharedBtn;
-  padding: 0.5vmax;
-  border-radius: 50%;
-  font-size: 0.8rem;
-}

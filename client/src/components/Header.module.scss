@@ -107,18 +107,29 @@
 }
 
 @media only screen and (max-width: 750px) {
+  .mainHeader {
+    z-index: 6;
+  }
   .hamburger {
     display: flex;
   }
+  .logoLink {
+    position: absolute;
+    top: 0;
+    left: 1vh;
+    z-index: 7;
+  }
   .navBar {
     height: 100vh;
-    width: max-content;
+    width: 100%;
     background-color: $headerBackground;
     transform: translateX(100%);
     ul {
       flex-direction: column;
-      justify-content: space-around;
-      margin: 3vmax 3vmax;
+      justify-content: center;
+    }
+    a {
+      margin-bottom: 20%;
     }
   }
   .activeNav {

@@ -17,17 +17,7 @@ function Materials() {
           intervenție
         </h1>
         <p>
-          Materialele pot fi folosite drept suport în antrenarea unor capacități
-          latente și conectarea noilor cunoștințe pe baza cunoștințelor ancoră,
-          exercițiile constante ducând la automatizarea deprinderilor de lucru:
-          desprinderi de scris- citit, calcul și formarea psihomotricității.
-          Exercițiile de dezvoltare personală vor conduce la o mai bună
-          conștientizare a emoțiilor personale, identificarea, discriminarea și
-          gestionarea acestora, promovând o bună evoluție inter și
-          intra-personală.
-        </p>
-        <p>
-          Accesați fiecare rubrică pentru a vedea detaliat informațiile
+          Puteți accesa fiecare rubrică pentru a vedea detaliat articolele
           corespunzătoare.
         </p>
       </section>
@@ -88,6 +78,18 @@ function Materials() {
             </li>
           </ul>
         </article>
+      </section>
+      <section className={headerSection}>
+        <p>
+          Materialele pot fi folosite drept suport în antrenarea unor capacități
+          latente și conectarea noilor cunoștințe pe baza cunoștințelor ancoră,
+          exercițiile constante ducând la automatizarea deprinderilor de lucru:
+          desprinderi de scris- citit, calcul și formarea psihomotricității.
+          Exercițiile de dezvoltare personală vor conduce la o mai bună
+          conștientizare a emoțiilor personale, identificarea, discriminarea și
+          gestionarea acestora, promovând o bună evoluție inter și
+          intra-personală.
+        </p>
       </section>
     </main>
   );

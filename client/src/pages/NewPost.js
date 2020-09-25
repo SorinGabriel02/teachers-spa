@@ -1,14 +1,15 @@
 import React, { useReducer, useContext, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import { AppContext } from "../context/appContext";
 import PostEditor from "../components/PostEditor";
 import Loading from "../components/Loading";
 import Backdrop from "../components/Backdrop";
 import Modal from "../components/Modal";
+import XBtn from "../components/XBtn";
 import useHttpReq from "../hooks/useHttpReq";
 
-import { publish, modalClose } from "./NewPost.module.scss";
+import { publish } from "./NewPost.module.scss";
 
 const initialState = {
   isLoading: false,
@@ -43,8 +44,9 @@ function newPostReducer(state, action) {
   }
 }
 
-function NewPost(props) {
+function NewPost() {
   const history = useHistory();
+  const { pageName } = useParams();
   const { isAuthenticated } = useContext(AppContext);
   const [postData, err, makeReq, cancelReq] = useHttpReq();
   const [state, dispatch] = useReducer(newPostReducer, initialState);
@@ -57,7 +59,7 @@ function NewPost(props) {
     dispatch({ type: "publish" });
     await makeReq(
       "post",
-      "/api/posts/new",
+      `/api/posts/${pageName}/new`,
       { content: state.editorState },
       { headers: { Authorization: `Bearer ${isAuthenticated}` } }
     );
@@ -67,7 +69,7 @@ function NewPost(props) {
   const hideError = () => dispatch({ type: "showError", payload: false });
 
   useEffect(() => {
-    if (postData) history.push("/noutati");
+    if (postData) history.goBack();
     if (err) dispatch({ type: "showError", payload: true });
     return () => {
       if (cancelReq)
@@ -89,9 +91,7 @@ function NewPost(props) {
     <main>
       <Backdrop show={state.showError} onClick={hideError} />
       <Modal show={state.showError}>
-        <button className={modalClose} onClick={hideError}>
-          X
-        </button>
+        <XBtn onClick={() => history.goBack()} />
         <hr />
         <h2>
           {err && err.status === 401

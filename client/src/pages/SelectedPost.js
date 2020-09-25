@@ -44,7 +44,7 @@ const initialState = {
 function postReducer(state, action) {
   switch (action.type) {
     case "apiCall":
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: action.payload };
     case "dataRetrieved":
       return {
         ...state,
@@ -75,12 +75,8 @@ function postReducer(state, action) {
         editPostMode: !state.editPostMode,
       };
     case "postChange":
-      return {
-        ...state,
-        postData: action.payload,
-      };
+      return { ...state, postData: action.payload };
     case "editedComment": {
-      console.log(action.payload);
       const updatedComments =
         action.payload &&
         state.commentsData.map((comm) => {
@@ -113,7 +109,6 @@ function postReducer(state, action) {
 function SelectedPost() {
   const { postId } = useParams();
   const history = useHistory();
-
   const ref = useRef();
   const { isAuthenticated, isAdmin } = useContext(AppContext);
   const [state, dispatch] = useReducer(postReducer, initialState);
@@ -122,58 +117,46 @@ function SelectedPost() {
   const handleComment = (value) =>
     dispatch({ type: "commentInput", payload: value });
 
-  const showDeleteModal = useCallback(
-    () => dispatch({ type: "deleteModal", payload: true }),
-    []
-  );
-  const hideDeleteModal = useCallback(
-    () => dispatch({ type: "deleteModal", payload: false }),
-    []
-  );
+  const showDeleteModal = () =>
+    dispatch({ type: "deleteModal", payload: true });
+
+  const hideDeleteModal = () =>
+    dispatch({ type: "deleteModal", payload: false });
+
   const deleteArticle = async () => {
     hideDeleteModal();
-    dispatch({ type: "apiCall" });
+    dispatch({ type: "apiCall", payload: true });
     await makeReq("delete", `/api/posts/delete/${postId}`, {
       headers: { Authorization: `Bearer ${isAuthenticated}` },
     });
-    history.push("/noutati");
+    history.goBack();
   };
 
   const postComment = () => {
     if (!isAuthenticated) {
-      // adding a piece of state, login component will know
+      // add state to history, login component will see
       // the user wants to post a comment and bring him back
-      return history.push("/autentificare", {
-        backToComment: postId,
-      });
+      return history.push("/autentificare", { backToComment: postId });
     }
     if (isAuthenticated && !state.commentInput) return ref.current.focus();
 
-    dispatch({ type: "apiCall" });
+    dispatch({ type: "apiCall", payload: true });
     makeReq(
       "post",
       `/api/comments/${postId}/new`,
       { content: DOMPurify.sanitize(state.commentInput) },
-      {
-        headers: {
-          Authorization: `Bearer ${isAuthenticated}`,
-        },
-      }
+      { headers: { Authorization: `Bearer ${isAuthenticated}` } }
     );
   };
 
   const editComment = useCallback(
-    async (commentId, edited) => {
-      dispatch({ type: "apiCall" });
-      await makeReq(
+    (commentId, edited) => {
+      dispatch({ type: "apiCall", payload: true });
+      makeReq(
         "patch",
         `/api/comments/${commentId}`,
         { content: DOMPurify.sanitize(edited) },
-        {
-          headers: {
-            Authorization: `Bearer ${isAuthenticated}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${isAuthenticated}` } }
       );
     },
     [isAuthenticated, makeReq]
@@ -181,15 +164,11 @@ function SelectedPost() {
 
   const deleteComment = useCallback(
     async (commentId) => {
-      dispatch({ type: "apiCall" });
+      dispatch({ type: "apiCall", payload: true });
       await makeReq("delete", `/api/comments/${commentId}`, {
-        headers: {
-          Authorization: `Bearer ${isAuthenticated}`,
-        },
+        headers: { Authorization: `Bearer ${isAuthenticated}` },
       });
-      if (!err) {
-        dispatch({ type: "deleteComment", payload: commentId });
-      }
+      if (!err) dispatch({ type: "deleteComment", payload: commentId });
     },
     [isAuthenticated, makeReq, err]
   );
@@ -197,7 +176,7 @@ function SelectedPost() {
   const handlePostEdit = () => {
     dispatch({ type: "editPostMode" });
     if (state.editPostMode) {
-      dispatch({ type: "apiRequest" });
+      dispatch({ type: "apiCall", payload: true });
       makeReq(
         "patch",
         `/api/posts/update/${postId}`,
@@ -207,18 +186,27 @@ function SelectedPost() {
     }
   };
 
-  const handlePostChange = (content) => {
+  const handlePostChange = (content) =>
     dispatch({ type: "postChange", payload: content });
-  };
 
-  const handleXBtn = () => {
-    history.push("/noutati");
-  };
+  const handleXBtn = () => history.goBack();
+
+  const showBackdrop =
+    Boolean(err && err.status) ||
+    state.editCommentMode ||
+    state.deleteModal ||
+    (state.isLoading && !state.postData);
+
+  const showLoading =
+    !Boolean(err?.status) && state.isLoading && !state.postData;
+
+  const showErrorMessage = err?.data?.errorMessage
+    ? err.data.errorMessage
+    : "A intervenit o eroare. Te rog să încerci mai târziu.";
 
   const updateComments = useCallback(() => {
     return (
-      state.commentsData &&
-      state.commentsData.length &&
+      state?.commentsData?.length &&
       state.commentsData.map((comment) => (
         <PostedComment
           key={comment.id}
@@ -229,15 +217,14 @@ function SelectedPost() {
       ))
     );
   }, [deleteComment, editComment, state.commentsData]);
-
   // get post data when component mounts
   useEffect(() => {
-    dispatch({ type: "apiCall" });
+    dispatch({ type: "apiCall", payload: true });
     makeReq("get", `/api/posts/${postId}`);
   }, [makeReq, postId]);
-
+  // watch for incoming data and refresh UI
   useEffect(() => {
-    if (data && data.post) {
+    if (data?.post) {
       dispatch({
         type: "dataRetrieved",
         payload: {
@@ -245,18 +232,16 @@ function SelectedPost() {
           comments: [...data.post.comments],
         },
       });
-      if (history.location.state && history.location.state.focusOnComment)
-        ref.current.focus();
+      if (history?.location?.state?.focusOnComment) ref.current.focus();
     }
-    if (data && data.comment) {
+    if (data?.comment) {
       dispatch({ type: "newComment", payload: data.comment });
     }
-    if (data && data.updatedComment) {
+    if (data?.updatedComment) {
       dispatch({ type: "editedComment", payload: data.updatedComment });
     }
   }, [data, err, history.location]);
-
-  // cancel request if active on componentWillUnmount
+  // cancel request if active and component dismounts
   useEffect(() => {
     return () => {
       cancelReq &&
@@ -266,31 +251,18 @@ function SelectedPost() {
 
   return (
     <main className={selectedContainer}>
-      {!Boolean(err && err.status) && state.isLoading && !state.postData && (
-        <Loading styles={{ top: "45vh" }} />
-      )}
+      {showLoading && <Loading styles={{ top: "45vh" }} />}
       <Modal show={Boolean(err && err.status)}>
         <XBtn onClick={handleXBtn} />
         <hr />
-        {err && err.data.errorMessage
-          ? err.data.errorMessage
-          : "A intervenit o eroare. Te rog să încerci mai târziu."}
+        {showErrorMessage}
       </Modal>
-      <Backdrop
-        show={
-          Boolean(err && err.status) ||
-          state.editCommentMode ||
-          state.deleteModal ||
-          (state.isLoading && !state.postData)
-        }
-        onClick={hideDeleteModal}
-      />
+      <Backdrop show={showBackdrop} onClick={hideDeleteModal} />
       {/* Modal to confirm post delete */}
       <Modal show={state.deleteModal} className={deleteModal}>
         <header>
           <h3>Te rog confirmă ștergerea permanentă a articolului.</h3>
         </header>
-        <hr />
         <main>
           <button className={deleteBtn} onClick={deleteArticle}>
             Șterge
@@ -300,16 +272,27 @@ function SelectedPost() {
           </button>
         </main>
       </Modal>
-      {isAdmin && (
-        <section className={btnSection}>
-          <button className={editBtn} onClick={handlePostEdit}>
-            {!state.editPostMode ? "Editează Articolul" : "Salvează articolul"}
-          </button>
-          <button className={deleteBtn} onClick={showDeleteModal}>
-            Șterge Articolul
-          </button>
-        </section>
-      )}
+      <section className={btnSection}>
+        {isAdmin && (
+          <React.Fragment>
+            <button
+              disabled={state.isLoading}
+              className={editBtn}
+              onClick={handlePostEdit}
+            >
+              {!state.editPostMode
+                ? "Editează Articolul"
+                : "Salvează articolul"}
+            </button>
+            <button className={deleteBtn} onClick={showDeleteModal}>
+              Șterge Articolul
+            </button>
+          </React.Fragment>
+        )}
+        <button onClick={handleXBtn} className={editBtn}>
+          &lt;&lt; Mergi Înapoi
+        </button>
+      </section>
       <section className={editorContainer}>
         <PostEditor
           handleChange={handlePostChange}
@@ -328,7 +311,11 @@ function SelectedPost() {
         )}
       </section>
       <section className={commentContainer}>
-        <button className={sendCommentBtn} onClick={postComment}>
+        <button
+          disabled={state.isLoading}
+          className={sendCommentBtn}
+          onClick={postComment}
+        >
           {isAuthenticated ? "Adaugă Comentariu" : "Logează-te pentru a posta"}
         </button>
         <Comment
