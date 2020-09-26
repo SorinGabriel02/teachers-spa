@@ -19,6 +19,12 @@ body {
   width: 100%;
 }
 
+img {
+  display: block;
+  width: auto;
+  height: auto;
+}
+
 .errorMessage {
   color: rgb(252, 49, 49);
   box-shadow: 0 0 3px white;
