@@ -118,6 +118,11 @@ function Noutati() {
         <XBtn onClick={handleClick} />
         <h1>Eroare de server. Te rog să încerci mai târziu.</h1>
       </Modal>
+      {isAdmin && posts && (
+        <NavLink to={`/${pageName}/postNou`}>
+          <button className={publishBtn}>Publică articol</button>
+        </NavLink>
+      )}
       {state.noPosts ? (
         <h1 className={notFound}>Această pagină va fi actualizată în curând</h1>
       ) : (
@@ -125,11 +130,6 @@ function Noutati() {
           <header className={headerContainer}>
             <h1>{chooseHeader(pageName)}</h1>
             <h4>Accesează pentru a vedea fiecare articol în detaliu</h4>
-            {isAdmin && posts && (
-              <NavLink to={`/${pageName}/postNou`}>
-                <button className={publishBtn}>Publică articol</button>
-              </NavLink>
-            )}
           </header>
           <section className={postsSection}>{postsList}</section>
         </React.Fragment>
