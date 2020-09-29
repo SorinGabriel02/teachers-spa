@@ -3,6 +3,8 @@ const Post = require("../models/postModel");
 const Comment = require("../models/commentModel");
 const { validationResult } = require("express-validator");
 
+const { transporter, mailOptions } = require("../services/nodemailer");
+
 const newComment = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty())
@@ -46,6 +48,21 @@ const newComment = async (req, res, next) => {
     await user.save({ session });
 
     await session.commitTransaction();
+    // let the admins know a new comment has been posted
+    transporter.sendMail(
+      {
+        ...mailOptions,
+        subject: "profesoridesprijin comentariu nou",
+        text: `Un nou comentariu tocmai a fost creat. 
+        Numele autorului: ${user.username}
+        Comentariul: ${content}
+        Adresa postului: ${process.env.FRONTEND_BASE_URL}/noutati/${post.forPage}/${post._id}`,
+      },
+      (err) => {
+        if (err) console.log(err);
+      }
+    );
+
     // send back new comment with an extra "id" prop = to "_id"
     res.status(201).json({ comment: newComment.toObject({ getters: true }) });
   } catch (error) {
