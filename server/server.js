@@ -18,7 +18,7 @@ app.use(helmet());
 app.use(helmet.hidePoweredBy({ setTo: "PHP 7.4.8" }));
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+    origin: process.env.FRONTEND_BASE_URL,
     credentials: true,
   })
 );

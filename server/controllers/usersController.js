@@ -3,6 +3,8 @@ const User = require("../models/userModel");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
+const { transporter, mailOptions } = require("../services/nodemailer");
+
 // expiry time in 15min token should be refreshed by a frontend call
 const tokenForUser = (userId) =>
   jwt.sign({ sub: userId }, process.env.JWT_SECRET, { expiresIn: "15m" });
@@ -80,6 +82,18 @@ const signup = async (req, res, next) => {
     const savedUser = await newUser.save();
     // send back a token and a refresh token as cookie
     refreshTokenAsCookie(savedUser.id, savedUser.admin, res);
+    // send info email to admins -> new account
+    transporter.sendMail(
+      {
+        ...mailOptions,
+        subject: "profesoridesprijin cont nou",
+        text: `Un nou cont tocmai a fost creat. Nume: ${username}`,
+      },
+      (err) => {
+        if (err) console.log(err);
+      }
+    );
+
     res.status(201).json({ token: tokenForUser(savedUser.id) });
   } catch (error) {
     res.status(500).json({
