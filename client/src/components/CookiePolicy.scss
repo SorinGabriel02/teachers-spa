@@ -1,0 +1,45 @@
+@import "../styles/button";
+@import "../variables.scss";
+
+.policyContainer {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  bottom: 0;
+  left: 0;
+  padding: 2vh 1vw;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.8);
+  h5 {
+    padding: 3%;
+    color: white;
+    text-shadow: 0 0 1px;
+  }
+  button {
+    @extend .sharedBtn;
+    height: fit-content;
+    background-color: $greenBtn;
+    box-shadow: 0 0 2px;
+  }
+  button:hover {
+    box-shadow: 0 0 3px $headerBackground;
+  }
+  button:visited {
+    box-shadow: 0 0 1px white;
+  }
+}
+
+.policyContainer-enter {
+  opacity: 0;
+}
+.policyContainer-enter-active {
+  opacity: 1;
+  transition: opacity 250ms linear 1s;
+}
+.policyContainer-exit {
+  opacity: 1;
+}
+.policyContainer-exit-active {
+  opacity: 0;
+  transition: opacity 250ms;
+}

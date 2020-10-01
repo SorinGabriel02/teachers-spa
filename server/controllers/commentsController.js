@@ -56,7 +56,7 @@ const newComment = async (req, res, next) => {
         text: `Un nou comentariu tocmai a fost creat. 
         Numele autorului: ${user.username}
         Comentariul: ${content}
-        Adresa postului: ${process.env.FRONTEND_BASE_URL}/noutati/${post.forPage}/${post._id}`,
+        Adresa postului: ${process.env.FRONTEND_BASE_URL}/articol/${post.forPage}/${post._id}`,
       },
       (err) => {
         if (err) console.log(err);

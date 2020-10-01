@@ -1,5 +1,7 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+import { CSSTransition } from "react-transition-group";
+import ReactGA from "react-ga";
 
 import { AppContext } from "./context/appContext";
 import Header from "./components/Header";
@@ -13,11 +15,42 @@ import Login from "./pages/Login";
 import NewPost from "./pages/NewPost";
 import SelectedPost from "./pages/SelectedPost";
 import Loading from "./components/Loading";
+import CookiePolicy from "./components/CookiePolicy";
 
 import { app } from "./App.module.scss";
 
 function App() {
   const { isAuthenticated, isAdmin, appLoading } = useContext(AppContext);
+  const [cookiesOk, setCookiesOk] = useState(
+    Boolean(localStorage.getItem("cookiesOk"))
+  );
+
+  const handleAccept = useCallback(() => {
+    localStorage.setItem("cookiesOk", true);
+    setCookiesOk(true);
+    ReactGA.initialize("UA-179230022-1");
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
+
+  // accept cookie policy on scroll or exploring site
+  useEffect(() => {
+    const acceptedOnBrowse = (e) => {
+      if (e.target.nodeName === "A" || e.target.nodeName === "IMG") {
+        if (!cookiesOk) handleAccept();
+        window.removeEventListener("click", acceptedOnBrowse);
+      }
+    };
+
+    const acceptedOnScroll = () => {
+      if (!cookiesOk) handleAccept();
+      window.removeEventListener("scroll", acceptedOnScroll);
+    };
+
+    if (!cookiesOk) {
+      window.addEventListener("click", acceptedOnBrowse);
+      window.addEventListener("scroll", acceptedOnScroll);
+    }
+  }, [cookiesOk, handleAccept]);
 
   if (appLoading) return <Loading />;
 
@@ -40,14 +73,11 @@ function App() {
         <Route exact path="/materiale/:pageName">
           <Noutati />
         </Route>
-        <Route path="/materiale/:pageName/:postId">
+        <Route exact path="/articol/:pageName/:postId">
           <SelectedPost />
         </Route>
         <Route exact path="/noutati/:pageName">
           <Noutati />
-        </Route>
-        <Route exact path="/noutati/:pageName/:postId">
-          <SelectedPost />
         </Route>
         <Route path="/autentificare">
           {!isAuthenticated ? <Login /> : <Redirect to="/" />}
@@ -58,6 +88,15 @@ function App() {
         <Redirect to="/" />
       </Switch>
       <Footer />
+      <CSSTransition
+        classNames="policyContainer"
+        timeout={250}
+        mountOnEnter
+        unmountOnExit
+        in={!cookiesOk}
+      >
+        <CookiePolicy handleAccept={handleAccept} />
+      </CSSTransition>
     </div>
   );
 }

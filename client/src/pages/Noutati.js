@@ -67,7 +67,7 @@ function Noutati() {
         <article key={post.id} className={editorContainer}>
           <NavLink
             style={{ textDecoration: "none" }}
-            to={`/noutati/${pageName}/${post.id}`}
+            to={`/articol/${pageName}/${post.id}`}
           >
             <SunEditor
               ref={ref}
