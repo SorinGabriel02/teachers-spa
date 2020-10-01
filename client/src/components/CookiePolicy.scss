@@ -7,13 +7,17 @@
   align-items: center;
   bottom: 0;
   left: 0;
+  width: 100%;
   padding: 2vh 1vw;
   z-index: 100;
   background-color: rgba(0, 0, 0, 0.8);
+
   h5 {
     padding: 3%;
     color: white;
     text-shadow: 0 0 1px;
+    font-weight: 400;
+    font-size: 1rem;
   }
   button {
     @extend .sharedBtn;
@@ -34,12 +38,12 @@
 }
 .policyContainer-enter-active {
   opacity: 1;
-  transition: opacity 250ms linear 1s;
+  transition: opacity 450ms;
 }
 .policyContainer-exit {
   opacity: 1;
 }
 .policyContainer-exit-active {
   opacity: 0;
-  transition: opacity 250ms;
+  transition: opacity 450ms;
 }

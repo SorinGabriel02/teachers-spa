@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { CSSTransition } from "react-transition-group";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 import ReactGA from "react-ga";
+import { v4 as uuidv4 } from "uuid";
 
 import { AppContext } from "./context/appContext";
 import Header from "./components/Header";
@@ -57,6 +58,15 @@ function App() {
   return (
     <div className={app}>
       <Header />
+      <CSSTransition
+        classNames="policyContainer"
+        timeout={450}
+        mountOnEnter
+        unmountOnExit
+        in={!cookiesOk}
+      >
+        <CookiePolicy handleAccept={handleAccept} />
+      </CSSTransition>
       <Switch>
         <Route exact path="/">
           <Welcome />
@@ -88,15 +98,6 @@ function App() {
         <Redirect to="/" />
       </Switch>
       <Footer />
-      <CSSTransition
-        classNames="policyContainer"
-        timeout={250}
-        mountOnEnter
-        unmountOnExit
-        in={!cookiesOk}
-      >
-        <CookiePolicy handleAccept={handleAccept} />
-      </CSSTransition>
     </div>
   );
 }

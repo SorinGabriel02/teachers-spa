@@ -22,7 +22,8 @@
     "react-scripts": "^3.4.3",
     "react-transition-group": "^4.4.1",
     "reactjs-popup": "^2.0.3",
-    "suneditor-react": "^2.14.2"
+    "suneditor-react": "^2.14.2",
+    "uuid": "^8.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
