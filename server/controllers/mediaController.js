@@ -13,7 +13,7 @@ const s3 = new AWS.S3({
 // is the user admin ??
 const uploadImage = (req, res) => {
   // permitted myme types
-  const mymeTypes = ["image/png", "image/jpeg", "image/webp"];
+  const mymeTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
   const myme = req.file.mimetype;
 
   const fileToArray = req.file.originalname.split(".");
