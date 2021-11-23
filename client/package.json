@@ -10,7 +10,7 @@
     "axios": "^0.21.2",
     "babel-polyfill": "^6.26.0",
     "cli": "^1.0.1",
-    "dompurify": "^2.0.15",
+    "dompurify": "^2.0.17",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.21",
     "netlify": "^4.5.1",
