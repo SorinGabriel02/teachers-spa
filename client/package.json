@@ -12,7 +12,7 @@
     "cli": "^1.0.1",
     "dompurify": "^2.0.15",
     "jwt-decode": "^2.2.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "netlify": "^4.5.1",
     "netlify-cli": "^2.64.1",
     "react": "^16.13.1",
