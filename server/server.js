@@ -42,7 +42,7 @@ mongoose.connect(
     useCreateIndex: true,
     useFindAndModify: false,
   },
-  (err) => {
+  err => {
     if (err) return console.log(err);
     console.log("Successfully connected to the database.");
     app.listen(port, () => console.log(`Server listening on port ${port}`));
