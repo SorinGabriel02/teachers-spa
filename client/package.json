@@ -14,7 +14,7 @@
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.21",
     "netlify": "^4.5.1",
-    "netlify-cli": "^2.64.1",
+    "netlify-cli": "^12.12.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-ga": "^3.1.2",
