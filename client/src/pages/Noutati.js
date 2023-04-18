@@ -1,4 +1,10 @@
-import React, { useReducer, useEffect, useContext, useRef } from "react";
+import React, {
+  useReducer,
+  useEffect,
+  useContext,
+  useRef,
+  useState,
+} from "react";
 import { NavLink, useHistory, useParams } from "react-router-dom";
 import SunEditor from "suneditor-react";
 
@@ -31,7 +37,9 @@ function postsReducer(state, action) {
   }
 }
 
-function Noutati() {
+function Noutati(params) {
+  console.log("params::", params);
+
   const ref = useRef(null);
   const history = useHistory();
   const { pageName } = useParams();
@@ -41,7 +49,8 @@ function Noutati() {
   const [chooseHeader] = useHeader();
 
   const setOptionsObj = {
-    height: "65.5vh",
+    height: "80%",
+    width: "90%",
     mode: "balloon",
     resizingBar: false,
   };
@@ -62,13 +71,13 @@ function Noutati() {
             to={`/articol/${pageName}/${post.id}`}
           >
             <SunEditor
-              ref={ref}
-              showToolbar={false}
+              forwardRef={ref}
+              hideToolbar={true}
               enableToolbar={false}
               setContents={post.content}
               disable={true}
               setDefaultStyle={
-                "background-color: rgb(240, 240, 230); overflow-x: hidden; overflow-y: hidden;"
+                "background-color: rgb(240, 240, 230); overflow-x: hidden; overflow-y: hidden; max-width: 100%; border: 0;"
               }
               setOptions={setOptionsObj}
             />

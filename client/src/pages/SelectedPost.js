@@ -282,7 +282,7 @@ function SelectedPost() {
           &lt;&lt; Pagina Anterioară
         </button>
       </section>
-      <section className={"editorContainer"}>
+      <section className={"editorContainer singlePost"}>
         <PostEditor
           handleChange={handlePostChange}
           editorContent={state.postData}

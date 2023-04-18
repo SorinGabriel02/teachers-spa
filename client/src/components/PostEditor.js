@@ -65,7 +65,7 @@ function PostEditor(props) {
       <SunEditor
         token={props.token}
         disable={props.disable}
-        showToolbar={!props.disable}
+        hideToolbar={props.disable}
         setDefaultStyle={props.setDefaultStyle}
         setContents={props.editorContent}
         setOptions={options}

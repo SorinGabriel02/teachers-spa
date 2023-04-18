@@ -1,7 +1,7 @@
-@import "../variables.scss";
-@import "../styles/button";
-@import "../styles/card";
-@import "../styles/label";
+@import "./variables.scss";
+@import "./button.scss";
+@import "./card.scss";
+@import "./label.scss";
 
 .selectedContainer {
   display: flex;

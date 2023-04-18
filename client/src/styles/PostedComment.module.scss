@@ -1,15 +1,6 @@
-@import "../variables.scss";
-@import "../styles/button";
+@import "./variables.scss";
+@import "./button";
 
-.editBtn {
-  @extend .sharedBtn;
-  background-color: $greenBtn;
-}
-
-.deleteBtn {
-  @extend .sharedBtn;
-  background-color: $redBtn;
-}
 .singleComment {
   display: flex;
   justify-content: space-between;
@@ -26,6 +17,17 @@
   padding-left: 1vmax;
   &:hover {
     opacity: 1;
+  }
+  .editBtn {
+    @extend .sharedBtn;
+    background-color: $greenBtn;
+    font-size: 14px;
+  }
+  
+  .deleteBtn {
+    @extend .sharedBtn;
+    background-color: $redBtn;
+    font-size: 14px;
   }
 }
 
