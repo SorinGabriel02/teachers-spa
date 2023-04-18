@@ -1,7 +1,5 @@
 import React from "react";
 
-import "./CookiePolicy.scss";
-
 function CookiePolicy({ handleAccept }) {
   return (
     <section className="policyContainer">

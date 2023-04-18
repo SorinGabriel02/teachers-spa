@@ -1,11 +1,10 @@
-@import "../variables.scss";
+@import "./variables.scss";
 
 .editContainer {
   width: 100%;
-  min-width: 90%;
+  min-width: 20%;
   min-height: fit-content;
   height: fit-content;
-  margin: 1vmax auto;
   padding: 1vmax;
   box-shadow: $boxShadow;
   background-color: whitesmoke;

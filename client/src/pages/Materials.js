@@ -1,17 +1,10 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import {
-  materials,
-  headerSection,
-  linksContainer,
-  cycle,
-} from "./Materials.module.scss";
-
 function Materials() {
   return (
-    <main className={materials}>
-      <section className={headerSection}>
+    <main className={"materials"}>
+      <section className={"headerSection"}>
         <h1>
           Această pagină conține fișe de lucru clasificate pe domenii de
           intervenție
@@ -21,8 +14,8 @@ function Materials() {
           corespunzătoare.
         </p>
       </section>
-      <section className={linksContainer}>
-        <article className={cycle}>
+      <section className={"linksContainer"}>
+        <article className={"cycle"}>
           <h2>Ciclul Primar</h2>
           <ul>
             <li>
@@ -50,7 +43,7 @@ function Materials() {
             </li>
           </ul>
         </article>
-        <article className={cycle}>
+        <article className={"cycle"}>
           <h2>Ciclul Gimnazial</h2>
           <ul>
             <li>
@@ -79,7 +72,7 @@ function Materials() {
           </ul>
         </article>
       </section>
-      <section className={headerSection}>
+      <section className={"headerSection"}>
         <p>
           Materialele pot fi folosite drept suport în antrenarea unor capacități
           latente și conectarea noilor cunoștințe pe baza cunoștințelor ancoră,

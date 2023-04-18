@@ -19,17 +19,6 @@ import Modal from "../components/Modal";
 import XBtn from "../components/XBtn";
 
 import "suneditor/dist/css/suneditor.min.css";
-import {
-  selectedContainer,
-  btnSection,
-  sendCommentBtn,
-  editBtn,
-  deleteBtn,
-  commentsSection,
-  commentContainer,
-  editorContainer,
-  deleteModal,
-} from "./SelectedPost.module.scss";
 
 const initialState = {
   isLoading: true,
@@ -79,7 +68,7 @@ function postReducer(state, action) {
     case "editedComment": {
       const updatedComments =
         action.payload &&
-        state.commentsData.map((comm) => {
+        state.commentsData.map(comm => {
           if (comm.id === action.payload.id) {
             comm.content = action.payload.content;
           }
@@ -93,7 +82,7 @@ function postReducer(state, action) {
     }
     case "deleteComment": {
       const filteredComments = state.commentsData.filter(
-        (comm) => comm.id !== action.payload
+        comm => comm.id !== action.payload
       );
       return {
         ...state,
@@ -114,7 +103,7 @@ function SelectedPost() {
   const [state, dispatch] = useReducer(postReducer, initialState);
   const [data, err, makeReq, cancelReq] = useHttpReq();
 
-  const handleComment = (value) =>
+  const handleComment = value =>
     dispatch({ type: "commentInput", payload: value });
 
   const showDeleteModal = () =>
@@ -163,7 +152,7 @@ function SelectedPost() {
   );
 
   const deleteComment = useCallback(
-    async (commentId) => {
+    async commentId => {
       dispatch({ type: "apiCall", payload: true });
       await makeReq("delete", `/api/comments/${commentId}`, {
         headers: { Authorization: `Bearer ${isAuthenticated}` },
@@ -186,7 +175,7 @@ function SelectedPost() {
     }
   };
 
-  const handlePostChange = (content) =>
+  const handlePostChange = content =>
     dispatch({ type: "postChange", payload: content });
 
   const handleXBtn = () => history.goBack();
@@ -207,7 +196,7 @@ function SelectedPost() {
   const updateComments = useCallback(() => {
     return (
       state?.commentsData?.length &&
-      state.commentsData.map((comment) => (
+      state.commentsData.map(comment => (
         <PostedComment
           key={comment.id}
           comment={comment}
@@ -250,7 +239,7 @@ function SelectedPost() {
   }, [cancelReq]);
 
   return (
-    <main className={selectedContainer}>
+    <main className={"selectedContainer"}>
       {showLoading && <Loading styles={{ top: "45vh" }} />}
       <Modal show={Boolean(err && err.status)}>
         <XBtn onClick={handleXBtn} />
@@ -259,48 +248,48 @@ function SelectedPost() {
       </Modal>
       <Backdrop show={showBackdrop} onClick={hideDeleteModal} />
       {/* Modal to confirm post delete */}
-      <Modal show={state.deleteModal} className={deleteModal}>
+      <Modal show={state.deleteModal} className={"deleteModal"}>
         <header>
           <h3>Te rog confirmă ștergerea permanentă a articolului.</h3>
         </header>
         <main>
-          <button className={deleteBtn} onClick={deleteArticle}>
+          <button className={"deleteBtn"} onClick={deleteArticle}>
             Șterge
           </button>
-          <button className={editBtn} onClick={hideDeleteModal}>
+          <button className={"editBtn"} onClick={hideDeleteModal}>
             Anulează
           </button>
         </main>
       </Modal>
-      <section className={btnSection}>
+      <section className={"btnSection"}>
         {isAdmin && (
           <React.Fragment>
             <button
               disabled={state.isLoading}
-              className={editBtn}
+              className={"editBtn"}
               onClick={handlePostEdit}
             >
               {!state.editPostMode
                 ? "Editează Articolul"
                 : "Salvează articolul"}
             </button>
-            <button className={deleteBtn} onClick={showDeleteModal}>
+            <button className={"deleteBtn"} onClick={showDeleteModal}>
               Șterge Articolul
             </button>
           </React.Fragment>
         )}
-        <button onClick={handleXBtn} className={editBtn}>
+        <button onClick={handleXBtn} className={"editBtn"}>
           &lt;&lt; Pagina Anterioară
         </button>
       </section>
-      <section className={editorContainer}>
+      <section className={"editorContainer singlePost"}>
         <PostEditor
           handleChange={handlePostChange}
           editorContent={state.postData}
           disable={!state.editPostMode}
         />
       </section>
-      <section className={commentsSection}>
+      <section className={"commentsSection"}>
         <h2>Comentarii:</h2>
         {state.commentsData && !state.commentsData.length ? (
           <p style={{ textAlign: "center" }}>
@@ -310,10 +299,10 @@ function SelectedPost() {
           <ul>{updateComments()}</ul>
         )}
       </section>
-      <section className={commentContainer}>
+      <section className={"commentContainer"}>
         <button
           disabled={state.isLoading}
-          className={sendCommentBtn}
+          className={"sendCommentBtn"}
           onClick={postComment}
         >
           {isAuthenticated ? "Adaugă Comentariu" : "Logează-te pentru a posta"}

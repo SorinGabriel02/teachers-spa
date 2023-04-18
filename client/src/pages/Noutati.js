@@ -1,4 +1,10 @@
-import React, { useReducer, useEffect, useContext, useRef } from "react";
+import React, {
+  useReducer,
+  useEffect,
+  useContext,
+  useRef,
+  useState,
+} from "react";
 import { NavLink, useHistory, useParams } from "react-router-dom";
 import SunEditor from "suneditor-react";
 
@@ -10,14 +16,6 @@ import Backdrop from "../components/Backdrop";
 import Modal from "../components/Modal";
 import XBtn from "../components/XBtn";
 
-import {
-  newsContainer,
-  headerContainer,
-  publishBtn,
-  postsSection,
-  editorContainer,
-  notFound,
-} from "./Noutati.module.scss";
 import "suneditor/dist/css/suneditor.min.css";
 
 const initialState = { isLoading: true, noPosts: false };
@@ -39,7 +37,9 @@ function postsReducer(state, action) {
   }
 }
 
-function Noutati() {
+function Noutati(params) {
+  console.log("params::", params);
+
   const ref = useRef(null);
   const history = useHistory();
   const { pageName } = useParams();
@@ -49,7 +49,8 @@ function Noutati() {
   const [chooseHeader] = useHeader();
 
   const setOptionsObj = {
-    height: "65.5vh",
+    height: "80%",
+    width: "90%",
     mode: "balloon",
     resizingBar: false,
   };
@@ -63,20 +64,20 @@ function Noutati() {
         const bCreatedAt = Date.parse(b.createdAt);
         return bCreatedAt - aCreatedAt;
       })
-      .map((post) => (
-        <article key={post.id} className={editorContainer}>
+      .map(post => (
+        <article key={post.id} className={"editorContainer"}>
           <NavLink
             style={{ textDecoration: "none" }}
             to={`/articol/${pageName}/${post.id}`}
           >
             <SunEditor
-              ref={ref}
-              showToolbar={false}
+              forwardRef={ref}
+              hideToolbar={true}
               enableToolbar={false}
               setContents={post.content}
               disable={true}
               setDefaultStyle={
-                "background-color: rgb(240, 240, 230); overflow-x: hidden; overflow-y: hidden;"
+                "background-color: rgb(240, 240, 230); overflow-x: hidden; overflow-y: hidden; max-width: 100%; border: 0;"
               }
               setOptions={setOptionsObj}
             />
@@ -108,7 +109,7 @@ function Noutati() {
   }, [cancelReq]);
 
   return (
-    <main className={newsContainer}>
+    <main className={"newsContainer"}>
       {state.isLoading && <Loading />}
       <Backdrop
         onClick={handleClick}
@@ -120,18 +121,20 @@ function Noutati() {
       </Modal>
       {isAdmin && posts && (
         <NavLink to={`/${pageName}/postNou`}>
-          <button className={publishBtn}>Publică articol</button>
+          <button className={"publishBtn"}>Publică articol</button>
         </NavLink>
       )}
       {state.noPosts ? (
-        <h1 className={notFound}>Această pagină va fi actualizată în curând</h1>
+        <h1 className={"notFound"}>
+          Această pagină va fi actualizată în curând
+        </h1>
       ) : (
         <React.Fragment>
-          <header className={headerContainer}>
+          <header className={"headerContainer"}>
             <h1>{chooseHeader(pageName)}</h1>
             <h4>Accesează pentru a vedea fiecare articol în detaliu</h4>
           </header>
-          <section className={postsSection}>{postsList}</section>
+          <section className={"postsSection"}>{postsList}</section>
         </React.Fragment>
       )}
     </main>

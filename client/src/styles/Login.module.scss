@@ -1,9 +1,9 @@
-@import "../variables.scss";
-@import "../styles/card";
-@import "../styles/label";
-@import "../styles/textInput";
-@import "../styles/button";
-@import "../styles/link";
+@import "./variables.scss";
+@import "./card.scss";
+@import "./label.scss";
+@import "./textInput.scss";
+@import "./button.scss";
+@import "./link.scss";
 
 .loginContainer {
   width: 100%;

@@ -3,8 +3,6 @@ import ReactDOM from "react-dom";
 import { CSSTransition } from "react-transition-group";
 import PropTypes from "prop-types";
 
-import styles from "./Modal.module.scss";
-
 function Modal(props) {
   return ReactDOM.createPortal(
     <CSSTransition
@@ -13,13 +11,13 @@ function Modal(props) {
       in={props.show}
       timeout={200}
       classNames={{
-        enter: styles.containerEnter,
-        enterActive: styles.containerEnterActive,
-        exit: styles.containerExit,
-        exitActive: styles.containerExitActive,
+        enter: "containerEnter",
+        enterActive: "containerEnterActive",
+        exit: "containerExit",
+        exitActive: "containerExitActive",
       }}
     >
-      <div className={`${styles.container} ${props.className}`}>
+      <div className={`${"container"} ${props.className}`}>
         {props.children}
       </div>
     </CSSTransition>,

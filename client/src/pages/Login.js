@@ -10,8 +10,6 @@ import Backdrop from "../components/Backdrop";
 import Modal from "../components/Modal";
 import XBtn from "../components/XBtn";
 
-import { loginContainer, loginForm } from "./Login.module.scss";
-
 const initialState = {
   isLoading: false,
   isLogin: true,
@@ -84,7 +82,7 @@ function Login() {
     clearError,
   } = useValidation();
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
     // pre-fetch validation
     if (!state.isLogin && !validateName(state.name)) return;
@@ -112,7 +110,7 @@ function Login() {
     dispatch({ type: "isLoading" });
   };
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
     dispatch({ type: name, payload: value });
     clearError(name);
@@ -173,7 +171,7 @@ function Login() {
   }, [state.isLogin, cancelReq]);
 
   return (
-    <section className={loginContainer}>
+    <section className={"loginContainer"}>
       {state.isLoading && <Loading size={"5vmax"} />}
       {err && (
         <React.Fragment>
@@ -184,7 +182,7 @@ function Login() {
           </Modal>
         </React.Fragment>
       )}
-      <form onSubmit={handleSubmit} className={loginForm}>
+      <form onSubmit={handleSubmit} className={"loginForm"}>
         <h2>{state.isLogin ? "Autentificare" : "Creează cont"}</h2>
         {!state.isLogin && (
           <React.Fragment>

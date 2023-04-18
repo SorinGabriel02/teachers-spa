@@ -2,18 +2,6 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { AppContext } from "../context/appContext";
 
-import {
-  mainHeader,
-  logoLink,
-  navBar,
-  activeLink,
-  hamburger,
-  lineOne,
-  lineTwo,
-  lineThree,
-  activeHamburger,
-  activeNav,
-} from "./Header.module.scss";
 import logo from "../assets/logo.png";
 
 function Header() {
@@ -23,8 +11,8 @@ function Header() {
   const [active, setActive] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  const handleClick = (e) => {
-    setActive((prevActive) => !prevActive);
+  const handleClick = e => {
+    setActive(prevActive => !prevActive);
   };
 
   const handleLogout = () => {
@@ -35,11 +23,11 @@ function Header() {
 
   useEffect(() => {
     if (active) {
-      hamburgerRef.current.classList.add(activeHamburger);
-      navRef.current.classList.add(activeNav);
+      hamburgerRef.current.classList.add("activeHamburger");
+      navRef.current.classList.add("activeNav");
     } else {
-      hamburgerRef.current.classList.remove(activeHamburger);
-      navRef.current.classList.remove(activeNav);
+      hamburgerRef.current.classList.remove("activeHamburger");
+      navRef.current.classList.remove("activeNav");
     }
   }, [active]);
 
@@ -55,21 +43,21 @@ function Header() {
   }, [windowWidth]);
 
   return (
-    <header className={mainHeader}>
-      <NavLink onClick={() => setActive(false)} className={logoLink} to="/">
+    <header className="mainHeader">
+      <NavLink onClick={() => setActive(false)} className={"logoLink"} to="/">
         <img src={logo} alt="logo" />
       </NavLink>
-      <div onClick={handleClick} ref={hamburgerRef} className={hamburger}>
-        <div className={lineOne}></div>
-        <div className={lineTwo}></div>
-        <div className={lineThree}></div>
+      <div onClick={handleClick} ref={hamburgerRef} className={"hamburger"}>
+        <div className={"lineOne"}></div>
+        <div className={"lineTwo"}></div>
+        <div className={"lineThree"}></div>
       </div>
-      <nav ref={navRef} className={navBar}>
+      <nav ref={navRef} className={"navBar"}>
         <ul>
           <li>
             <NavLink
               onClick={() => setActive(false)}
-              activeClassName={activeLink}
+              activeClassName={"activeLink"}
               to="/legislatie"
             >
               Legislație
@@ -78,7 +66,7 @@ function Header() {
           <li>
             <NavLink
               onClick={() => setActive(false)}
-              activeClassName={activeLink}
+              activeClassName={"activeLink"}
               to="/documente"
             >
               Documente COSP
@@ -87,7 +75,7 @@ function Header() {
           <li>
             <NavLink
               onClick={() => setActive(false)}
-              activeClassName={activeLink}
+              activeClassName={"activeLink"}
               to="/materiale"
             >
               Materiale Suport
@@ -96,7 +84,7 @@ function Header() {
           <li>
             <NavLink
               onClick={() => setActive(false)}
-              activeClassName={activeLink}
+              activeClassName={"activeLink"}
               to="/noutati/news"
             >
               Noutăți
@@ -106,7 +94,7 @@ function Header() {
             <li>
               <NavLink
                 onClick={() => setActive(false)}
-                activeClassName={activeLink}
+                activeClassName={"activeLink"}
                 to="/autentificare"
               >
                 Autentificare

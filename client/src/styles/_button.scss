@@ -2,7 +2,7 @@
 
 .sharedBtn {
   width: fit-content;
-  font-size: 1.1rem;
+  font-size: 1rem;
   text-shadow: 0 0 1px $shadowColor;
   padding: 0.3rem 0.4rem;
   margin: 1vmax;
@@ -27,6 +27,6 @@
 
 @media only screen and (max-width: 450px) {
   .sharedBtn {
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 }

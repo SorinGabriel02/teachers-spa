@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { CSSTransition } from "react-transition-group";
 import ReactGA from "react-ga";
-import { v4 as uuidv4 } from "uuid";
 
 import { AppContext } from "./context/appContext";
 import Header from "./components/Header";
@@ -17,8 +16,6 @@ import NewPost from "./pages/NewPost";
 import SelectedPost from "./pages/SelectedPost";
 import Loading from "./components/Loading";
 import CookiePolicy from "./components/CookiePolicy";
-
-import { app } from "./App.module.scss";
 
 function App() {
   const { isAuthenticated, isAdmin, appLoading } = useContext(AppContext);
@@ -35,7 +32,7 @@ function App() {
 
   // accept cookie policy on scroll or exploring site
   useEffect(() => {
-    const acceptedOnBrowse = (e) => {
+    const acceptedOnBrowse = e => {
       if (e.target.nodeName === "A" || e.target.nodeName === "IMG") {
         if (!cookiesOk) handleAccept();
         window.removeEventListener("click", acceptedOnBrowse);
@@ -56,7 +53,7 @@ function App() {
   if (appLoading) return <Loading />;
 
   return (
-    <div className={app}>
+    <div className={"app"}>
       <Header />
       <CSSTransition
         classNames="policyContainer"
