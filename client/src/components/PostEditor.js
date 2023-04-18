@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 
-import { editContainer } from "./PostEditor.module.scss";
 import { AppContext } from "../context/appContext";
 
 function PostEditor(props) {
@@ -57,12 +56,12 @@ function PostEditor(props) {
     formats: ["p", "h1", "h2", "h3", "h4"],
   };
 
-  const handleChange = (content) => {
+  const handleChange = content => {
     props.handleChange(content);
   };
 
   return (
-    <div className={editContainer}>
+    <div className={"editContainer"}>
       <SunEditor
         token={props.token}
         disable={props.disable}

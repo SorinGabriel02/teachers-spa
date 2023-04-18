@@ -10,14 +10,6 @@ import Backdrop from "../components/Backdrop";
 import Modal from "../components/Modal";
 import XBtn from "../components/XBtn";
 
-import {
-  newsContainer,
-  headerContainer,
-  publishBtn,
-  postsSection,
-  editorContainer,
-  notFound,
-} from "./Noutati.module.scss";
 import "suneditor/dist/css/suneditor.min.css";
 
 const initialState = { isLoading: true, noPosts: false };
@@ -63,8 +55,8 @@ function Noutati() {
         const bCreatedAt = Date.parse(b.createdAt);
         return bCreatedAt - aCreatedAt;
       })
-      .map((post) => (
-        <article key={post.id} className={editorContainer}>
+      .map(post => (
+        <article key={post.id} className={"editorContainer"}>
           <NavLink
             style={{ textDecoration: "none" }}
             to={`/articol/${pageName}/${post.id}`}
@@ -108,7 +100,7 @@ function Noutati() {
   }, [cancelReq]);
 
   return (
-    <main className={newsContainer}>
+    <main className={"newsContainer"}>
       {state.isLoading && <Loading />}
       <Backdrop
         onClick={handleClick}
@@ -120,18 +112,20 @@ function Noutati() {
       </Modal>
       {isAdmin && posts && (
         <NavLink to={`/${pageName}/postNou`}>
-          <button className={publishBtn}>Publică articol</button>
+          <button className={"publishBtn"}>Publică articol</button>
         </NavLink>
       )}
       {state.noPosts ? (
-        <h1 className={notFound}>Această pagină va fi actualizată în curând</h1>
+        <h1 className={"notFound"}>
+          Această pagină va fi actualizată în curând
+        </h1>
       ) : (
         <React.Fragment>
-          <header className={headerContainer}>
+          <header className={"headerContainer"}>
             <h1>{chooseHeader(pageName)}</h1>
             <h4>Accesează pentru a vedea fiecare articol în detaliu</h4>
           </header>
-          <section className={postsSection}>{postsList}</section>
+          <section className={"postsSection"}>{postsList}</section>
         </React.Fragment>
       )}
     </main>

@@ -1,11 +1,11 @@
 import React from "react";
 
-import { mainFooter, content } from "./Footer.module.scss";
+const year = new Date().getFullYear();
 
 function Footer() {
   return (
-    <footer className={mainFooter}>
-      <p className={content}>&copy; Profesori de Sprijin 2020</p>
+    <footer className="mainFooter">
+      <p>&copy; Profesori de Sprijin {year}</p>
     </footer>
   );
 }

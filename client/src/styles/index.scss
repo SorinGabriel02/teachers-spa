@@ -1,4 +1,29 @@
 @import "./variables.scss";
+@import './basicLink';
+@import './button';
+@import './card';
+@import './label';
+@import './link';
+@import './textInput';
+@import './App.module.scss';
+@import './Welcome.module.scss';
+@import './XBtn.module.scss';
+@import "./SelectedPost.module.scss";
+@import "./Header.module.scss";
+@import "./Footer.module.scss";
+@import "./Backdrop.module.scss";
+@import "./Comment.module.scss";
+@import "./CookiePolicy.scss";
+@import "./Loading.module.scss";
+@import "./Modal.module.scss";
+@import "./PostedComment.module.scss";
+@import "./PostEditor.module.scss";
+@import "./Documents.module.scss";
+@import "./Legislatie.module.scss";
+@import "./Login.module.scss";
+@import "./Materials.module.scss";
+@import "./NewPost.module.scss";
+@import "./Noutati.module.scss";
 
 *,
 *::after,

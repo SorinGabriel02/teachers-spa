@@ -2,14 +2,6 @@ import React from "react";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 
-import {
-  documente,
-  cerereFig,
-  requestContainer,
-  exemplare,
-  acteStabilire,
-  instiintari,
-} from "./Documents.module.scss";
 import cerereTip from "../assets/cerereTip.jpg";
 import cerereEval from "../assets/cerere_evaluare.pdf";
 import fisaMedicala from "../assets/fisa_medicala_sintetica.pdf";
@@ -24,17 +16,17 @@ import acordMentinere from "../assets/acord_mentinere_integrare.jpg";
 
 function Documents() {
   return (
-    <main className={documente}>
+    <main className="documente">
       <h1>Certificatul de Orientare Școlară și Profesională &#40;COSP&#41;</h1>
       <section className="tooltipContainer">
         <h2>Documente necesare pentru obținerea COSP ordinul 1985/2016</h2>
         <h3>Acte necesare pentru dosar</h3>
-        <div className={requestContainer}>
+        <div className="requestContainer">
           <a
             href={cerereTip}
             target="_blank"
             rel="noopener noreferrer"
-            className={cerereFig}
+            className="cerereFig"
           >
             <p>Cerere Evaluare</p>
             <Popup
@@ -156,7 +148,7 @@ function Documents() {
           </ul>
         </div>
         <h3>Downloadează exemplare în format PDF</h3>
-        <div className={exemplare}>
+        <div className={"exemplare"}>
           <p>
             Adresa din antetul exemplarelor diferă de la un județ la altul.
             Aceste exemple conțin adresa din județul Iași.
@@ -185,7 +177,7 @@ function Documents() {
           </ul>
         </div>
       </section>
-      <section className={acteStabilire}>
+      <section className={"acteStabilire"}>
         <h2>Acte necesare stabilirii dosarului de sprijin financiar</h2>
         <p>
           Eleviii incluși în cadrul unui program de sprijin educațional al unei
@@ -287,7 +279,7 @@ function Documents() {
           </li>
         </ul>
       </section>
-      <section className={instiintari}>
+      <section className={"instiintari"}>
         <h2>Înștiințări gererale</h2>
         <p>
           Există deasemenea și două fișe ce exprimă acordul părintelui în

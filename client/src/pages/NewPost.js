@@ -9,8 +9,6 @@ import Modal from "../components/Modal";
 import XBtn from "../components/XBtn";
 import useHttpReq from "../hooks/useHttpReq";
 
-import { publish } from "./NewPost.module.scss";
-
 const initialState = {
   isLoading: false,
   editorState: "",
@@ -51,10 +49,10 @@ function NewPost() {
   const [postData, err, makeReq, cancelReq] = useHttpReq();
   const [state, dispatch] = useReducer(newPostReducer, initialState);
 
-  const handleChange = (content) =>
+  const handleChange = content =>
     dispatch({ type: "contentChange", payload: content });
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
     dispatch({ type: "publish" });
     await makeReq(
@@ -105,7 +103,7 @@ function NewPost() {
         style={{ display: "flex", flexDirection: "column" }}
       >
         <PostEditor handleChange={handleChange} />
-        <button className={publish} disabled={btnDisable}>
+        <button className={"publish"} disabled={btnDisable}>
           Publică Articolul
         </button>
       </form>

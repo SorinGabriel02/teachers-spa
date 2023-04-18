@@ -1,6 +1,5 @@
 import React from "react";
 
-import { legislation } from "./Legislatie.module.scss";
 import ordin5555 from "../assets/ordin_5555_2011.pdf";
 import ordin5573 from "../assets/ordin_5573_2011.pdf";
 import ordin762 from "../assets/ordin_762_2007.pdf";
@@ -11,7 +10,7 @@ import metodologie from "../assets/metodologie_cadru.pdf";
 
 function Legislatie() {
   return (
-    <main className={legislation}>
+    <main className={"legislation"}>
       <h1>Legislație Aferentă</h1>
       <section>
         <h2>

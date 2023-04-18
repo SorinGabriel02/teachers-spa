@@ -7,16 +7,6 @@ import Modal from "../components/Modal";
 import Backdrop from "../components/Backdrop";
 import Comment from "../components/Comment";
 
-import {
-  singleComment,
-  commentButtons,
-  editBtn,
-  deleteBtn,
-  editModal,
-  modalButtons,
-  modalDeleteBtn,
-  userInfo,
-} from "./PostedComment.module.scss";
 import avatar from "../assets/defaultAvatar.png";
 
 function PostedComment({ comment, editComment, deleteComment }) {
@@ -27,7 +17,7 @@ function PostedComment({ comment, editComment, deleteComment }) {
   const [edited, setEdited] = useState(comment.content);
   const [editMode, setEditMode] = useState(false);
 
-  const handleChange = (value) => setEdited(value);
+  const handleChange = value => setEdited(value);
 
   const editC = () => {
     setShow(true);
@@ -71,7 +61,7 @@ function PostedComment({ comment, editComment, deleteComment }) {
       let iterator = 14;
       const stringBreaks = comment.content.replace(
         /(?:\r\n|\r|\n)/g,
-        (s) => (iterator && iterator-- && "<br />") || " "
+        s => (iterator && iterator-- && "<br />") || " "
       );
       contentRef.current.innerHTML = stringBreaks;
     }
@@ -86,9 +76,9 @@ function PostedComment({ comment, editComment, deleteComment }) {
   }, [editMode]);
 
   return (
-    <li className={singleComment}>
+    <li className={"singleComment"}>
       <article>
-        <p className={userInfo}>
+        <p className={"userInfo"}>
           <img src={avatar} alt="avatar icon" />
           {comment?.author?.username}
         </p>
@@ -96,45 +86,45 @@ function PostedComment({ comment, editComment, deleteComment }) {
       </article>
       <div
         style={noBtnShowing ? { border: "none" } : null}
-        className={commentButtons}
+        className={"commentButtons"}
       >
         {displayEditBtn && (
-          <button onClick={editC} className={editBtn}>
+          <button onClick={editC} className={"editBtn"}>
             Editează
           </button>
         )}
         {displayDeleteBtn && (
-          <button onClick={deleteC} className={deleteBtn}>
+          <button onClick={deleteC} className={"deleteBtn"}>
             Șterge
           </button>
         )}
         <Backdrop show={show} onClick={() => setShow(false)} />
         <Modal show={show} className="editCommentContainer">
           {editMode ? (
-            <div className={editModal}>
+            <div className={"editModal"}>
               <Comment
                 inputRef={commentRef}
                 value={edited}
                 onChange={handleChange}
               />
-              <div className={modalButtons}>
-                <button className={editBtn} onClick={confirmedEdit}>
+              <div className={"modalButtons"}>
+                <button className={"editBtn"} onClick={confirmedEdit}>
                   Salvează
                 </button>
-                <button className={editBtn} onClick={hideModal}>
+                <button className={"editBtn"} onClick={hideModal}>
                   Anulează
                 </button>
               </div>
             </div>
           ) : (
-            <div className={editModal}>
+            <div className={"editModal"}>
               <h3>Te rog confirmă ștergerea definitivă a comentariului.</h3>
               <hr />
-              <div className={modalButtons}>
-                <button className={modalDeleteBtn} onClick={confirmedDelete}>
+              <div className={"modalButtons"}>
+                <button className={"modalDeleteBtn"} onClick={confirmedDelete}>
                   Șterge
                 </button>
-                <button className={editBtn} onClick={hideModal}>
+                <button className={"editBtn"} onClick={hideModal}>
                   Anulează
                 </button>
               </div>

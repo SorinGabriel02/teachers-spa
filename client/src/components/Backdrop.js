@@ -3,8 +3,6 @@ import ReactDOM from "react-dom";
 import { CSSTransition } from "react-transition-group";
 import PropTypes from "prop-types";
 
-import styles from "./Backdrop.module.scss";
-
 function Backdrop(props) {
   return ReactDOM.createPortal(
     <CSSTransition
@@ -13,13 +11,13 @@ function Backdrop(props) {
       in={props.show}
       timeout={150}
       classNames={{
-        enter: styles.backdropEnter,
-        enterActive: styles.backdropEnterActive,
-        exit: styles.backdropExit,
-        exitActive: styles.backdropExitActive,
+        enter: "backdropEnter",
+        enterActive: "backdropEnterActive",
+        exit: "backdropExit",
+        exitActive: "backdropExitActive",
       }}
     >
-      <div onClick={props.onClick} className={styles.backdrop}></div>
+      <div onClick={props.onClick} className={"backdrop"}></div>
     </CSSTransition>,
     document.getElementById("backdrop")
   );

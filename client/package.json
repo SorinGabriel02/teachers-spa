@@ -14,12 +14,12 @@
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.21",
     "netlify": "^4.5.1",
-    "netlify-cli": "^2.64.1",
+    "netlify-cli": "^2.37.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-ga": "^3.1.2",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.3",
+    "react-scripts": "^5.0.1",
     "react-transition-group": "^4.4.1",
     "reactjs-popup": "^2.0.3",
     "suneditor-react": "^2.14.2",
@@ -47,6 +47,9 @@
     ]
   },
   "devDependencies": {
-    "node-sass": "^7.0.0"
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-normalize": "^10.0.1",
+    "postcss-preset-env": "^7.8.3",
+    "sass": "^1.57.1"
   }
 }
