@@ -17,9 +17,9 @@ build
 # images
 /server/upload/images
 
-#pdfs
-/assets
-/client/src/assets
+# #pdfs
+# /assets
+# /client/src/assets
 
 # misc
 .env
