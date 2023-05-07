@@ -21,7 +21,7 @@ function PostEditor(props) {
     imageUploadUrl:
       process.env.NODE_ENV === "development"
         ? "http://localhost:8080/api/media/images/new"
-        : "https://profesoridesprijin.herokuapp.com/api/media/images/new",
+        : "https://vast-jade-duckling-veil.cyclic.app/api/media/images/new",
     showPathLabel: false,
     resizingBar: false,
     imageAccept: ".jpg, .jpeg, .png, .webp",
